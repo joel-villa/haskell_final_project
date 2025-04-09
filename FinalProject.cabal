@@ -63,9 +63,8 @@ executable FinalProject
     -- Modules included in this executable, other than Main.
     other-modules:    EventHandler,
                       Tick,
-                      Types,
-                      WorldToPic
-
+                      Types
+                      
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
 

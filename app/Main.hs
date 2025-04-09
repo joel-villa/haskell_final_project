@@ -8,8 +8,6 @@ import Brillo
 import Types
 import EventHandler
 import Tick
-import WorldToPic
-
 
 -- | Display the last event received as text.
 --prelude.show.event, very helpful
@@ -20,8 +18,6 @@ main :: IO ()
 main =do
   bmp <- loadBMP "resources/LilDude.bmp"
   floorbmp <- loadBMP "resources/floor.bmp"
-
-  let worldToPic = \w -> worldToPicture w bmp floorbmp -- TODO make this able to pass all resources
 
   play
     (InWindow "GameEvent" (1000, 1000) (10, 10))   --Display mode
