@@ -13,7 +13,7 @@ import Brillo.Interface.IO.Interact
 main :: IO ()
 
 main =do
-  picture <- loadBMP "pixilart-drawing-_1_.bmp"
+  picture <- loadBMP "357BMPstuff/LilDude.bmp"
   play
     (InWindow "GameEvent" (700, 100) (10, 10))   --Display mode
     white    --Background color.
