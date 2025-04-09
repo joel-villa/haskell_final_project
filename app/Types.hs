@@ -1,5 +1,7 @@
+module Types where
+{-
 --You know what Coords are
-data Coord =(Float, Float)
+data Coord = (Float, Float)
 
 --Avalible directions, maybe what to derive show or eq
 -- Up is more like jump, so migh be a little more difficult to associate
@@ -11,7 +13,7 @@ data Player= Player { heath ::Int,
                       fallingTime :: Float,
                       weapon :: Weapon,
                       money :: Int,
-                      sMoneyAndSValubles :: [Item]
+                      sMoneyAndSValubles :: [Item],
                       xVel :: Float,
                       yVel::Float}
 
@@ -31,7 +33,7 @@ starterSheep =Player {health=100,
                      xvel=0,
                      yvel=0}
 
-data Items = potion Potion| weapon Weapon     -- Maybe a armor thing?
+data Items = Potion potion| Weapon weapon     -- Maybe a armor thing?
 
 data Weapon = Weapon { wDamage :: Int       -- added to dmg rolls on hits
                      , wDesc   :: String}   --Exact descriptor, this would be for the users benefit
@@ -46,6 +48,8 @@ data InvintorAction = DrinkPotion | EquipArmor | EquipWeapon
 --          x/yvel ++  health++   health--   yVel--
 data Effect = SpeedUp| Healing | Harming | SlowFalling   -- Ignore I stole this from minecwaft
 
-data World = World {wSheep   :: Player      -- the player
-                   , wLevel  :: Level      -- current game level
-                   , wLevels :: [Level] }  -- all levels
+-- data World = World {wSheep   :: Player      -- the player
+--                    , wLevel  :: Level      -- current game level
+--                    , wLevels :: [Level] }  -- all levels
+-}
+data World = World { pos  :: (Float,Float)   } -- TODO change this to other World
