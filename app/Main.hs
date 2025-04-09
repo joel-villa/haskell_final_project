@@ -16,9 +16,9 @@ import WorldToPic
 main :: IO ()
 
 main =do
-  bmp <- loadBMP "357BMPstuff/LilDude.bmp"
+  bmp <- loadBMP "resources/LilDude.bmp"
 
-  let worldToPic = \w -> worldToPicture w bmp
+  let worldToPic = \w -> worldToPicture w bmp -- TODO make this able to pass all resources
 
   play
     (InWindow "GameEvent" (700, 100) (10, 10))   --Display mode
