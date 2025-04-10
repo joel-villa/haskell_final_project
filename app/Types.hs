@@ -49,12 +49,12 @@ data Effect = SpeedUp| Healing | Harming | SlowFalling   -- Ignore I stole this 
 -- data World = World {wSheep   :: Player      -- the player
 --                    , wLevel  :: Level      -- current game level
 --                    , wLevels :: [Level] }  -- all levels
-level1 = Level {floorPos= (makeTup (-100.0) 100.0 10.5), floorString = "resources/pinkGrass.bmp",extraPos =[(20.0,70.0)],extraString=["resources/patchOfClouds.bmp"] }
+--level1 = Level {floorPos= (makeTup (-100.0) 100.0 10.5), floorString = "resources/pinkGrass.bmp",extraPos =[(20.0,70.0)],extraString=["resources/patchOfClouds.bmp"] }
 data Level =Level {floorPos::[(Float,Float)], floorString:: String, extraPos::[(Float,Float)],extraString ::[String]}
 
-data World = World { position  :: (Float,Float), floor :: [(Float,Float)], offset:: Float  } -- TODO change this to other World
+data World = World { position:: (Float,Float),  curLevel::Level , offset:: Float} -- TODO change this to other World
 
-makeTup :: Float-> Float->Float->[(Float,Float)]
-makeTup start end step
-  |start > end =[((start-(5.0*step)),-20),((-start+(3.0*step)),-20)] 
-  |otherwise =[(start+step,(-30))] ++ makeTup (start+step) end step
+--makeTup :: Float-> Float->Float->[(Float,Float)]
+--makeTup start end step
+--  |start > end =[((start-(5.0*step)),-20),((-start+(3.0*step)),-20)] 
+--  |otherwise =[(start+step,(-30))] ++ makeTup (start+step) end step
