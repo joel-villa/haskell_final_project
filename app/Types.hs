@@ -50,4 +50,4 @@ data Effect = SpeedUp| Healing | Harming | SlowFalling   -- Ignore I stole this 
 --                    , wLevel  :: Level      -- current game level
 --                    , wLevels :: [Level] }  -- all levels
 
-data World = World { position  :: (Float,Float), floor :: [(Float,Float)]  } -- TODO change this to other World
+data World = World { position  :: (Float,Float), floor :: [(Float,Float)], offset ::Float} -- TODO change this to other World
