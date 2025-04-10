@@ -18,20 +18,18 @@ import Tick
 main :: IO ()
 
 main =do
-  let level1 = Level {floorPos= (makeTup (-100.0) 100.0 10.5), floorString = "resources/pinkGrass.bmp",extraPos =[(20.0,70.0)],extraString=["resources/patchOfClouds.bmp"] }
-  let starterWorld= World ((0,(-12)) level1 0)
   bmp <- loadBMP "resources/Sheep.bmp"
   floorbmp <- loadBMP "resources/pinkGrass.bmp"
   clouds <- loadBMP "resources/patchOfClouds.bmp"
 
-  -- TODO make this able to pass all resources
+  let worldToPic = \w -> worldToPicture w bmp floorbmp -- TODO make this able to pass all resources
   
 
   play
     (InWindow "GameEvent" (1000, 1000) (10, 10))   --Display mode
     ((makeColor 0.75 0.75 1 0.5))    --Background color.
     100  --Number of simulation steps to take for each second of real time.
-    (starterWorld)   --The initial world.
+    (World(0, (-12))(makeTup (-100.0) 100.0 10.5) 0)   --The initial world.
     (\world -> (pictures (worldToPicture world bmp floorbmp clouds))) --A function to convert the world a picture.
     handleEvent   -- (Event -> world -> world) A function to handle input events.
     tick --(Float -> world -> world)
@@ -46,8 +44,8 @@ makeTup start end step
 
 -- data World = World { pos  :: (Float,Float)   }     -- current level depth}  -- all levels
 worldToPicture :: World -> Picture->Picture->Picture-> [Picture]
-worldToPicture (World(x,y) (Level [] _ _ _) offset) pic floorpic clouds= Translate (20*(x-offset)) (20*y) (pic)
-worldToPicture (World(x,y) (Level ((z,w):fs) a b c) offset) pic floorpic clouds = scale 2 2 (Translate (5*(z-offset)) (5*w) (floorpic)) : (World(x,y) (Level (fs) a b c ) offset) pic floorpic clouds
+worldToPicture (World(x,y) [] offset) pic floorpic clouds= Translate (20*(x-offset)) (20*y) (pic) :[Scale 2.5 2.5 (Translate 20 80 clouds)]
+worldToPicture (World(x,y) ((z,w):fs) offset) pic floorpic clouds = scale 2 2 (Translate (5*(z-offset)) (5*w) (floorpic)) : worldToPicture (World(x,y) (fs) offset) pic floorpic clouds
 --TODO make this capable of 
 
 {-

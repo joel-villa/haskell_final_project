@@ -12,5 +12,5 @@ handleEvent e (World(x,y) fs off)=(World(x,y) fs (getOffset (x))) -- Other cases
 getOffset :: Float -> Float 
 getOffset x
   |x>5 = (x-5)
-  |x<(-5) = (x-5)
-  |otherwise =x
+  |x<(-5) = (x+5)
+  |otherwise =0
