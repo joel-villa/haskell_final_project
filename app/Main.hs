@@ -63,6 +63,9 @@ worldToPicture :: World -> Picture->Picture->Picture-> [Picture]
 worldToPicture w@(World plr (Level _ [(b,c)]) offset) pic floorpic clouds =
   Scale 2.5 2.5 (Translate (b-offset) c clouds):Scale 2 1.5 (Translate ((b*(-18))-offset) (c*3) clouds) :drawFloor w floorpic ++[drawPlayer w pic]
 
+drawFloor :: World->Picture -> [Picture]
+drawFloor [] _ _ =[]  -- or anything we want to throw in after drawing the floor
+drawFloor ((z,w):fs) 
 drawFloor :: World -> Picture -> [Picture]
 drawFloor (World _ (Level [] _) _) floorpic = []
 drawFloor (World plr (Level ((z,w):fs) xs) offset) floorpic =
