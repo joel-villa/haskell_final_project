@@ -16,13 +16,13 @@ getOffset x
   |otherwise = 0
 
 updateXPos :: Float -> World -> World
-updateXPos n w = w {hero = updatedHero}
+updateXPos n w = w {hero = updatedHero, offset= getOffset (xPos updatedHero)}
   where
     oldHero = hero w                                  -- get old hero 
     updatedHero = oldHero {xPos = (xPos oldHero) + n} -- update position of hero
 
 updateYPos :: Float -> World -> World
-updateYPos n w = w {hero = updatedHero}
+updateYPos n w = w {hero = updatedHero,offset= getOffset (xPos updatedHero)}
   where
     oldHero = hero w                                  -- get current hero from w
     updatedHero = oldHero {yPos = (yPos oldHero) + n} -- updated yPosition
