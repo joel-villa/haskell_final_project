@@ -50,5 +50,14 @@ data Effect = SpeedUp| Healing | Harming | SlowFalling   -- Ignore I stole this 
 --                    , wLevel  :: Level      -- current game level
 --                    , wLevels :: [Level] }  -- all levels
 
-data Level = Level {floorpos::[(Float,Float)], extras::[(Float,Float)]} 
-data World = World { hero :: Player, curLevel ::Level, offset ::Float} -- TODO change this to other World
+data Level = 
+  Level {
+    floorpos:: [(Float,Float)], 
+    extras  :: [(Float,Float)]
+    } 
+data World = 
+  World { 
+    hero     :: Player, 
+    curLevel :: Level, 
+    offset   :: Float
+    } -- TODO change this to other World
