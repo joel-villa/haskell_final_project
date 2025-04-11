@@ -9,14 +9,12 @@ data Coord = Coord (Float, Float)
 data Directions = Right | Left | Up | Down
 
 --A sheep fellow, maybe he will be purple, maybe he will be green
-data Player= Player { health ::Int,
-                      pos :: Coord, 
+data Player= Player { xPos :: Float, 
+                      yPos:: Float, 
+                      health ::Int,
                       fallingTime :: Float,
-                      weapon :: Item,
                       money :: Int,
-                      sMoneyAndSValubles :: [Item],
-                      xVel :: Float,
-                      yVel::Float}
+                      sMoneyAndSValubles :: [Item]}
 
 -- Should be the same as player but w/out fallingTime?? and yVel 
 data BadGuy = BadGuy {health_bad :: Int, 
@@ -25,14 +23,16 @@ data BadGuy = BadGuy {health_bad :: Int,
                       pouch::[Item], 
                       xVel_bad:: Float}
 
+
 -- Your classic begener sheep 
-starterSheep =Player {health=100, 
-                     pos= Coord (1, 1),
+starterSheep =Player{xPos =0,
+                     yPos =(-12),
+                     health=100, 
                      fallingTime=0,
                      money=10, 
-                     sMoneyAndSValubles=[Potion {quantEffect=10,descriptor="Health Potion +10", effect=Healing}],
-                     xVel=0,
-                     yVel=0}
+                     sMoneyAndSValubles=[Potion {quantEffect=10,descriptor="Health Potion +10", effect=Healing}]
+                     }
+
 
 data Item = Potion {quantEffect :: Int,  -- Like how much it increases your health/ xvel/yvel
                      descriptor:: String, --Exact descriptor, this would be for the users benefit
@@ -50,4 +50,5 @@ data Effect = SpeedUp| Healing | Harming | SlowFalling   -- Ignore I stole this 
 --                    , wLevel  :: Level      -- current game level
 --                    , wLevels :: [Level] }  -- all levels
 
-data World = World { position  :: (Float,Float), floor :: [(Float,Float)], offset ::Float} -- TODO change this to other World
+data Level = Level {floorpos::[(Float,Float)], extras::[(Float,Float)]} 
+data World = World { hero :: Player, curLevel ::Level, offset ::Float} -- TODO change this to other World
