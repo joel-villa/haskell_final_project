@@ -34,11 +34,16 @@ starterSheep =Player{xPos =0,
                      }
 
 
-data Item = Potion {quantEffect :: Int,  -- Like how much it increases your health/ xvel/yvel
-                     descriptor:: String, --Exact descriptor, this would be for the users benefit
-                     effect::Effect }     -- diff effect
-           | Weapon {wDamage :: Int       -- added to dmg rolls on hits
-                   , wDesc   :: String}   --Exact descriptor, this would be for the users benefit
+data Item = 
+  Potion {
+    quantEffect :: Int,  -- Like how much it increases your health/ xvel/yvel
+    descriptor:: String, --Exact descriptor, this would be for the users benefit
+    effect::Effect 
+  }     -- diff effect
+  | Weapon {
+    wDamage :: Int,       -- added to dmg rolls on hits
+    wDesc   :: String     --Exact descriptor, this would be for the users benefit
+    }   
 -- Maybe a armor thing?
 
 data InvintorAction = DrinkPotion | EquipArmor | EquipWeapon
@@ -50,5 +55,14 @@ data Effect = SpeedUp| Healing | Harming | SlowFalling   -- Ignore I stole this 
 --                    , wLevel  :: Level      -- current game level
 --                    , wLevels :: [Level] }  -- all levels
 
-data Level = Level {floorpos::[(Float,Float)], extras::[(Float,Float)]} 
-data World = World { hero :: Player, curLevel ::Level, offset ::Float} -- TODO change this to other World
+data Level = 
+  Level {
+    floorpos:: [(Float,Float)], 
+    extras  :: [(Float,Float)]
+    } 
+data World = 
+  World { 
+    hero     :: Player, 
+    curLevel :: Level, 
+    offset   :: Float
+    } -- TODO change this to other World

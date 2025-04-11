@@ -11,18 +11,29 @@ handleEvent _ world=world -- Other cases, do nothing
 
 getOffset :: Float -> Float 
 getOffset x
-  |x>5 = (x-5)
-  |x<(-5) = (x+5)
-  |otherwise =0
+  |x > 5     = (x - 5)
+  |x < (-5)  = (x + 5)
+  |otherwise = 0
 
-updateXPos ::Float-> World ->World
-updateXPos n (World plr lev _ )=(World (updatePlayer plr ((xPos plr)+n) (yPos plr)) lev (getOffset (xPos plr)) )
+updateXPos :: Float -> World -> World
+updateXPos n w = w {hero = updatedHero}
+  where
+    oldHero = hero w                                  -- get old hero 
+    updatedHero = oldHero {xPos = (xPos oldHero) + n} -- update position of hero
 
-updateYPos ::Float-> World ->World
-updateYPos n (World plr lev _ )=(World (updatePlayer plr (xPos plr) ((yPos plr) +n) ) lev (getOffset (xPos plr)) )
+updateYPos :: Float -> World -> World
+updateYPos n w = w {hero = updatedHero}
+  where
+    oldHero = hero w                                  -- get current hero from w
+    updatedHero = oldHero {yPos = (yPos oldHero) + n} -- updated yPosition
 
-updatePlayer ::Player->Float ->Float->Player
+{-
+TODO is the needed still? 
+updatePlayer :: Player -> Float -> Float -> Player
 updatePlayer (Player x y h ft m ms) z q = (Player z q h ft m ms)
+-}
+
+
 {-
 bonk:: World->Player ->Bool 
 bonk =undefined

@@ -16,14 +16,10 @@ import Tick
 
 
 main :: IO ()
-
 main =do
   bmp <- loadBMP "resources/Sheep.bmp"
   floorbmp <- loadBMP "resources/pinkGrass.bmp"
   clouds <- loadBMP "resources/patchOfClouds.bmp"
-
-   -- TODO make this able to pass all resources
-  
 
   play
     (InWindow "GameEvent" (1000, 900) (0,0))   --Display mode
@@ -61,6 +57,9 @@ drawFloor (World(x,y) (Level ((z,w):fs) xs) offset) floorpic =
 -}
 
 worldToPicture :: World -> Picture->Picture->Picture-> [Picture]
+-- worldToPicture w sheep floor cloud = Scale 2.5 2.5 (Translate (b-offset) c clouds):Scale 2 1.5 (Translate ((b*(-18))-offset) (c*3) clouds) :drawFloor w floorpic ++[drawPlayer w pic]
+--   where 
+--     level =
 worldToPicture w@(World plr (Level _ [(b,c)]) offset) pic floorpic clouds =
   Scale 2.5 2.5 (Translate (b-offset) c clouds):Scale 2 1.5 (Translate ((b*(-18))-offset) (c*3) clouds) :drawFloor w floorpic ++[drawPlayer w pic]
 
