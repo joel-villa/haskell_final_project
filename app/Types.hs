@@ -80,4 +80,5 @@ data World =
     curLevel :: Level, 
     offset   :: Float
     } -- TODO change this to other World
-data Terrain = Block {xPos :: Float, yPos :: Float} | Cloud {xPos :: Float, yPos :: Float, vel:: Float} | Fence {xPos :: Float, ypos :: Float}
+
+data Terrain = Block {xpos :: Float, ypos :: Float} | Cloud {xpos :: Float, ypos :: Float, vel:: Float} | Fence {xpos :: Float, ypos :: Float}
