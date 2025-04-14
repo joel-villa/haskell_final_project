@@ -2,7 +2,7 @@ module Types where
 
 --Avalible directions, maybe what to derive show or eq
 -- Up is more like jump, so migh be a little more difficult to associate
-data Directions = Right | Left | Up | Down
+--data Directions = Right | Left | Up | Down
 
 --A sheep fellow, maybe he will be purple, maybe he will be green
 data Player= 

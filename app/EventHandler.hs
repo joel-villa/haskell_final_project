@@ -4,12 +4,12 @@ import Brillo.Interface.IO.Interact
 
 
 newHandleEvent :: Event ->World ->World 
-newHandleEvent(EventKey (SpecialKey KeyRight) down _ _) w =w{hero= ((hero w){xVel=1})}
-newHandleEvent(EventKey (SpecialKey KeyRight) up _ _) w =w{hero= ((hero w){xVel=0})}
-newHandleEvent(EventKey (SpecialKey KeyLeft) down _ _) w =w{hero= ((hero w){xVel=(-1)})}
-newHandleEvent(EventKey (SpecialKey KeyLeft) up _ _) w =w{hero= ((hero w){xVel=0})}
-newHandleEvent(EventKey (SpecialKey KeyUp) down _ _) w =w{hero= ((hero w){yVel=1})}
-newHandleEvent(EventKey (SpecialKey KeyUp) up _ _) w =w{hero= ((hero w){yVel=0})}
+newHandleEvent(EventKey (SpecialKey KeyRight) Down _ _) w =w{hero= ((hero w){xVel=1})}
+newHandleEvent(EventKey (SpecialKey KeyRight) Up _ _) w =w{hero= ((hero w){xVel=0})}
+newHandleEvent(EventKey (SpecialKey KeyLeft) Down _ _) w =w{hero= ((hero w){xVel=(-1)})}
+newHandleEvent(EventKey (SpecialKey KeyLeft) Up _ _) w =w{hero= ((hero w){xVel=0})}
+newHandleEvent(EventKey (SpecialKey KeyUp) Down _ _) w =w{hero= ((hero w){yVel=1})}
+newHandleEvent(EventKey (SpecialKey KeyUp) Up _ _) w =w{hero= ((hero w){yVel=0})}
 newHandleEvent _ w=w
 
 
