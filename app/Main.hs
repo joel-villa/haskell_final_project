@@ -26,7 +26,7 @@ main =do
     fps                                        -- in Init.hs
     initWorld                                  -- in Init.hs
     (\world -> (worldToPicture world [bmp, floorbmp, clouds])) --A function to convert the world a picture.
-    handleEvent                                -- in EventHandler.hs
+    newHandleEvent                                -- in EventHandler.hs
     tick                                       -- in Tick.hs
 
 worldToPicture:: World -> [Picture]->Picture
@@ -35,7 +35,7 @@ worldToPicture w pics = pictures((drawPlayer w (pics!!1)):(drawFloor w (pics!!0)
     drawExtras w pic =(Scale 2.5 2.5 (Translate (10) 50 pic)):[Scale 1.5 1 (Translate (-200) 190 pic)]     -- Sorry I will fix this later
 
 drawPlayer :: World -> Picture -> Picture
-drawPlayer world pic = Translate (20*(xPos (hero world)-(offset world))) (20*(yPos(hero world))) (pic)
+drawPlayer world pic = Translate (20*((xPos (hero world)+ xVel (hero world))-(offset world))) (20*(yPos(hero world))) (pic)
 
 drawFloor :: World->Picture -> [Picture]
 drawFloor w pic   = case (floorpos(curLevel w)) of 

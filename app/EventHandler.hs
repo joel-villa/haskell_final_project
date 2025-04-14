@@ -4,8 +4,13 @@ import Brillo.Interface.IO.Interact
 
 
 newHandleEvent :: Event ->World ->World 
-newHandleEvent(EventKey (SpecialKey KeyRight) down _ _) w =w{hero= (hero w{})}
-newHandleEvent(EventKey (SpecialKey KeyRight) up _ _) world
+newHandleEvent(EventKey (SpecialKey KeyRight) down _ _) w =w{hero= ((hero w){xVel=1})}
+newHandleEvent(EventKey (SpecialKey KeyRight) up _ _) w =w{hero= ((hero w){xVel=0})}
+newHandleEvent(EventKey (SpecialKey KeyLeft) down _ _) w =w{hero= ((hero w){xVel=(-1)})}
+newHandleEvent(EventKey (SpecialKey KeyLeft) up _ _) w =w{hero= ((hero w){xVel=0})}
+newHandleEvent(EventKey (SpecialKey KeyUp) down _ _) w =w{hero= ((hero w){yVel=1})}
+newHandleEvent(EventKey (SpecialKey KeyUp) up _ _) w =w{hero= ((hero w){yVel=0})}
+newHandleEvent _ w=w
 
 
 handleEvent :: Event ->World-> World
@@ -14,6 +19,11 @@ handleEvent(EventKey (SpecialKey KeyLeft) _ _ _) world=updateXPos (-1) world
 handleEvent(EventKey (SpecialKey KeyUp) _ _ _) world=updateYPos (1) world
 handleEvent(EventKey (SpecialKey KeyDown) _ _ _) world=updateYPos (-1) world
 handleEvent _ world=world -- Other cases, do nothing 
+
+
+handleVertCollision::Player -> [(Float,Float)]-> Float->Player 
+handleVertCollision sheep floor yDisp = undefined
+
 
 getOffset :: Float -> Float 
 getOffset x
