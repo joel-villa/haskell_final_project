@@ -2,6 +2,10 @@ module Init where
 import Brillo
 import Types
 
+-- The background color: 
+backgroundColor :: Color
+backgroundColor = (makeColor 0.75 0.75 1 0.5)
+
 -- Your classic begener sheep 
 starterSheep =
   Player{

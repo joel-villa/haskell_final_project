@@ -22,7 +22,7 @@ main =do
 
   play
     (InWindow "GameEvent" (1000, 900) (0,0))   --Display mode
-    ((makeColor 0.75 0.75 1 0.5))    --Background color.
+    (backgroundColor)    --Background color, in Init.hs
     100  --Number of simulation steps to take for each second of real time.
     (World starterSheep (Level (makeTup (-200.0) 200.0 10.5) [(20,80)]) 0)   --The initial world.
     (\world -> (worldToPicture world [bmp, floorbmp, clouds])) --A function to convert the world a picture.
