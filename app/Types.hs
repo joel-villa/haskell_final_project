@@ -10,7 +10,7 @@ data Player=
     xPos :: Float, 
     yPos:: Float, 
     health ::Int,
-    fallingTime :: Float,
+    inAir :: Bool,
     money :: Int,
     sMoneyAndSValubles :: [Item]
   }
