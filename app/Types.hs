@@ -10,6 +10,7 @@ data Player=
     xPos   :: Float, 
     yPos   :: Float, 
     xVel   :: Float,
+    yVel   :: Float,
     health :: Int,
     inAir  :: Bool,
     money  :: Int,
@@ -20,17 +21,17 @@ data Player=
 data BadGuy = 
   BadGuy {
     health_bad :: Int, 
-    pos_bad::(Float, Float), -- (x,y) ?  
-    money_bad::Int, 
-    pouch::[Item], 
-    xVel_bad:: Float
+    pos_bad    :: (Float, Float), -- (x,y) ?  
+    money_bad  :: Int, 
+    pouch      :: [Item], 
+    xVel_bad   :: Float
   }
 
 data Item = 
   Potion {
     quantEffect :: Int,  -- Like how much it increases your health/ xvel/yvel
-    descriptor:: String, --Exact descriptor, this would be for the users benefit
-    effect::Effect 
+    descriptor  :: String, --Exact descriptor, this would be for the users benefit
+    effect      :: Effect 
   }     -- diff effect
   | Weapon {
     wDamage :: Int,       -- added to dmg rolls on hits
@@ -46,8 +47,8 @@ data Effect = SpeedUp| Healing | Harming | SlowFalling   -- Ignore I stole this 
 
 data Level = 
   Level {
-    floorpos:: [(Float,Float)], 
-    extras  :: [(Float,Float)]
+    floorpos :: [(Float,Float)], 
+    extras   :: [(Float,Float)]
     } 
 data World = 
   World { 
