@@ -3,11 +3,10 @@
 module Main where
 
 import Brillo
---import Data.Text 
--- import Brillo.Interface.IO.Game (Event (EventKey))
 import Types
 import EventHandler
 import Tick
+import Init
 
 -- | Display the last event received as text.
 --prelude.show.event, very helpful
