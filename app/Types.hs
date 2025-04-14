@@ -9,19 +9,25 @@ data Coord = Coord (Float, Float)
 data Directions = Right | Left | Up | Down
 
 --A sheep fellow, maybe he will be purple, maybe he will be green
-data Player= Player { xPos :: Float, 
-                      yPos:: Float, 
-                      health ::Int,
-                      fallingTime :: Float,
-                      money :: Int,
-                      sMoneyAndSValubles :: [Item]}
+data Player= 
+  Player { 
+    xPos :: Float, 
+    yPos:: Float, 
+    health ::Int,
+    fallingTime :: Float,
+    money :: Int,
+    sMoneyAndSValubles :: [Item]
+  }
 
 -- Should be the same as player but w/out fallingTime?? and yVel 
-data BadGuy = BadGuy {health_bad :: Int, 
-                      pos_bad::Coord, 
-                      money_bad::Int, 
-                      pouch::[Item], 
-                      xVel_bad:: Float}
+data BadGuy = 
+  BadGuy {
+    health_bad :: Int, 
+    pos_bad::Coord, 
+    money_bad::Int, 
+    pouch::[Item], 
+    xVel_bad:: Float
+  }
 
 
 
@@ -34,7 +40,7 @@ data Item =
   | Weapon {
     wDamage :: Int,       -- added to dmg rolls on hits
     wDesc   :: String     --Exact descriptor, this would be for the users benefit
-    }   
+  }   
 -- Maybe a armor thing?
 
 data InvintorAction = DrinkPotion | EquipArmor | EquipWeapon
