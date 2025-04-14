@@ -22,19 +22,19 @@ main =do
 
   play
     (InWindow "GameEvent" (1000, 900) (0,0))   --Display mode
-    (backgroundColor)    --Background color, in Init.hs
-    100  --Number of simulation steps to take for each second of real time.
-    (World starterSheep (Level (makeTup (-200.0) 200.0 10.5) [(20,80)]) 0)   --The initial world.
+    backgroundColor                            -- in Init.hs
+    fps                                        -- in Init.hs
+    initWorld                                  -- in Init.hs
     (\world -> (worldToPicture world [bmp, floorbmp, clouds])) --A function to convert the world a picture.
     handleEvent   -- (Event -> world -> world) A function to handle input events.
     tick --(Float -> world -> world)
 
 
 
-makeTup :: Float-> Float->Float->[(Float,Float)]
-makeTup start end step
-  |start > end =[((start-(5.0*step)),-24),((-start+(3.0*step)),-24),((start-(18.0*step)),-24),((-start+(11.0*step)),-24)] 
-  |otherwise =[(start+step,(-30))] ++ makeTup (start+step) end step
+-- makeTup :: Float-> Float->Float->[(Float,Float)]
+-- makeTup start end step
+--   |start > end =[((start-(5.0*step)),-24),((-start+(3.0*step)),-24),((start-(18.0*step)),-24),((-start+(11.0*step)),-24)] 
+--   |otherwise =[(start+step,(-30))] ++ makeTup (start+step) end step
 
 
 worldToPicture:: World -> [Picture]->Picture
