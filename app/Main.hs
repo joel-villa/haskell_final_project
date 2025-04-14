@@ -32,7 +32,7 @@ main =do
 worldToPicture:: World -> [Picture]->Picture
 worldToPicture w pics = pictures((drawPlayer w (pics!!1)):(drawFloor w (pics!!0)) ++ (drawExtras w (pics!!2)))
   where 
-    drawExtras w pic =(Scale 2.5 2.5 (Translate (-50) 50 pic)):[Scale 2 1.5 (Translate (-200) 100 pic)]     -- Sorry I will fix this later
+    drawExtras w pic =(Scale 2.5 2.5 (Translate (10) 50 pic)):[Scale 1.5 1 (Translate (-200) 190 pic)]     -- Sorry I will fix this later
 
 drawPlayer :: World -> Picture -> Picture
 drawPlayer world pic = Translate (20*(xPos (hero world)-(offset world))) (20*(yPos(hero world))) (pic)

@@ -2,6 +2,12 @@ module EventHandler where
 import Types
 import Brillo.Interface.IO.Interact
 
+
+newHandleEvent :: Event ->World ->World 
+newHandleEvent(EventKey (SpecialKey KeyRight) down _ _) w =w{hero= (hero w{})}
+newHandleEvent(EventKey (SpecialKey KeyRight) up _ _) world
+
+
 handleEvent :: Event ->World-> World
 handleEvent(EventKey (SpecialKey KeyRight) _ _ _) world=updateXPos 1 world
 handleEvent(EventKey (SpecialKey KeyLeft) _ _ _) world=updateXPos (-1) world
