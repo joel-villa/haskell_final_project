@@ -3,11 +3,10 @@
 module Main where
 
 import Brillo
---import Data.Text 
--- import Brillo.Interface.IO.Game (Event (EventKey))
 import Types
 import EventHandler
 import Tick
+import Init
 
 -- | Display the last event received as text.
 --prelude.show.event, very helpful
@@ -23,20 +22,12 @@ main =do
 
   play
     (InWindow "GameEvent" (1000, 900) (0,0))   --Display mode
-    ((makeColor 0.75 0.75 1 0.5))    --Background color.
-    100  --Number of simulation steps to take for each second of real time.
-    (World starterSheep (Level (makeTup (-200.0) 200.0 10.5) [(20,80)]) 0)   --The initial world.
+    backgroundColor                            -- in Init.hs
+    fps                                        -- in Init.hs
+    initWorld                                  -- in Init.hs
     (\world -> (worldToPicture world [bmp, floorbmp, clouds])) --A function to convert the world a picture.
-    handleEvent   -- (Event -> world -> world) A function to handle input events.
-    tick --(Float -> world -> world)
-
-
-
-makeTup :: Float-> Float->Float->[(Float,Float)]
-makeTup start end step
-  |start > end =[((start-(5.0*step)),-24),((-start+(3.0*step)),-24),((start-(18.0*step)),-24),((-start+(11.0*step)),-24)] 
-  |otherwise =[(start+step,(-30))] ++ makeTup (start+step) end step
-
+    handleEvent                                -- in EventHandler.hs
+    tick                                       -- in Tick.hs
 
 worldToPicture:: World -> [Picture]->Picture
 worldToPicture w pics = pictures((drawPlayer w (pics!!1)):(drawFloor w (pics!!0)) ++ (drawExtras w (pics!!2)))
