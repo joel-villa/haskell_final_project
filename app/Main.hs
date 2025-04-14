@@ -25,7 +25,7 @@ main =do
     backgroundColor                            -- in Init.hs
     fps                                        -- in Init.hs
     initWorld                                  -- in Init.hs
-    (\world -> (worldToPicture world [bmp, floorbmp, clouds])) --A function to convert the world a picture.
+    (\world -> (worldToPicture world [floorbmp,bmp, clouds])) --A function to convert the world a picture.
     newHandleEvent                                -- in EventHandler.hs
     tick                                       -- in Tick.hs
 
