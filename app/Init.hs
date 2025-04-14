@@ -24,7 +24,7 @@ starterSheep :: Player
 starterSheep =
   Player{
     xPos   = 0,
-    yPos   = (-12),
+    yPos   = (-237),
     xVel   = 0,
     yVel   = 0,
     health = 100, 

@@ -15,7 +15,7 @@ newHandleEvent _ w=w
 handleJump :: Player ->Player
 handleJump plr 
   |inAir plr = plr 
-  |otherwise = plr{yVel=5, inAir=True}
+  |otherwise = plr{yVel=15, inAir=True}
 
 handleEvent :: Event ->World-> World
 handleEvent(EventKey (SpecialKey KeyRight) _ _ _) world=updateXPos 1 world
