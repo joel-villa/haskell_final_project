@@ -1,8 +1,8 @@
 module Types where
 
 --You know what Coords are
-data Coord = Coord (Float, Float)
-  deriving (Eq , Show)
+-- data Coord = Coord (Float, Float)
+--   deriving (Eq , Show)
 
 --Avalible directions, maybe what to derive show or eq
 -- Up is more like jump, so migh be a little more difficult to associate
@@ -23,7 +23,7 @@ data Player=
 data BadGuy = 
   BadGuy {
     health_bad :: Int, 
-    pos_bad::Coord, 
+    pos_bad::(Float, Float), -- (x,y) ?  
     money_bad::Int, 
     pouch::[Item], 
     xVel_bad:: Float
