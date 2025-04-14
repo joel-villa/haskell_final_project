@@ -26,8 +26,8 @@ main =do
     fps                                        -- in Init.hs
     initWorld                                  -- in Init.hs
     (\world -> (worldToPicture world [bmp, floorbmp, clouds])) --A function to convert the world a picture.
-    handleEvent   -- (Event -> world -> world) A function to handle input events.
-    tick --(Float -> world -> world)
+    handleEvent                                -- in EventHandler.hs
+    tick                                       -- in Tick.hs
 
 worldToPicture:: World -> [Picture]->Picture
 worldToPicture w pics = pictures((drawPlayer w (pics!!1)):(drawFloor w (pics!!0)) ++ (drawExtras w (pics!!2)))
