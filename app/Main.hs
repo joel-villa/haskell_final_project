@@ -35,7 +35,7 @@ worldToPicture w pics = pictures((drawPlayer w (pics!!1)):(drawFloor w (pics!!0)
     drawExtras w pic =(Scale 2.5 2.5 (Translate (-(getOffset (xPos (hero w)))) 100 pic)):[Scale 1.5 1 (Translate (-300-(getOffset (xPos (hero w)))) 300 pic)]     -- Sorry I will fix this later
 
 drawPlayer :: World -> Picture -> Picture
-drawPlayer world pic = Translate (20*((xPos (hero world)+ xVel (hero world))-(getOffset (xPos (hero world))))) (20*(yPos(hero world))) (pic)
+drawPlayer world pic = Translate (20*((xPos (hero world))-(getOffset (xPos (hero world))))) (20*(yPos(hero world))) (pic)
 
 
 
