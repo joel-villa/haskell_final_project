@@ -20,12 +20,15 @@ makeTup start end step
 
 
 -- Your classic begener sheep 
+starterSheep :: Player
 starterSheep =
   Player{
-    xPos =0,
-    yPos =(-12),
-    health=100, 
-    fallingTime=0,
-    money=10, 
-    sMoneyAndSValubles=[Potion {quantEffect=10,descriptor="Health Potion +10", effect=Healing}]
+    xPos   = 0,
+    yPos   = (-12),
+    xVel   = 0,
+    yVel   = 0,
+    health = 100, 
+    inAir  = False,
+    money  = 10, 
+    sMoneyAndSValubles = [Potion {quantEffect=10,descriptor="Health Potion +10", effect=Healing}]
   }
