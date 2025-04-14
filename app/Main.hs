@@ -29,14 +29,6 @@ main =do
     handleEvent   -- (Event -> world -> world) A function to handle input events.
     tick --(Float -> world -> world)
 
-
-
--- makeTup :: Float-> Float->Float->[(Float,Float)]
--- makeTup start end step
---   |start > end =[((start-(5.0*step)),-24),((-start+(3.0*step)),-24),((start-(18.0*step)),-24),((-start+(11.0*step)),-24)] 
---   |otherwise =[(start+step,(-30))] ++ makeTup (start+step) end step
-
-
 worldToPicture:: World -> [Picture]->Picture
 worldToPicture w pics = pictures((drawPlayer w (pics!!1)):(drawFloor w (pics!!0)) ++ (drawExtras w (pics!!2)))
   where 
