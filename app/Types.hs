@@ -1,9 +1,5 @@
 module Types where
 
---You know what Coords are
--- data Coord = Coord (Float, Float)
---   deriving (Eq , Show)
-
 --Avalible directions, maybe what to derive show or eq
 -- Up is more like jump, so migh be a little more difficult to associate
 data Directions = Right | Left | Up | Down
@@ -29,8 +25,6 @@ data BadGuy =
     xVel_bad:: Float
   }
 
-
-
 data Item = 
   Potion {
     quantEffect :: Int,  -- Like how much it increases your health/ xvel/yvel
@@ -48,9 +42,6 @@ data InvintorAction = DrinkPotion | EquipArmor | EquipWeapon
 --          x/yvel ++  health++   health--   yVel--
 data Effect = SpeedUp| Healing | Harming | SlowFalling   -- Ignore I stole this from minecwaft
 
--- data World = World {wSheep   :: Player      -- the player
---                    , wLevel  :: Level      -- current game level
---                    , wLevels :: [Level] }  -- all levels
 
 data Level = 
   Level {
