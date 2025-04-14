@@ -7,11 +7,12 @@ data Directions = Right | Left | Up | Down
 --A sheep fellow, maybe he will be purple, maybe he will be green
 data Player= 
   Player { 
-    xPos :: Float, 
-    yPos:: Float, 
-    health ::Int,
-    inAir :: Bool,
-    money :: Int,
+    xPos   :: Float, 
+    yPos   :: Float, 
+    xVel   :: Float,
+    health :: Int,
+    inAir  :: Bool,
+    money  :: Int,
     sMoneyAndSValubles :: [Item]
   }
 

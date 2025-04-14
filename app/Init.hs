@@ -24,8 +24,10 @@ starterSheep =
   Player{
     xPos =0,
     yPos =(-12),
+    xVel = 0,
+    yVel = 0,
     health=100, 
-    fallingTime=0,
+    inAir=False,
     money=10, 
     sMoneyAndSValubles=[Potion {quantEffect=10,descriptor="Health Potion +10", effect=Healing}]
   }
