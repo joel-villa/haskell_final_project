@@ -1,6 +1,7 @@
 module Init where
 import Brillo
 import Types
+import FirstWorld
 
 -- fps: Number of simulation steps to take for each second of real time
 fps :: Int 
@@ -12,8 +13,9 @@ backgroundColor = (makeColor 0.75 0.75 1 0.5)
 
 
 initWorld :: World
-initWorld = World starterSheep levelOne 0
+--initWorld = World starterSheep levelOne 0
 -- initWorld = World starterSheep (Level (makeTup (-200.0) 200.0 10.5) [(20,80)]) 0
+initWorld = World starterSheep(firstWorldToLevel(firstWorld)) 0
 levelOne :: Level
 levelOne = Level terrain extras baddies
   where 
