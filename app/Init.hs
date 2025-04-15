@@ -4,7 +4,7 @@ import Types
 
 -- fps: Number of simulation steps to take for each second of real time
 fps :: Int 
-fps = 100
+fps = 60
 
 -- The background color: 
 backgroundColor :: Color
