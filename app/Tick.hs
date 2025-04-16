@@ -4,15 +4,32 @@ import Types
 tick :: Float -> World -> World
 tick _ w = newWorld
   where 
-    newPlayer = updatePlayer (hero w)
-    newWorld = w {hero = newPlayer}
+    bs = terrain (curLevel w)
+    newPlayer = updatePlayer (hero w) bs
+    newWorld = w {hero = newPlayer} 
 
-updatePlayer :: Player -> Player
-updatePlayer p0 = newP
+updatePlayer :: Player -> [Block] -> Player
+updatePlayer p0 bs = newP
   where
     p1 = p0 {xPos = xPos p0 + xVel p0 , yPos =yPos p0 +yVel p0}
-    newP = if inAir p1 then (handleVerticalCollision p1 (-237))  else p1 -- if in Air, fall
+    p2 = if inAir p1 then p1 {yVel = yVel p1 - 0.5} else p1 -- if in Air, fall
+    newP = horizontalCollision p2 bs
 
+horizontalCollision :: Player -> [Block] -> Player
+horizontalCollision p [] = p
+horizontalCollision p (block:bs) = 
+  if inBetween (xPos p)  x1 x2 && inBetween (yPos p) (-300) (-237) --TODO make this not hard-coded :(
+  then p {yPos = -237, inAir = False, yVel = 0}
+  else horizontalCollision p bs
+    where 
+      (x1, y2) = topLeft block
+      x2 = x1 + width block
+      y1 = y2 - height block
+
+
+inBetween :: Float -> Float -> Float -> Bool
+inBetween x low high = x > low && x < high
+--TODO collisions!!
 handleVerticalCollision:: Player -> Float -> Player 
 handleVerticalCollision player pos 
   |pos> yPos player = player{yPos=pos, inAir=False,yVel=0}--too far
