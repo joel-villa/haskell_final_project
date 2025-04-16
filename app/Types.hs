@@ -24,7 +24,18 @@ data BadGuy =
     pos_bad    :: (Float, Float), -- (x,y) ?  
     money_bad  :: Int, 
     pouch      :: [Item], 
-    xVel_bad   :: Float
+    pathing    :: Path
+  }
+
+data Path = 
+  None
+  | Path {
+    initPos      :: (Float, Float),
+    goalPos      :: (Float, Float),
+    x            :: Float,
+    y            :: Float,
+    xVelocity    :: Float,
+    yVelocity    :: Float
   }
 
 data Item = 
@@ -44,12 +55,25 @@ data InvintorAction = DrinkPotion | EquipArmor | EquipWeapon
 --          x/yvel ++  health++   health--   yVel--
 data Effect = SpeedUp| Healing | Harming | SlowFalling   -- Ignore I stole this from minecwaft
 
-
 data Level = 
   Level {
-    floorpos :: [(Float,Float)], 
-    extras   :: [(Float,Float)]
+    terrain          :: [Block],
+    extras           :: [(Float,Float)],
+    badies           :: [BadGuy]
     } 
+data Block = 
+  Block {
+    topLeft     :: (Float, Float),
+    height      :: Float,
+    width       :: Float, 
+    path        :: Path
+  }
+
+-- data Level = 
+--   Level {
+--     floorpos :: [(Float,Float)], 
+--     extras   :: [(Float,Float)]
+--     } 
 data World = 
   World { 
     hero     :: Player, 
