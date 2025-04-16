@@ -37,12 +37,10 @@ worldToPicture w pics = pictures((drawPlayer w (pics!!1)):(drawFloor w (pics!!0)
 drawPlayer :: World -> Picture -> Picture
 drawPlayer world pic = Translate (20*((xPos (hero world))-(getOffset (xPos (hero world))))) ((yPos(hero world))) (pic)
 
-
-
 drawFloor :: World->Picture -> [Picture]
-drawFloor w pic   = case (floorpos(curLevel w)) of 
+drawFloor w pic   = case (terrain(curLevel w)) of 
   [] -> []
-  ((x,y):fs) -> floorPic x y w : drawFloor w{curLevel= ((curLevel w){floorpos=fs})} pic
+  ((Block (x,y) _ _ _):bs) -> floorPic x y w : drawFloor w{curLevel= ((curLevel w){terrain=bs})} pic
   where
     floorPic x y w =scale 2 2 (Translate (5*(x-(getOffset (xPos (hero w))))) (5*y) (pic))  -- Draws the floor, scales each tile by 2X2
 
