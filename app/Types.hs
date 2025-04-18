@@ -70,11 +70,11 @@ data JBlock =
   }
 
 data Level = 
-Level {
-terrain  :: [JBlock]
-floorpos :: [(Float,Float)], 
-clouds   :: [Terrain]
-} 
+  Level {
+    terrain  :: [JBlock],
+    floorpos :: [(Float,Float)], 
+    clouds   :: [Terrain]
+  } 
 data World = 
   World { 
     hero     :: Player, 
@@ -82,8 +82,8 @@ data World =
     offset   :: Float
     } -- TODO change this to other World
 
-data Terrain = JBlock {jbxpos :: Float, jbypos :: Float} | 
-               Block {bxpos :: Float, bypos} |
+data Terrain = 
+               Block {bxpos :: Float, bypos :: Float} |
                Cloud {cxpos :: Float, cypos :: Float, cvel:: Float} | 
                Fence {fxpos :: Float, fypos :: Float}
 

@@ -20,9 +20,9 @@ firstWorld x y xs ys= [ Block x y, Block (x+(xs)) y,Block (x+(2.0*xs)) y, Block 
                            Block (x+(28.0*xs)) (y+(ys*5)),Block (x+(28.0*xs)) (y+(ys*6)),Block (x+(29.0*xs)) (y+(ys*6)),
                            Block (x+(30.0*xs)) (y+(ys*6)),Block (x+(31.0*xs)) (y+(ys*6)),Block (x+(32.0*xs)) (y+(ys*6))]
 
-firstWorldToLevelBlock :: [Terrain] -> [(Float,Float)]
+firstWorldToLevelBlock :: [Terrain] -> [JBlock]
 firstWorldToLevelBlock [] = []
-firstWorldToLevelBlock (Block x y : xs) =  reverse((x,y) : firstWorldToLevelBlock xs)
+firstWorldToLevelBlock (Block x y : xs) =  reverse((JBlock (x, y) 10.5 10.5 None): firstWorldToLevelBlock xs)
 firstWorldToLevelBlock (Cloud x y z :xs) = firstWorldToLevelBlock xs
 
 firstWorldToLevelCloud :: [Terrain] -> [Terrain]
@@ -31,5 +31,5 @@ firstWorldToLevelCloud (Cloud x y v: xs ) = reverse(Cloud {cxpos = x , cypos = y
 firstWorldToLevelCloud (Block x y : xs) = firstWorldToLevelCloud xs
 
 firstWorldToLevel :: [Terrain] -> Level
-firstWorldToLevel terrain = Level {floorpos = (firstWorldToLevelBlock terrain) , clouds = (firstWorldToLevelCloud terrain)}
+firstWorldToLevel terrain = Level {terrain = (firstWorldToLevelBlock terrain) , clouds = (firstWorldToLevelCloud terrain)}
 

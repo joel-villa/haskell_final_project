@@ -16,7 +16,7 @@ initWorld :: World
 --initWorld = World starterSheep levelOne 0
 -- initWorld = World starterSheep (Level (makeTup (-200.0) 200.0 10.5) [(20,80)]) 0
 initWorld = World starterSheep(firstWorldToLevel(firstWorld (-20) (-30.0) 10.5 5.5)) 0
-l{-evelOne :: Level
+{-levelOne :: Level
 levelOne = Level terrain extras baddies
   where 
     terrain = makeBlocks (-200, -30) 200 10.5 10.5
@@ -24,10 +24,10 @@ levelOne = Level terrain extras baddies
     baddies = []
       -}
 
-makeBlocks :: (Float, Float) -> Float -> Float -> Float -> [Block] -- make horizontal path of blocks
+makeBlocks :: (Float, Float) -> Float -> Float -> Float -> [JBlock] -- make horizontal path of blocks
 makeBlocks (initX, initY) endX h w  
   | initX > endX = []
-  | otherwise = Block (initX, initY) h w None : makeBlocks (initX + w, initY) endX h w
+  | otherwise = JBlock (initX, initY) h w None : makeBlocks (initX + w, initY) endX h w
 makeTup :: Float-> Float->Float->[(Float,Float)]
 makeTup start end step
   |start > end =[((start-(5.0*step)),-24),((-start+(3.0*step)),-24),((start-(18.0*step)),-24),((-start+(11.0*step)),-24)] 
