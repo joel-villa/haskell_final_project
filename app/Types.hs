@@ -72,7 +72,7 @@ data Block =
 -- data Level = 
 --   Level {
 --     floorpos :: [(Float,Float)], 
---     extras   :: [(Float,Float)]
+--     clouds   :: [Terrain]
 --     } 
 data World = 
   World { 
@@ -81,4 +81,7 @@ data World =
     offset   :: Float
     } -- TODO change this to other World
 
-data Terrain = Block {xpos :: Float, ypos :: Float} | Cloud {xpos :: Float, ypos :: Float, vel:: Float} | Fence {xpos :: Float, ypos :: Float}
+data Terrain = Block {bxpos :: Float, bypos :: Float} | 
+               Cloud {cxpos :: Float, cypos :: Float, cvel:: Float} | 
+               Fence {fxpos :: Float, fypos :: Float}
+
