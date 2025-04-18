@@ -42,7 +42,7 @@ drawFloor w pic   = case (terrain(curLevel w)) of
   [] -> []
   ((JBlock (x,y) _ _ _):bs) -> floorPic x y w : drawFloor w{curLevel= ((curLevel w){terrain=bs})} pic
   where
-    floorPic x y w =scale 2 2 (Translate (5*(x-(getOffset (xPos (hero w))))) (5*y) (pic))  -- Draws the floor, scales each tile by 2X2
+    floorPic x y w =scale 2 2 (Translate ((x-(getOffset (xPos (hero w))))) (y) (pic))  -- Draws the floor, scales each tile by 2X2
 
 
 

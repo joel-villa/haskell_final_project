@@ -18,8 +18,8 @@ updatePlayer p0 bs = newP
 horizontalCollision :: Player -> [JBlock] -> Player
 horizontalCollision p [] = p
 horizontalCollision p (block:bs) = 
-  if inBetween (xPos p)  x1 x2 && inBetween (yPos p) (-300) (-237) --TODO make this not hard-coded :(
-  then p {yPos = -237, inAir = False, yVel = 0}
+  if inBetween (xPos p)  x1 x2 && inBetween (yPos p) (y1) (y2) --TODO make this not hard-coded :(
+  then p {yPos = y1, inAir = False, yVel = 0}
   else horizontalCollision p bs
     where 
       (x1, y2) = topLeft block
