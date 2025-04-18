@@ -64,7 +64,8 @@ executable FinalProject
     other-modules:    EventHandler,
                       Tick,
                       Types,
-                      Init
+                      Init,
+                      FirstWorld
                       
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:

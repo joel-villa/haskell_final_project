@@ -8,14 +8,14 @@ tick _ w = newWorld
     newPlayer = updatePlayer (hero w) bs
     newWorld = w {hero = newPlayer} 
 
-updatePlayer :: Player -> [Block] -> Player
+updatePlayer :: Player -> [JBlock] -> Player
 updatePlayer p0 bs = newP
   where
     p1 = p0 {xPos = xPos p0 + xVel p0 , yPos =yPos p0 +yVel p0}
     p2 = if inAir p1 then p1 {yVel = yVel p1 - 0.5} else p1 -- if in Air, fall
     newP = horizontalCollision p2 bs
 
-horizontalCollision :: Player -> [Block] -> Player
+horizontalCollision :: Player -> [JBlock] -> Player
 horizontalCollision p [] = p
 horizontalCollision p (block:bs) = 
   if inBetween (xPos p)  x1 x2 && inBetween (yPos p) (-300) (-237) --TODO make this not hard-coded :(

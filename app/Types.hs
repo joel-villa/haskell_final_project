@@ -55,28 +55,35 @@ data InvintorAction = DrinkPotion | EquipArmor | EquipWeapon
 --          x/yvel ++  health++   health--   yVel--
 data Effect = SpeedUp| Healing | Harming | SlowFalling   -- Ignore I stole this from minecwaft
 
-data Level = 
+{-data Level = 
   Level {
     terrain          :: [Block],
     extras           :: [(Float,Float)],
     badies           :: [BadGuy]
-    } 
-data Block = 
-  Block {
+    } -}
+data JBlock = 
+  JBlock {
     topLeft     :: (Float, Float),
     height      :: Float,
     width       :: Float, 
     path        :: Path
   }
 
--- data Level = 
---   Level {
---     floorpos :: [(Float,Float)], 
---     extras   :: [(Float,Float)]
---     } 
+data Level = 
+  Level {
+    terrain  :: [JBlock],
+    floorpos :: [(Float,Float)], 
+    clouds   :: [Terrain]
+  } 
 data World = 
   World { 
     hero     :: Player, 
     curLevel :: Level, 
     offset   :: Float
     } -- TODO change this to other World
+
+data Terrain = 
+               Block {bxpos :: Float, bypos :: Float} |
+               Cloud {cxpos :: Float, cypos :: Float, cvel:: Float} | 
+               Fence {fxpos :: Float, fypos :: Float}
+
