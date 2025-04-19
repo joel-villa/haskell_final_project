@@ -15,7 +15,8 @@ backgroundColor = (makeColor 0.75 0.75 1 0.5)
 initWorld :: World
 --initWorld = World starterSheep levelOne 0
 -- initWorld = World starterSheep (Level (makeTup (-200.0) 200.0 10.5) [(20,80)]) 0
-initWorld = World starterSheep(firstWorldToLevel(firstWorld (-200) (-160.0) 51 (30))) 0
+
+initWorld = World starterSheep(firstWorldToLevel(firstWorld (-200) (-160.0) 51 (30))) 0 0 heavenIntro [angel]
 {-levelOne :: Level
 levelOne = Level terrain extras baddies
   where 
@@ -47,3 +48,22 @@ starterSheep =
     money  = 10, 
     sMoneyAndSValubles = [Potion {quantEffect=10,descriptor="Health Potion +10", effect=Healing}]
   }
+
+angel ::BadGuy
+angel=
+  BadGuy{
+    health_bad=10,
+    money_bad=10,
+    pouch=[],
+    pathing= basicAngelPath
+}
+basicAngelPath= 
+  JPath{
+    initPos=(200,(-100)),
+    goalPos =(-100,(-100)),
+    x=100,
+    y=(-100),
+    xVelocity=(-0.5),
+    yVelocity=0
+  }
+

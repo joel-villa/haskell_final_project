@@ -20,12 +20,12 @@ data Player=
 -- Should be the same as player but w/out fallingTime?? and yVel 
 data BadGuy = 
   BadGuy {
-    health_bad :: Int, 
-    pos_bad    :: (Float, Float), -- (x,y) ?  
+    health_bad :: Int,  
     money_bad  :: Int, 
     pouch      :: [Item], 
     pathing    :: JPath
   }
+
 
 data JPath = 
   None
@@ -55,12 +55,6 @@ data InvintorAction = DrinkPotion | EquipArmor | EquipWeapon
 --          x/yvel ++  health++   health--   yVel--
 data Effect = SpeedUp| Healing | Harming | SlowFalling   -- Ignore I stole this from minecwaft
 
-{-data Level = 
-  Level {
-    terrain          :: [Block],
-    extras           :: [(Float,Float)],
-    badies           :: [BadGuy]
-    } -}
 data JBlock = 
   JBlock {
     topLeft     :: (Float, Float),
@@ -79,9 +73,12 @@ data World =
   World { 
     hero     :: Player, 
     curLevel :: Level, 
-    offset   :: Float
+    offset   :: Float,
+    intro    ::Int,
+    inTheBegining::[String],
+    enemies:: [BadGuy]
     } -- TODO change this to other World
-
+heavenIntro=["In the begining", "there was darkness", "And God said","Let there be a sheep","and then God said", "Go west young sheep"]
 data Terrain = 
                Block {bxpos :: Float, bypos :: Float} |
                Cloud {cxpos :: Float, cypos :: Float, cvel:: Float} | 

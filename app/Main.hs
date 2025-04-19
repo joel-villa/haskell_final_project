@@ -20,23 +20,47 @@ main =do
   bmp <- loadBMP "resources/Sheep.bmp"
   floorbmp <- loadBMP "resources/pinkGrass.bmp"
   clouds <- loadBMP "resources/patchOfClouds.bmp"
+  angelGuy <-loadBMP "resources/angleDude.bmp"
 
   play
     (InWindow "GameEvent" (1000, 900) (0,0))   --Display mode
     backgroundColor                            -- in Init.hs
     fps                                        -- in Init.hs
     initWorld                                  -- in Init.hs
-    (\world -> (worldToPicture world [floorbmp,bmp, clouds])) --A function to convert the world a picture.
+    (\world -> (worldToPicture world [floorbmp,bmp, clouds,angelGuy])) --A function to convert the world a picture.
     newHandleEvent                                -- in EventHandler.hs
     tick                                       -- in Tick.hs
 
 worldToPicture:: World -> [Picture]->Picture
-worldToPicture w pics = pictures((drawPlayer h offset' (pics!!1)) : (pictures (drawFloor bs offset' (pics!!0))) : (drawExtras w (pics!!2)))
+worldToPicture w pics = 
+  pictures((drawPlayer h offset' (pics!!1)) : (pictures (drawFloor bs offset' (pics!!0))) :drawIntro w:  (drawExtras w (pics!!2))++drawEnimies bgs offset' (pics!!3)) 
   where 
     offset' = (offset w)
     bs = terrain (curLevel w)
     h = hero w 
-    drawExtras w pic =(Scale 2.5 2.5 (Translate (-300) 100 pic)):[Scale 1.5 1 (Translate (-300) 300 pic)]     -- Sorry I will fix this later
+    bgs = enemies w
+    drawExtras w pic =(Scale 2.5 2.5 (Translate (0) 100 pic)):[Scale 1.5 1 (Translate (-300) 300 pic)]     -- Sorry I will fix this later
+
+drawEnimies :: [BadGuy]->Float->Picture->[Picture]
+drawEnimies [] _ _ =[]
+drawEnimies (bg:bgs) offs pic = (Scale 2 2 (Translate (x1-offs) y1 pic)) :drawEnimies bgs offs pic
+  where 
+    x1 = x (pathing bg)
+    y1=y (pathing bg)
+
+
+
+drawIntro :: World ->Picture
+drawIntro w = draw x
+  where
+    num =intro w
+    x= if (num `div` 150) >5 then 5 else (num `div` 150)
+    draw x = Color red (Translate (-450- (offset w)) 0 (scale 0.65 1 (text ((inTheBegining w)!!x))))
+    --x=(Translate (-400) 0 (scale 0.5 0.5 (text ((inTheBegining w)!!0))))
+    --x1=(Translate (-400) 0 (scale 0.5 0.5 (text ((inTheBegining w)!!1))))
+    --x2=(Translate (-400) 0 (scale 0.5 0.5 (text ((inTheBegining w)!!2))))
+    --x3=(Translate (-400) 0 (scale 0.5 0.5 (text ((inTheBegining w)!!3))))
+
 
 drawPlayer :: Player -> Float ->  Picture -> Picture
 drawPlayer h offs pic = pictures [translate x y pic, translate x y (circle 5),translate x0 y pic] --arbitrary 5, center is position of player
@@ -48,7 +72,7 @@ drawPlayer h offs pic = pictures [translate x y pic, translate x y (circle 5),tr
 
 drawFloor :: [JBlock] -> Float -> Picture -> [Picture] 
 drawFloor [] offs pic = []
-drawFloor (b:bs) offs pic = floorPic                     : drawFloor bs offs pic
+drawFloor (b:bs) offs pic = floorPic:                     drawFloor bs offs pic
                                 --These circles are the corners of the JBlock?
                               --(Line [((2*x1-50), ((2)*y1)), ((2*x2-22), (2*y2))]) :  -- these nums are NOT choosen arbitrarely
                               --(Line[((2*x0-50), ((2)*y1)), ((2*(x0+w)-22), (2*y2))]):

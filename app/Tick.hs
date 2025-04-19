@@ -6,7 +6,21 @@ tick _ w = newWorld
   where 
     bs = terrain (curLevel w)
     newPlayer = updatePlayer (hero w) (offset w) bs
-    newWorld = w {hero = newPlayer, offset=(getOffset w)} 
+    newWorld = w {hero = newPlayer, offset=(getOffset w),intro= ((intro w) +1),enemies= (updateEnemies (enemies w))} 
+
+updateEnemies:: [BadGuy]->[BadGuy]
+updateEnemies [] =[]
+updateEnemies (bg:bgs) = newBg : updateEnemies bgs
+  where
+    newBg = bg{pathing=(updatePath (pathing bg)) }
+    
+
+updatePath :: JPath -> JPath  -- Just switch the starter and end and flip the velocity 
+updatePath path =if (xp,yp) == (goalPos path) then newPath else path{x=(x path)+(xVelocity path)}
+  where 
+    (xp,yp)=((x path), (y path))
+    prevGoal = goalPos path
+    newPath= path{goalPos=(initPos path), initPos =prevGoal, xVelocity= (xVelocity path) *(-1) }
 
 updatePlayer :: Player -> Float->[JBlock] -> Player
 updatePlayer p0 offs bs = newP
