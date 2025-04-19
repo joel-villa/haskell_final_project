@@ -31,39 +31,46 @@ main =do
     tick                                       -- in Tick.hs
 
 worldToPicture:: World -> [Picture]->Picture
-worldToPicture w pics = pictures((drawPlayer h offset (pics!!1)) : (pictures (drawFloor bs offset (pics!!0))) : (drawExtras w (pics!!2)))
+worldToPicture w pics = pictures((drawPlayer h offset' (pics!!1)) : (pictures (drawFloor bs offset' (pics!!0))) : (drawExtras w (pics!!2)))
   where 
-    offset = getOffset (xPos (hero w))
+    offset' = (offset w)
     bs = terrain (curLevel w)
     h = hero w 
-    drawExtras w pic =(Scale 2.5 2.5 (Translate (-(getOffset (xPos (hero w)))) 100 pic)):[Scale 1.5 1 (Translate (-300-(getOffset (xPos (hero w)))) 300 pic)]     -- Sorry I will fix this later
+    drawExtras w pic =(Scale 2.5 2.5 (Translate (-300) 100 pic)):[Scale 1.5 1 (Translate (-300) 300 pic)]     -- Sorry I will fix this later
 
 drawPlayer :: Player -> Float ->  Picture -> Picture
-drawPlayer h offset pic = pictures [translate x y pic, translate x y (circle 5)] --arbitrary 5, center is position of player
+drawPlayer h offs pic = pictures [translate x y pic, translate x y (circle 5),translate x0 y pic] --arbitrary 5, center is position of player
   where
     x0 = xPos h
     y = yPos h
-    x = x0 - offset
+    x = x0 - offs
 -- drawPlayer world pic = Translate (20*((xPos (hero world))-(getOffset (xPos (hero world))))) ((yPos(hero world))) (pic)
 
 drawFloor :: [JBlock] -> Float -> Picture -> [Picture] 
-drawFloor [] offset pic = []
-drawFloor (b:bs) offset pic = floorPic                     : 
-                              (translate x1 y1 (circle 3)) :  --These circles are the corners of the JBlock?
-                              (translate x2 y1 (circle 3)) :  -- 3 is arbitrary
-                              (translate x2 y2 (circle 3)) : 
-                              (translate x1 y2 (circle 3)) : 
-                              drawFloor bs offset pic
+drawFloor [] offs pic = []
+drawFloor (b:bs) offs pic = floorPic                     : drawFloor bs offs pic
+                                --These circles are the corners of the JBlock?
+                              --(Line [((2*x1-50), ((2)*y1)), ((2*x2-22), (2*y2))]) :  -- these nums are NOT choosen arbitrarely
+                              --(Line[((2*x0-50), ((2)*y1)), ((2*(x0+w)-22), (2*y2))]):
+                              -- the 2* is for the scalar of the block
+                              -- (-50) is how many pixels off the left side of the block picture doesnt take up
+                              -- (-22) is how many pixels the right side of the block picture doesnt take up
+                              --If you change this, it will break collison in its current form
+                              --(Line [((0), (0)), ((offs), (0))]):
+                              
   where 
     (x0, y1) = topLeft b
-    x1 = x0 - offset
+    x1 = x0 - offs
     w = width b
     h = height b
     x2 = x1 + w
     y2 = y1 - h
     -- points = [(x1, y1), (x2, y1), (x2, y2), (x1, y2)]
-    floorPic = translate x1 y1 pic
+    floorPic = (scale 2 2(translate x1 y1  pic))
     -- rectPic = translate x1 y1 (polygon points) -- Where the block actually is? 
+
+--the block is actually -25 on left -21 on right so 54 pixels
+
 
 -- drawFloor :: World->Picture -> [Picture]
 -- drawFloor w pic = case (terrain(curLevel w)) of 
