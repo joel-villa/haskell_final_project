@@ -49,10 +49,10 @@ drawPlayer h offset pic = pictures [translate x y pic, translate x y (circle 5)]
 drawFloor :: [JBlock] -> Float -> Picture -> [Picture] 
 drawFloor [] offset pic = []
 drawFloor (b:bs) offset pic = floorPic                     : 
-                              (translate x1 y1 (circle 5)) :  --These circles are the corners of the JBlock?
-                              (translate x2 y1 (circle 5)) : 
-                              (translate x2 y2 (circle 5)) : 
-                              (translate x1 y2 (circle 5)) : 
+                              (translate x1 y1 (circle 3)) :  --These circles are the corners of the JBlock?
+                              (translate x2 y1 (circle 3)) :  -- 3 is arbitrary
+                              (translate x2 y2 (circle 3)) : 
+                              (translate x1 y2 (circle 3)) : 
                               drawFloor bs offset pic
   where 
     (x0, y1) = topLeft b
