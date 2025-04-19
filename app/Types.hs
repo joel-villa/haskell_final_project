@@ -24,12 +24,12 @@ data BadGuy =
     pos_bad    :: (Float, Float), -- (x,y) ?  
     money_bad  :: Int, 
     pouch      :: [Item], 
-    pathing    :: Path
+    pathing    :: JPath
   }
 
-data Path = 
+data JPath = 
   None
-  | Path {
+  | JPath {
     initPos      :: (Float, Float),
     goalPos      :: (Float, Float),
     x            :: Float,
@@ -66,7 +66,7 @@ data JBlock =
     topLeft     :: (Float, Float),
     height      :: Float,
     width       :: Float, 
-    path        :: Path
+    path        :: JPath
   }
 
 data Level = 
