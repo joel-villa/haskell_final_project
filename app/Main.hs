@@ -46,17 +46,24 @@ drawPlayer h offset pic = pictures [translate x y pic, translate x y (circle 5)]
     x = x0 - offset
 -- drawPlayer world pic = Translate (20*((xPos (hero world))-(getOffset (xPos (hero world))))) ((yPos(hero world))) (pic)
 
-drawFloor :: [JBlock] -> Float -> Picture -> [Picture] --TODO
+drawFloor :: [JBlock] -> Float -> Picture -> [Picture] 
 drawFloor [] offset pic = []
-drawFloor (b:bs) offset pic = floorPic : rectPic : drawFloor bs offset pic
+drawFloor (b:bs) offset pic = floorPic                     : 
+                              (translate x1 y1 (circle 3)) :  --These circles are the corners of the JBlock?
+                              (translate x2 y1 (circle 3)) :  -- 3 is arbitrary
+                              (translate x2 y2 (circle 3)) : 
+                              (translate x1 y2 (circle 3)) : 
+                              drawFloor bs offset pic
   where 
-    (x0, y) = topLeft b
-    x = x0 - offset
-    wdth = width b
+    (x0, y1) = topLeft b
+    x1 = x0 - offset
+    w = width b
     h = height b
-    points = [(x, y), (x + wdth, y), (x + wdth, y - h), (x, y -h)]
-    floorPic = translate x y pic
-    rectPic = translate x y (polygon points)
+    x2 = x1 + w
+    y2 = y1 - h
+    -- points = [(x1, y1), (x2, y1), (x2, y2), (x1, y2)]
+    floorPic = translate x1 y1 pic
+    -- rectPic = translate x1 y1 (polygon points) -- Where the block actually is? 
 
 -- drawFloor :: World->Picture -> [Picture]
 -- drawFloor w pic = case (terrain(curLevel w)) of 
