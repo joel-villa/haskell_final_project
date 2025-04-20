@@ -13,17 +13,7 @@ backgroundColor = (makeColor 0.75 0.75 1 0.5)
 
 
 initWorld :: World
---initWorld = World starterSheep levelOne 0
--- initWorld = World starterSheep (Level (makeTup (-200.0) 200.0 10.5) [(20,80)]) 0
-
 initWorld = World starterSheep(firstWorldToLevel(firstWorld (-200) (-160.0) 51 (30))) 0 0 heavenIntro [angel,angel{pathing=basicAngelPath2},angel{pathing=basicAngelPath3}]
-{-levelOne :: Level
-levelOne = Level terrain extras baddies
-  where 
-    terrain = makeBlocks (-200, -30) 200 10.5 10.5
-    extras = [(20, 80)]
-    baddies = []
-      -}
 
 makeBlocks :: (Float, Float) -> Float -> Float -> Float -> [JBlock] -- make horizontal path of blocks
 makeBlocks (initX, initY) endX h w  

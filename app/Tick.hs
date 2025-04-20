@@ -29,12 +29,12 @@ updatePlayer p0 offs bs = newP
     p2 = if inAir p1 then p1 {yVel = yVel p1 - 0.5} else p1 -- if in Air, fall
     newP = horizontalCollision p2 offs bs
 
+--New and improved and critic proof getOffset. Now goes off of the xvel instead of just positioning
 getOffset :: World -> Float 
 getOffset w= 
   if ((xPos (hero w))-(offset w)>= (200) && (xVel (hero w))>0) ||((xPos (hero w))-(offset w)<=(200)&&xVel (hero w)<0) then (offset w) +(xVel (hero w)) else (offset w)
 
 
---(Line [((2*x1-50), ((2)*y1)), ((2*x2-22), (2*y2))]) 
 horizontalCollision :: Player -> Float->[JBlock] -> Player
 horizontalCollision p _ [] = p  -- {inAir =True}
 horizontalCollision p offs (block:bs) = 
@@ -51,12 +51,13 @@ horizontalCollision p offs (block:bs) =
       x2 = x1 + width block
       y1 = y2 - height block
 
+--checks if there is enough lives to bring the player back and if it past the screen height
 handleFall::Player->Player
 handleFall p =
   if health p >0 &&  yPos p <(-500) then p{health= (health p) -1, yPos =500} else p
  
 inBetween :: Float -> Float -> Float -> Bool
 inBetween x low high = x > low && x < high
---TODO collisions!!
+
 
 

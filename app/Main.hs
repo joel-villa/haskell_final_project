@@ -10,10 +10,7 @@ import Init
 import GHC.Float
 
 -- | Display the last event received as text.
---prelude.show.event, very helpful
-
---worldToPicture' World -> Picture->Picture->Picture 
-
+--prelude.show.event, very helpful 
 
 main :: IO ()
 main =do
@@ -22,13 +19,14 @@ main =do
   clouds <- loadBMP "resources/patchOfClouds.bmp"
   angelGuy <-loadBMP "resources/angleDude.bmp"
   heart<-loadBMP "resources/heart.bmp"
+  heavenPictures =[floorbmp,bmp, clouds,angelGuy,heart]
 
   play
     (InWindow "GameEvent" (1000, 900) (0,0))   --Display mode
     backgroundColor                            -- in Init.hs
     fps                                        -- in Init.hs
     initWorld                                  -- in Init.hs
-    (\world -> (worldToPicture world [floorbmp,bmp, clouds,angelGuy,heart])) --A function to convert the world a picture.
+    (\world -> (worldToPicture world heavenPictures)) --A function to convert the world a picture.
     newHandleEvent                                -- in EventHandler.hs
     tick                                       -- in Tick.hs
 
@@ -42,6 +40,7 @@ worldToPicture w pics =
     bgs = enemies w
     drawExtras w pic =(Scale 2.5 2.5 (Translate (0) 100 pic)):[Scale 1.5 1 (Translate (-300) 300 pic)]     -- Sorry I will fix this later
 
+--Draws multiple enimies but in the current form, with only one picture
 drawEnimies :: [BadGuy]->Float->Picture->[Picture]
 drawEnimies [] _ _ =[]
 drawEnimies (bg:bgs) offs pic = (Scale 2 2 (Translate (x1-offs) y1 pic)) :drawEnimies bgs offs pic
@@ -49,44 +48,39 @@ drawEnimies (bg:bgs) offs pic = (Scale 2 2 (Translate (x1-offs) y1 pic)) :drawEn
     x1 = x (pathing bg)
     y1=y (pathing bg)
 
+-- Draws the hearts, this should stay consistent throughout any level
 drawHeart :: Picture -> World ->[Picture]
 drawHeart pic w= go (health (hero w)) pic 
   where 
     go 0.0 _ =[]
     go n pic =  (Translate ((n*80)+170) 400 pic) :go (n-1) pic
 
+-- draws the text introduction
 drawIntro :: World ->Picture
 drawIntro w = draw x
   where
     num =intro w
     x= if (num `div` 150) >5 then 5 else (num `div` 150)
     draw x = Color red (Translate (-450- (offset w)) 0 (scale 0.65 1 (text ((inTheBegining w)!!x))))
-    --x=(Translate (-400) 0 (scale 0.5 0.5 (text ((inTheBegining w)!!0))))
-    --x1=(Translate (-400) 0 (scale 0.5 0.5 (text ((inTheBegining w)!!1))))
-    --x2=(Translate (-400) 0 (scale 0.5 0.5 (text ((inTheBegining w)!!2))))
-    --x3=(Translate (-400) 0 (scale 0.5 0.5 (text ((inTheBegining w)!!3))))
-
-
+    
+--draws player, with the offset
 drawPlayer :: Player -> Float ->  Picture -> Picture
-drawPlayer h offs pic = translate x y pic --arbitrary 5, center is position of player
+drawPlayer h offs pic = translate x y pic 
   where
     x0 = xPos h
     y = yPos h
     x = x0 - offs
 -- drawPlayer world pic = Translate (20*((xPos (hero world))-(getOffset (xPos (hero world))))) ((yPos(hero world))) (pic)
 
-drawFloor :: [JBlock] -> Float -> Picture -> [Picture] 
-drawFloor [] offs pic = []
-drawFloor (b:bs) offs pic = floorPic:                     drawFloor bs offs pic
-                                --These circles are the corners of the JBlock?
-                              --(Line [((2*x1-50), ((2)*y1)), ((2*x2-22), (2*y2))]) :  -- these nums are NOT choosen arbitrarely
+--(Line [((2*x1-50), ((2)*y1)), ((2*x2-22), (2*y2))]) :  -- these nums are NOT choosen arbitrarely
                               --(Line[((2*x0-50), ((2)*y1)), ((2*(x0+w)-22), (2*y2))]):
                               -- the 2* is for the scalar of the block
                               -- (-50) is how many pixels off the left side of the block picture doesnt take up
                               -- (-22) is how many pixels the right side of the block picture doesnt take up
                               --If you change this, it will break collison in its current form
-                              --(Line [((0), (0)), ((offs), (0))]):
-                              
+drawFloor :: [JBlock] -> Float -> Picture -> [Picture] 
+drawFloor [] offs pic = []
+drawFloor (b:bs) offs pic = floorPic:drawFloor bs offs pic                            
   where 
     (x0, y1) = topLeft b
     x1 = x0 - offs
@@ -94,23 +88,6 @@ drawFloor (b:bs) offs pic = floorPic:                     drawFloor bs offs pic
     h = height b
     x2 = x1 + w
     y2 = y1 - h
-    -- points = [(x1, y1), (x2, y1), (x2, y2), (x1, y2)]
     floorPic = (scale 2 2(translate x1 y1  pic))
-    -- rectPic = translate x1 y1 (polygon points) -- Where the block actually is? 
 
 --the block is actually -25 on left -21 on right so 54 pixels
-
-
--- drawFloor :: World->Picture -> [Picture]
--- drawFloor w pic = case (terrain(curLevel w)) of 
---   [] -> []
---   ((JBlock (x,y) _ _ _):bs) -> floorPic x y w : drawFloor w{curLevel= ((curLevel w){terrain=bs})} pic
---   where
---     floorPic x y w =scale 2 2 (Translate ((x-(getOffset (xPos (hero w))))) (y) (pic))  -- Draws the floor, scales each tile by 2X2
-
-
-
-
-
-
-
