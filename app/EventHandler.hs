@@ -4,9 +4,9 @@ import Brillo.Interface.IO.Interact
 
 
 newHandleEvent :: Event ->World ->World 
-newHandleEvent(EventKey (SpecialKey KeyRight) Down _ _) w =w{hero= ((hero w){xVel=1})}
+newHandleEvent(EventKey (SpecialKey KeyRight) Down _ _) w =w{hero= ((hero w){xVel=10})}
 newHandleEvent(EventKey (SpecialKey KeyRight) Up _ _) w =w{hero= ((hero w){xVel=0})}
-newHandleEvent(EventKey (SpecialKey KeyLeft) Down _ _) w =w{hero= ((hero w){xVel=(-1)})}
+newHandleEvent(EventKey (SpecialKey KeyLeft) Down _ _) w =w{hero= ((hero w){xVel=(-5)})}
 newHandleEvent(EventKey (SpecialKey KeyLeft) Up _ _) w =w{hero= ((hero w){xVel=(0)})}
 newHandleEvent(EventKey (SpecialKey KeyUp) Down _ _) w =w{hero= (handleJump (hero w))}
 newHandleEvent(EventKey (SpecialKey KeyUp) Up _ _) w =w{hero= ((hero w){yVel=0})}
@@ -15,8 +15,9 @@ newHandleEvent _ w=w
 handleJump :: Player ->Player
 handleJump plr 
   |inAir plr = plr 
-  |otherwise = plr{yVel=15, inAir=True}
+  |otherwise = plr{yVel=20, inAir=True}
 
+{-
 handleEvent :: Event ->World-> World
 handleEvent(EventKey (SpecialKey KeyRight) _ _ _) world=updateXPos 1 world
 handleEvent(EventKey (SpecialKey KeyLeft) _ _ _) world=updateXPos (-1) world
@@ -29,20 +30,24 @@ handleVertCollision::Player -> [(Float,Float)]-> Float->Player
 handleVertCollision sheep floor yDisp = undefined
 
 
-getOffset :: Float -> Float 
-getOffset x
-  |x > 5     = (x - 5)
-  |x < (-5)  = (x + 5)
-  |otherwise = 0
+if ((player.rect.right - offset_x >= WIDTH - scroll_area_width) and player.x_vel > 0) or (
+                (player.rect.left - offset_x <= scroll_area_width) and player.x_vel < 0):
+            offset_x += player.x_vel
+-}
 
+
+-- ||((xPos p)-oldOffset<=(200)&&xVel p<0)
+
+{-
 updateXPos :: Float -> World -> World
-updateXPos n w = w {hero = updatedHero, offset= getOffset (xPos updatedHero)}
+updateXPos n w = w {hero = updatedHero, offset=newOffset }
   where
     oldHero = hero w                                  -- get old hero 
     updatedHero = oldHero {xPos = (xPos oldHero) + n} -- update position of hero
+    newOffset =getOffset w
 
 updateYPos :: Float -> World -> World
-updateYPos n w = w {hero = updatedHero,offset= getOffset (xPos updatedHero)}
+updateYPos n w = w {hero = updatedHero,offset= getOffset w}
   where
     oldHero = hero w                                  -- get current hero from w
     updatedHero = oldHero {yPos = (yPos oldHero) + n} -- updated yPosition
@@ -54,7 +59,7 @@ updatePlayer (Player x y h ft m ms) z q = (Player z q h ft m ms)
 -}
 
 
-{-
+
 bonk:: World->Player ->Bool 
 bonk =undefined
 
