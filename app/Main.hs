@@ -21,19 +21,20 @@ main =do
   floorbmp <- loadBMP "resources/pinkGrass.bmp"
   clouds <- loadBMP "resources/patchOfClouds.bmp"
   angelGuy <-loadBMP "resources/angleDude.bmp"
+  heart<-loadBMP "resources/heart.bmp"
 
   play
     (InWindow "GameEvent" (1000, 900) (0,0))   --Display mode
     backgroundColor                            -- in Init.hs
     fps                                        -- in Init.hs
     initWorld                                  -- in Init.hs
-    (\world -> (worldToPicture world [floorbmp,bmp, clouds,angelGuy])) --A function to convert the world a picture.
+    (\world -> (worldToPicture world [floorbmp,bmp, clouds,angelGuy,heart])) --A function to convert the world a picture.
     newHandleEvent                                -- in EventHandler.hs
     tick                                       -- in Tick.hs
 
 worldToPicture:: World -> [Picture]->Picture
 worldToPicture w pics = 
-  pictures((drawPlayer h offset' (pics!!1)) : (pictures (drawFloor bs offset' (pics!!0))) :drawIntro w:  (drawExtras w (pics!!2))++drawEnimies bgs offset' (pics!!3)) 
+  pictures((drawPlayer h offset' (pics!!1)) : (pictures (drawFloor bs offset' (pics!!0))) :drawIntro w: (drawHeart (pics!!4) w)++ (drawExtras w (pics!!2))++drawEnimies bgs offset' (pics!!3)) 
   where 
     offset' = (offset w)
     bs = terrain (curLevel w)
@@ -48,7 +49,11 @@ drawEnimies (bg:bgs) offs pic = (Scale 2 2 (Translate (x1-offs) y1 pic)) :drawEn
     x1 = x (pathing bg)
     y1=y (pathing bg)
 
-
+drawHeart :: Picture -> World ->[Picture]
+drawHeart pic w= go (health (hero w)) pic 
+  where 
+    go 0.0 _ =[]
+    go n pic =  (Translate ((n*80)+170) 400 pic) :go (n-1) pic
 
 drawIntro :: World ->Picture
 drawIntro w = draw x

@@ -11,7 +11,7 @@ data Player=
     yPos   :: Float, 
     xVel   :: Float,
     yVel   :: Float,
-    health :: Int,
+    health :: Float, -- I made this a float because im lazy, sorry guys
     inAir  :: Bool,
     money  :: Int,
     sMoneyAndSValubles :: [Item]

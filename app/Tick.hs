@@ -5,7 +5,7 @@ tick :: Float -> World -> World
 tick _ w = newWorld
   where 
     bs = terrain (curLevel w)
-    newPlayer = updatePlayer (hero w) (offset w) bs
+    newPlayer = handleFall (updatePlayer (hero w) (offset w) bs)
     newWorld = w {hero = newPlayer, offset=(getOffset w),intro= ((intro w) +1),enemies= (updateEnemies (enemies w))} 
 
 updateEnemies:: [BadGuy]->[BadGuy]
@@ -36,7 +36,7 @@ getOffset w=
 
 --(Line [((2*x1-50), ((2)*y1)), ((2*x2-22), (2*y2))]) 
 horizontalCollision :: Player -> Float->[JBlock] -> Player
-horizontalCollision p _ [] = p
+horizontalCollision p _ [] = p  -- {inAir =True}
 horizontalCollision p offs (block:bs) = 
   -- These numbers are NOT choosen arbituarly
   -- the 2* is for the scalar of the block
@@ -51,7 +51,9 @@ horizontalCollision p offs (block:bs) =
       x2 = x1 + width block
       y1 = y2 - height block
 
-
+handleFall::Player->Player
+handleFall p =
+  if health p >0 &&  yPos p <(-500) then p{health= (health p) -1, yPos =500} else p
  
 inBetween :: Float -> Float -> Float -> Bool
 inBetween x low high = x > low && x < high
