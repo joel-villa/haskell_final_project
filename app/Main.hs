@@ -19,14 +19,14 @@ main =do
   clouds <- loadBMP "resources/patchOfClouds.bmp"
   angelGuy <-loadBMP "resources/angleDude.bmp"
   heart<-loadBMP "resources/heart.bmp"
-  heavenPictures =[floorbmp,bmp, clouds,angelGuy,heart]
+  
 
   play
     (InWindow "GameEvent" (1000, 900) (0,0))   --Display mode
     backgroundColor                            -- in Init.hs
     fps                                        -- in Init.hs
     initWorld                                  -- in Init.hs
-    (\world -> (worldToPicture world heavenPictures)) --A function to convert the world a picture.
+    (\world -> (worldToPicture world [floorbmp,bmp, clouds,angelGuy,heart])) --A function to convert the world a picture.
     newHandleEvent                                -- in EventHandler.hs
     tick                                       -- in Tick.hs
 
