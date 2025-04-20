@@ -16,7 +16,7 @@ initWorld :: World
 --initWorld = World starterSheep levelOne 0
 -- initWorld = World starterSheep (Level (makeTup (-200.0) 200.0 10.5) [(20,80)]) 0
 
-initWorld = World starterSheep(firstWorldToLevel(firstWorld (-200) (-160.0) 51 (30))) 0 0 heavenIntro [angel]
+initWorld = World starterSheep(firstWorldToLevel(firstWorld (-200) (-160.0) 51 (30))) 0 0 heavenIntro [angel,angel{pathing=basicAngelPath2},angel{pathing=basicAngelPath3}]
 {-levelOne :: Level
 levelOne = Level terrain extras baddies
   where 
@@ -65,5 +65,25 @@ basicAngelPath=
     y=(-100),
     xVelocity=(-0.5),
     yVelocity=0
+  }
+
+basicAngelPath2= 
+  JPath{
+    initPos=(300,(0)),
+    goalPos =(600,(300)),
+    x=300,
+    y=(0),
+    xVelocity=(0.5),
+    yVelocity=(0.5)
+  }
+
+basicAngelPath3= 
+  JPath{
+    initPos=(900,(0)),
+    goalPos =(1200,(0)),
+    x=900,
+    y=(0),
+    xVelocity=(0.5),
+    yVelocity=(0)
   }
 

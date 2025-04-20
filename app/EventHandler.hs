@@ -15,7 +15,7 @@ newHandleEvent _ w=w
 handleJump :: Player ->Player
 handleJump plr 
   |inAir plr = plr 
-  |otherwise = plr{yVel=30, inAir=True}
+  |otherwise = plr{yVel=20, inAir=True}
 
 {-
 handleEvent :: Event ->World-> World

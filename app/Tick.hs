@@ -16,11 +16,11 @@ updateEnemies (bg:bgs) = newBg : updateEnemies bgs
     
 
 updatePath :: JPath -> JPath  -- Just switch the starter and end and flip the velocity 
-updatePath path =if (xp,yp) == (goalPos path) then newPath else path{x=(x path)+(xVelocity path)}
+updatePath path =if (xp,yp) == (goalPos path) then newPath else path{x=(x path)+(xVelocity path),y=(y path)+(yVelocity path)}
   where 
     (xp,yp)=((x path), (y path))
     prevGoal = goalPos path
-    newPath= path{goalPos=(initPos path), initPos =prevGoal, xVelocity= (xVelocity path) *(-1) }
+    newPath= path{goalPos=(initPos path), initPos =prevGoal, xVelocity= (xVelocity path) *(-1), yVelocity= (yVelocity path) *(-1)}
 
 updatePlayer :: Player -> Float->[JBlock] -> Player
 updatePlayer p0 offs bs = newP

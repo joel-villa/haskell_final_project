@@ -63,7 +63,7 @@ drawIntro w = draw x
 
 
 drawPlayer :: Player -> Float ->  Picture -> Picture
-drawPlayer h offs pic = pictures [translate x y pic, translate x y (circle 5),translate x0 y pic] --arbitrary 5, center is position of player
+drawPlayer h offs pic = translate x y pic --arbitrary 5, center is position of player
   where
     x0 = xPos h
     y = yPos h
