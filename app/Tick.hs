@@ -25,9 +25,18 @@ updatePath path =if (xp,yp) == (goalPos path) then newPath else path{x=(x path)+
 updatePlayer :: Player -> Float->[JBlock] -> Player
 updatePlayer p0 offs bs = newP
   where
-    p1 = p0 {xPos = xPos p0 + xVel p0 , yPos =yPos p0 +yVel p0}
-    p2 = if inAir p1 then p1 {yVel = yVel p1 - 0.5} else p1 -- if in Air, fall
-    newP = horizontalCollision p2 offs bs
+    p1 = p0 {xPos = xPos p0 + xVel p0 , yPos =yPos p0 +yVel p0} -- new location based on velocities
+    p2 = if inAir p1 then p1 {yVel = yVel p1 - 0.5} else p1     -- if in Air, fall
+    p3 = horizontalCollision p2 offs bs                         -- call to horizontalCollision
+    newP = p3 {weapon = updateWeapon p3}                        -- update Player's weapon velocity
+
+updateWeapon :: Player -> Item
+updateWeapon p = oldWeapon {wVelocity = newWVelocity}
+  where
+    oldWeapon = (weapon p)                          -- the old weapon
+    oldV = wVelocity oldWeapon                      -- the old weapon velocity
+    newWVelocity = if oldV > 0 then oldV - 1 else 0 -- decrement weapon velocity
+
 
 --New and improved and critic proof getOffset. Now goes off of the xvel instead of just positioning
 getOffset :: World -> Float 
