@@ -14,8 +14,8 @@ data Player=
     health :: Float, -- I made this a float because im lazy, sorry guys
     inAir  :: Bool,
     money  :: Int,
-    sMoneyAndSValubles :: [Item]
-    -- weapon
+    sMoneyAndSValubles :: [Item],
+    weapon :: Item
   }
 
 -- Should be the same as player but w/out fallingTime?? and yVel 
@@ -46,9 +46,10 @@ data Item =
     effect      :: Effect 
   }     -- diff effect
   | Weapon {
-    wDamage :: Int,       -- added to dmg rolls on hits
-    wDesc   :: String     --Exact descriptor, this would be for the users benefit
-    -- More weapon stats
+    wDamage :: Int,         -- added to dmg rolls on hits
+    wDesc   :: String,      -- Exact descriptor, this would be for the users benefit
+    wDamageRadius :: Float, -- How far of an effect?
+    wVelocity :: Float      -- 0 when not active, decremented in Tick while active
   }   
 -- Maybe a armor thing?
 
