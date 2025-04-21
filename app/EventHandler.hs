@@ -10,7 +10,7 @@ newHandleEvent(EventKey (Char 'a') Down _ _) w =w{hero= ((hero w){xVel=(-5)})}
 newHandleEvent(EventKey (Char 'a') Up _ _) w =w{hero= ((hero w){xVel=(0)})}
 newHandleEvent(EventKey (Char 'w') Down _ _) w =w{hero= (handleJump (hero w))}
 newHandleEvent(EventKey (Char 'w') Up _ _) w =w{hero= ((hero w){yVel=0})}
-newHandleEvent _ w=w
+newHandleEvent _ w=w --- hit 
 
 handleJump :: Player ->Player
 handleJump plr 

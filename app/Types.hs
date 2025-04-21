@@ -15,6 +15,7 @@ data Player=
     inAir  :: Bool,
     money  :: Int,
     sMoneyAndSValubles :: [Item]
+    -- weapon
   }
 
 -- Should be the same as player but w/out fallingTime?? and yVel 
@@ -47,6 +48,7 @@ data Item =
   | Weapon {
     wDamage :: Int,       -- added to dmg rolls on hits
     wDesc   :: String     --Exact descriptor, this would be for the users benefit
+    -- More weapon stats
   }   
 -- Maybe a armor thing?
 
