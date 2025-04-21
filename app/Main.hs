@@ -19,26 +19,38 @@ main =do
   clouds <- loadBMP "resources/patchOfClouds.bmp"
   angelGuy <-loadBMP "resources/angleDude.bmp"
   heart<-loadBMP "resources/heart.bmp"
-  
+  swing <- loadBMP "resources/SheepSwing.bmp"
 
+  let bmpList = [floorbmp,bmp, clouds,angelGuy,heart,swing]
   play
     (InWindow "GameEvent" (1000, 900) (0,0))   --Display mode
     backgroundColor                            -- in Init.hs
     fps                                        -- in Init.hs
     initWorld                                  -- in Init.hs
-    (\world -> (worldToPicture world [floorbmp,bmp, clouds,angelGuy,heart])) --A function to convert the world a picture.
+    (\world -> (worldToPicture world bmpList)) --A function to convert the world a picture.
     newHandleEvent                                -- in EventHandler.hs
     tick                                       -- in Tick.hs
 
 worldToPicture:: World -> [Picture]->Picture
 worldToPicture w pics = 
-  pictures((drawPlayer h offset' (pics!!1)) : (pictures (drawFloor bs offset' (pics!!0))) :drawIntro w: (drawHeart (pics!!4) w)++ (drawExtras w (pics!!2))++drawEnimies bgs offset' (pics!!3)) 
+  pictures((drawPlayer h offset' pPic) : (pictures (drawFloor bs offset' (pics!!0))) :drawIntro w: (drawHeart (pics!!4) w)++ (drawExtras w (pics!!2))++drawEnimies bgs offset' (pics!!3)) 
   where 
-    offset' = (offset w)
-    bs = terrain (curLevel w)
-    h = hero w 
-    bgs = enemies w
+    offset' = (offset w)      -- The offset of the world
+    bs = terrain (curLevel w) -- The JBlocks of this level
+    h = hero w                -- current player info
+    bgs = enemies w           -- baddies
     drawExtras w pic =(Scale 2.5 2.5 (Translate (0) 100 pic)):[Scale 1.5 1 (Translate (-300) 300 pic)]     -- Sorry I will fix this later
+    pPic = getPlayPic h pics  -- allows for multiple player pictures
+
+getPlayPic :: Player -> [Picture] -> Picture
+getPlayPic p pics = 
+  if swinging
+  then pics !! 5 -- Swinging "animation"
+  else pics !! 1 -- Normal pic
+  where
+    weaponV = wVelocity (weapon p) -- weapon velocity, nonzero => swinging
+    swinging = weaponV > 0         
+
 
 --Draws multiple enimies but in the current form, with only one picture
 drawEnimies :: [BadGuy]->Float->Picture->[Picture]
