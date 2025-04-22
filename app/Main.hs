@@ -65,7 +65,7 @@ drawHeart :: Picture -> World ->[Picture]
 drawHeart pic w= go (health (hero w)) pic 
   where 
     go 0.0 _ =[]
-    go n pic =  (Translate ((n*80)+170) 400 pic) :go (n-1) pic
+    go n pic =  (Translate ((n*80)+170) 380 pic) :go (n-1) pic
 
 -- draws the text introduction
 drawIntro :: World ->Picture
