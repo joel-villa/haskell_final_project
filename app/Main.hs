@@ -14,14 +14,17 @@ import GHC.Float
 
 main :: IO ()
 main =do
-  bmp <- loadBMP "resources/Sheep.bmp"
+  sheep <- loadBMP "resources/Sheep.bmp"
   floorbmp <- loadBMP "resources/pinkGrass.bmp"
   clouds <- loadBMP "resources/patchOfClouds.bmp"
   angelGuy <-loadBMP "resources/angleDude.bmp"
   heart<-loadBMP "resources/heart.bmp"
-  swing <- loadBMP "resources/SheepSwing.bmp"
+  sheepSwing <- loadBMP "resources/SheepSwing.bmp"
+  sheepLeft <- loadBMP "resources/SheepLeft.bmp"
+  sheepLeftSwing <- loadBMP "resources/SheepLeftSwing.bmp"
 
-  let bmpList = [floorbmp,bmp, clouds,angelGuy,heart,swing]
+  let bmpList = [floorbmp, sheep, clouds, angelGuy, heart, sheepSwing, 
+                 sheepLeft, sheepLeftSwing]
   play
     (InWindow "GameEvent" (1000, 900) (0,0))   --Display mode
     backgroundColor                            -- in Init.hs
@@ -44,12 +47,18 @@ worldToPicture w pics =
 
 getPlayPic :: Player -> [Picture] -> Picture
 getPlayPic p pics = 
-  if swinging
-  then pics !! 5 -- Swinging "animation"
-  else pics !! 1 -- Normal pic
+  if swinging 
+    then case facingRight of 
+      True -> pics !! 5  -- Swinging to right
+      False -> pics !! 7 -- swinging to left
+  else 
+    case facingRight of
+       True -> pics !! 1  -- facing right
+       False -> pics !! 6 -- facing left
   where
     weaponV = wVelocity (weapon p) -- weapon velocity, nonzero => swinging
-    swinging = weaponV > 0         
+    swinging = weaponV > 0   
+    facingRight = (xVel p) >= 0
 
 
 --Draws multiple enimies but in the current form, with only one picture
