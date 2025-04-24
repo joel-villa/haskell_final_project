@@ -24,7 +24,8 @@ data BadGuy =
     health_bad :: Int,  
     money_bad  :: Int, 
     pouch      :: [Item], 
-    pathing    :: JPath
+    pathing    :: JPath,
+    hitRadius  :: Float -- hitCircle's feel more natural w/ Brillo (since x,y is center of pic)
   }
 
 
@@ -41,15 +42,16 @@ data JPath =
 
 data Item = 
   Potion {
-    quantEffect :: Int,  -- Like how much it increases your health/ xvel/yvel
-    descriptor  :: String, --Exact descriptor, this would be for the users benefit
+    quantEffect :: Int,    -- Like how much it increases your health/ xvel/yvel
+    descriptor  :: String, -- Exact descriptor, this would be for the users benefit
     effect      :: Effect 
   }     -- diff effect
   | Weapon {
-    wDamage :: Int,         -- added to dmg rolls on hits
-    wDesc   :: String,      -- Exact descriptor, this would be for the users benefit
-    wDamageRadius :: Float, -- How far of an effect?
-    wVelocity :: Float      -- 0 when not active, decremented in Tick while active
+    wDamage       :: Int,           -- added to dmg rolls on hits
+    wDesc         :: String,        -- Exact descriptor, this would be for the users benefit
+    wDamageRadius :: Float,         -- How far of an effect?
+    wVelocity     :: Float,         -- 0 when not active, decremented in Tick while active
+    relativePos   :: (Float, Float) -- relative to sheep's position
   }   
 -- Maybe a armor thing?
 
