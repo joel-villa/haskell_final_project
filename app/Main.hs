@@ -64,10 +64,13 @@ getPlayPic p pics =
 --Draws multiple enimies but in the current form, with only one picture
 drawEnimies :: [BadGuy]->Float->Picture->[Picture]
 drawEnimies [] _ _ =[]
-drawEnimies (bg:bgs) offs pic = (Scale 2 2 (Translate (x1-offs) y1 pic)) :drawEnimies bgs offs pic
+drawEnimies (bg:bgs) offs pic = (Scale 2 2 (Translate (x1-offs) y1 pic)) : hitCircle : drawEnimies bgs offs pic
   where 
     x1 = x (pathing bg)
     y1=y (pathing bg)
+    -- hitCircle's feel more natural w/ Brillo (since x,y is center of pic)
+    -- hitCircle1 = scale 2 2 (translate (x1 - offs) y1 (circle (hitRadius bg))) 
+    hitCircle = (translate ((x1 - offs)*2) (y1*2) (circle (hitRadius bg))) 
 
 -- Draws the hearts, this should stay consistent throughout any level
 drawHeart :: Picture -> World ->[Picture]
@@ -86,11 +89,15 @@ drawIntro w = draw x
     
 --draws player, with the offset
 drawPlayer :: Player -> Float ->  Picture -> Picture
-drawPlayer h offs pic = translate x y pic 
+drawPlayer h offs pic = pictures [translate x y pic, playerPos, weaponRadius] 
   where
     x0 = xPos h
     y = yPos h
     x = x0 - offs
+    w = weapon h -- The weapon
+    (w_x_offset,w_y_offset) = relativePos w  -- The weapon's position relative to sheep
+    playerPos = translate x y (circle (10)) -- arbitrary 5 (for player position)
+    weaponRadius = translate (x + w_x_offset) (y + w_y_offset) (circle (wDamageRadius w))
 -- drawPlayer world pic = Translate (20*((xPos (hero world))-(getOffset (xPos (hero world))))) ((yPos(hero world))) (pic)
 
 --(Line [((2*x1-50), ((2)*y1)), ((2*x2-22), (2*y2))]) :  -- these nums are NOT choosen arbitrarely
