@@ -26,8 +26,8 @@ updatePlayer :: Player -> Float->[JBlock] -> Player
 updatePlayer p0 offs bs = newP
   where
     p1 = p0 {xPos = xPos p0 + xVel p0 , yPos =yPos p0 +yVel p0} -- new location based on velocities
-    p2 = if inAir p1 then p1 {yVel = yVel p1 - 0.5} else p1     -- if in Air, fall
-    p3 = horizontalCollision p2 offs bs                         -- call to horizontalCollision
+    p2 = horizontalCollision p1 offs bs                         -- call to horizontalCollision
+    p3 = if inAir p2 then p2 {yVel = yVel p2 - 0.25} else p2    -- if in Air, fall
     newP = p3 {weapon = updateWeapon p3}                        -- update Player's weapon velocity
 
 updateWeapon :: Player -> Item
@@ -45,16 +45,18 @@ getOffset w=
 
 
 horizontalCollision :: Player -> Float->[JBlock] -> Player
-horizontalCollision p _ [] = p  -- {inAir =True}
+horizontalCollision p _ [] = if not (inAir p) then  p {inAir =True} else p
 horizontalCollision p offs (block:bs) = 
   -- These numbers are NOT choosen arbituarly
   -- the 2* is for the scalar of the block
   -- (-50) is how many pixels off the left side of the block picture doesnt take up
   -- (-22) is how many pixels the right side of the block picture doesnt take up
   --If you change this, it will break collison in its current form
-  if inBetween (xPos p)  (2*x1-50-offs) (2*x2-22-offs) && inBetween (yPos p) ((2)*y1) (2*y2) --TODO make this not hard-coded :(  x1-25.5), y1), ((x2-18.5)
+  if inBetween (xPos p)  (2*x1-50-offs) (2*x2-22-offs) && inBetween (yPos p) ((2)*y1) (2*y2 + 80) --TODO make this not hard-coded :(  x1-25.5), y1), ((x2-18.5)
   then p {yPos = ((2)*y1+85), inAir = False, yVel = 0}
   else horizontalCollision p offs bs
+    -- (x1, y1) is bottom left corner (min values)
+    -- (x2, y2) is top right (max values)
     where 
       (x1, y2) = topLeft block
       x2 = x1 + width block
