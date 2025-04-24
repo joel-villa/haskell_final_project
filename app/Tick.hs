@@ -26,7 +26,7 @@ updatePlayer :: Player -> Float->[JBlock] -> Player
 updatePlayer p0 offs bs = newP
   where
     p1 = p0 {xPos = xPos p0 + xVel p0 , yPos =yPos p0 +yVel p0} -- new location based on velocities
-    p2 = collision p1 offs bs                         -- call to collision
+    p2 = horzCollision p1 offs bs                               -- call to horzCollision
     p3 = if inAir p2 then p2 {yVel = yVel p2 - 0.75} else p2    -- if in Air, fall
     newP = p3 {weapon = updateWeapon p3}                        -- update Player's weapon velocity
 
@@ -43,24 +43,21 @@ getOffset :: World -> Float
 getOffset w= 
   if ((xPos (hero w))-(offset w)>= (200) && (xVel (hero w))>0) ||((xPos (hero w))-(offset w)<=(200)&&xVel (hero w)<0) then (offset w) +(xVel (hero w)) else (offset w)
 
---TODO, should offset be in tick, I feel like it is more well suited for drawing, but idk
-collision :: Player -> Float->[JBlock] -> Player
-collision p _ [] = if not (inAir p) then  p {inAir =True} else p
-collision p offs (block:bs) = 
+horzCollision :: Player -> Float->[JBlock] -> Player
+horzCollision p _ [] = if not (inAir p) then  p {inAir =True} else p
+horzCollision p offs (block:bs) = 
   -- These numbers are NOT choosen arbituarly
   -- the 2* is for the scalar of the block
   -- (-50) is how many pixels off the left side of the block picture doesnt take up
   -- (-22) is how many pixels the right side of the block picture doesnt take up
   --If you change this, it will break collison in its current form
-  -- TODO: should we move this pixel math into draw? 
   if isCollision &&  ((yVel p) < 0.25) -- 0.25 b/c 0 resulted in jumping bug
     -- falling onto a block
     then p {yPos = ((2)*y1+85), inAir = False, yVel = 0} 
   else if isCollision && ((yVel p ) > 0.25) -- 0.25 b/c 0 resulted in jumping bug
     -- hitting head on block
-    then p {yPos = (2*y2-25), inAir = True, yVel = 0} -- Somewhat arbitrary 120: TODO: fix inBlock to make this more fluid
-  --TODO check both sides of the block as well (rename this function to collision, instead of just collision)
-  else collision p offs bs
+    then p {yPos = (2*y2-25), inAir = True, yVel = 0} -- Somewhat arbitrary -25 (found via guess and check)
+  else horzCollision p offs bs
     -- (x1, y1) is bottom left corner (min values)
     -- (x2, y2) is top right (max values)
     where 
@@ -75,7 +72,6 @@ inBlock :: JBlock -> (Float, Float) -> Float-> Bool
 -- (-22) is how many pixels the right side of the block picture doesnt take up
 --If you change this, it will break collison in its current form
 -- Joel's Note: 2*y2 + 80, where 80 was found by guess and check
--- TODO: should we move this pixel math into draw? 
 inBlock block (x, y) offs = inBetween x  (2*x1-50-offs) (2*x2-22-offs) && inBetween y ((2)*y1) (2*y2 + 80) --TODO make this not hard-coded :(  x1-25.5), y1), ((x2-18.5)
   -- (x1, y1) is bottom left corner (min values)
   -- (x2, y2) is top right (max values)
