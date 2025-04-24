@@ -52,6 +52,8 @@ horizontalCollision p offs (block:bs) =
   -- (-50) is how many pixels off the left side of the block picture doesnt take up
   -- (-22) is how many pixels the right side of the block picture doesnt take up
   --If you change this, it will break collison in its current form
+  -- Joel's Note: 2*y2 + 80, where 80 was found by guess and check to fix a bug
+  -- TODO: should we move this pixel math into draw? 
   if inBetween (xPos p)  (2*x1-50-offs) (2*x2-22-offs) && inBetween (yPos p) ((2)*y1) (2*y2 + 80) --TODO make this not hard-coded :(  x1-25.5), y1), ((x2-18.5)
   then p {yPos = ((2)*y1+85), inAir = False, yVel = 0}
   else horizontalCollision p offs bs
