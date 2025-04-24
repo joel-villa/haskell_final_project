@@ -66,7 +66,7 @@ firstWorld x y xs ys= [ Block x y, Block (x+(xs)) y,Block (x+(2.0*xs)) y, Block 
 
 firstWorldToLevelBlock :: [Terrain] -> [JBlock]
 firstWorldToLevelBlock [] = []
-firstWorldToLevelBlock (Block x y : xs) =  reverse((JBlock (x, y) 20.0 40.5 None): firstWorldToLevelBlock xs)
+firstWorldToLevelBlock (Block x y : xs) =  reverse((JBlock (x, y) 10.5 40.5 None): firstWorldToLevelBlock xs)
 firstWorldToLevelBlock (Cloud x y z :xs) = firstWorldToLevelBlock xs
 
 firstWorldToLevelCloud :: [Terrain] -> [Terrain]
