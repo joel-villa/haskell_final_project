@@ -36,4 +36,4 @@ useWeapon :: Player -> Player
 useWeapon p = p {weapon = swungSword}
   where
     oldWeapon = weapon p 
-    swungSword = oldWeapon {wVelocity = 8} -- This constant determines duraton of swing
+    swungSword = oldWeapon {wVelocity = 8, active = True} -- This constant determines duraton of swing

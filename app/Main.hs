@@ -47,7 +47,7 @@ worldToPicture w pics =
 
 getPlayPic :: Player -> [Picture] -> Picture
 getPlayPic p pics = 
-  if swinging 
+  if active (weapon p) 
     then case facingEast of 
       True -> pics !! 5  -- Swinging to right
       False -> pics !! 7 -- swinging to left
@@ -55,9 +55,7 @@ getPlayPic p pics =
     case facingEast of
        True -> pics !! 1  -- facing right
        False -> pics !! 6 -- facing left
-  where
-    weaponV = wVelocity (weapon p) -- weapon velocity, nonzero => swinging
-    swinging = weaponV > 0   
+  where 
     facingEast = facingRight p
 
 

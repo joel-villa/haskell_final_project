@@ -31,11 +31,12 @@ updatePlayer p0 offs bs = newP
     newP = p3 {weapon = updateWeapon p3}                        -- update Player's weapon velocity
 
 updateWeapon :: Player -> Item
-updateWeapon p = oldWeapon {wVelocity = newWVelocity}
+updateWeapon p = oldWeapon {wVelocity = newWVelocity, active = newActive}
   where
     oldWeapon = (weapon p)                          -- the old weapon
     oldV = wVelocity oldWeapon                      -- the old weapon velocity
     newWVelocity = if oldV > 0 then oldV - 1 else 0 -- decrement weapon velocity
+    newActive = if newWVelocity == 0 then False else True -- weapon is or is not being used 
 
 
 --New and improved and critic proof getOffset. Now goes off of the xvel instead of just positioning
