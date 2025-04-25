@@ -62,13 +62,20 @@ getPlayPic p pics =
 --Draws multiple enimies but in the current form, with only one picture
 drawEnimies :: [BadGuy]->Float->Picture->[Picture]
 drawEnimies [] _ _ =[]
-drawEnimies (bg:bgs) offs pic = (Scale 2 2 (Translate (x1-offs) y1 pic)) : hitCircle : drawEnimies bgs offs pic
+drawEnimies (bg:bgs) offs pic = (Scale 2 2 (Translate (x0-offs) y0 pic)) : hitBox : drawEnimies bgs offs pic
   where 
-    x1 = x (pathing bg)
-    y1=y (pathing bg)
+    x0 = x (pathing bg)
+    y0=y (pathing bg)
     -- hitCircle's feel more natural w/ Brillo (since x,y is center of pic)
-    -- hitCircle1 = scale 2 2 (translate (x1 - offs) y1 (circle (hitRadius bg))) 
-    hitCircle = (translate ((x1 - offs)*2) (y1*2) (circle (hitRadius bg))) 
+    -- hitCircle1 = scale 2 2 (translate (x1 - offs) y1 (circle (hitRadius bg)))
+    xCenter = (x0 - offs)*2
+    yCenter = (y0*2)
+    hitR = hitRadius bg
+    (x1, y1) = (xCenter - hitR, yCenter + hitR)
+    (x2, y2) = (xCenter + hitR, yCenter - hitR)
+    pts = [(x1, y1), (x1, y2), (x2, y2), (x2, y1), (x1, y1)]
+    hitBox = (line pts)
+    -- hitCircle = (translate xCenter yCenter (circle (hitRadius bg))) 
 
 -- Draws the hearts, this should stay consistent throughout any level
 drawHeart :: Picture -> World ->[Picture]
