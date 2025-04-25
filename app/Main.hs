@@ -48,17 +48,17 @@ worldToPicture w pics =
 getPlayPic :: Player -> [Picture] -> Picture
 getPlayPic p pics = 
   if swinging 
-    then case facingRight of 
+    then case facingEast of 
       True -> pics !! 5  -- Swinging to right
       False -> pics !! 7 -- swinging to left
   else 
-    case facingRight of
+    case facingEast of
        True -> pics !! 1  -- facing right
        False -> pics !! 6 -- facing left
   where
     weaponV = wVelocity (weapon p) -- weapon velocity, nonzero => swinging
     swinging = weaponV > 0   
-    facingRight = (xVel p) >= 0
+    facingEast = facingRight p
 
 
 --Draws multiple enimies but in the current form, with only one picture
