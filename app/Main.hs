@@ -62,13 +62,20 @@ getPlayPic p pics =
 --Draws multiple enimies but in the current form, with only one picture
 drawEnimies :: [BadGuy]->Float->Picture->[Picture]
 drawEnimies [] _ _ =[]
-drawEnimies (bg:bgs) offs pic = (Scale 2 2 (Translate (x1-offs) y1 pic)) : hitCircle : drawEnimies bgs offs pic
+drawEnimies (bg:bgs) offs pic = (Scale 2 2 (Translate (x0-offs) y0 pic)) : hitBox : drawEnimies bgs offs pic
   where 
-    x1 = x (pathing bg)
-    y1=y (pathing bg)
+    x0 = x (pathing bg)
+    y0=y (pathing bg)
     -- hitCircle's feel more natural w/ Brillo (since x,y is center of pic)
-    -- hitCircle1 = scale 2 2 (translate (x1 - offs) y1 (circle (hitRadius bg))) 
-    hitCircle = (translate ((x1 - offs)*2) (y1*2) (circle (hitRadius bg))) 
+    -- hitCircle1 = scale 2 2 (translate (x1 - offs) y1 (circle (hitRadius bg)))
+    xCenter = (x0 - offs)*2
+    yCenter = (y0*2)
+    hitR = hitRadius bg
+    (x1, y1) = (xCenter - hitR, yCenter + hitR)
+    (x2, y2) = (xCenter + hitR, yCenter - hitR)
+    pts = [(x1, y1), (x1, y2), (x2, y2), (x2, y1), (x1, y1)]
+    hitBox = (line pts)
+    -- hitCircle = (translate xCenter yCenter (circle (hitRadius bg))) 
 
 -- Draws the hearts, this should stay consistent throughout any level
 drawHeart :: Picture -> World ->[Picture]
@@ -87,15 +94,19 @@ drawIntro w = draw x
     
 --draws player, with the offset
 drawPlayer :: Player -> Float ->  Picture -> Picture
-drawPlayer h offs pic = pictures [translate x y pic, playerPos, weaponRadius] 
+drawPlayer h offs pic = pictures [translate x y pic, playerPos, weaponHBox] 
   where
-    x0 = xPos h
     y = yPos h
-    x = x0 - offs
+    x = (xPos h) - offs
+    playerPos = translate x y (circle (10)) -- arbitrary 10 (for player position)
     w = weapon h -- The weapon
-    (w_x_offset,w_y_offset) = relativePos w  -- The weapon's position relative to sheep
-    playerPos = translate x y (circle (10)) -- arbitrary 5 (for player position)
-    weaponRadius = translate (x + w_x_offset) (y + w_y_offset) (circle (wDamageRadius w))
+    (relX,relY) = relativePos w  -- The weapon's position relative to sheep
+    w_hit_rad = wDamageRadius w
+    (wCenterX, wCenterY) = (x + relX, y + relY)
+    (wx1, wy1) = (wCenterX - w_hit_rad, wCenterY + w_hit_rad)
+    (wx2, wy2) = (wCenterX + w_hit_rad, wCenterY -w_hit_rad)
+    pts = [(wx1, wy1), (wx2, wy1), (wx2, wy2), (wx1, wy2), (wx1, wy1)]
+    weaponHBox = line pts
 -- drawPlayer world pic = Translate (20*((xPos (hero world))-(getOffset (xPos (hero world))))) ((yPos(hero world))) (pic)
 
 --(Line [((2*x1-50), ((2)*y1)), ((2*x2-22), (2*y2))]) :  -- these nums are NOT choosen arbitrarely
