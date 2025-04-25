@@ -7,15 +7,16 @@ module Types where
 --A sheep fellow, maybe he will be purple, maybe he will be green
 data Player= 
   Player { 
-    xPos   :: Float, 
-    yPos   :: Float, 
-    xVel   :: Float,
-    yVel   :: Float,
-    health :: Float, -- I made this a float because im lazy, sorry guys
-    inAir  :: Bool,
-    money  :: Int,
+    xPos               :: Float, 
+    yPos               :: Float, 
+    xVel               :: Float,
+    yVel               :: Float,
+    health             :: Float, -- I made this a float because im lazy, sorry guys
+    inAir              :: Bool,
+    money              :: Int,
     sMoneyAndSValubles :: [Item],
-    weapon :: Item
+    weapon             :: Item, 
+    facingRight        :: Bool
   }
 
 -- Should be the same as player but w/out fallingTime?? and yVel 
