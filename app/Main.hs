@@ -117,14 +117,23 @@ drawPlayer h offs pic = pictures [translate x y pic, playerPos, weaponHBox]
                               --If you change this, it will break collison in its current form
 drawFloor :: [JBlock] -> Float -> Picture -> [Picture] 
 drawFloor [] offs pic = []
-drawFloor (b:bs) offs pic = floorPic:drawFloor bs offs pic                            
+drawFloor (b:bs) offs pic = floorPic : floorHBox :drawFloor bs offs pic                            
   where 
-    (x0, y1) = topLeft b
-    x1 = x0 - offs
-    w = width b
-    h = height b
-    x2 = x1 + w
-    y2 = y1 - h
-    floorPic = (scale 2 2(translate x1 y1  pic))
+    (x0, yCenter) = topLeft b
+    xCenter = x0 - offs
+    wdth = width b
+    hght = height b
+    (x1, y1) = (xCenter - (wdth * 0.5) + 2, yCenter + (hght * 0.5) - 3) -- the top left corner 
+    (x2, y2) = (x1 + wdth, y1 - hght) -- bottom right corner
+    floorPic = (scale 2 2(translate xCenter yCenter pic))
+    (scaled_x1, scaled_y1) = (x1*2, y1*2)
+    (scaled_x2, scaled_y2) = (x2*2, y2*2)
+    pts = [
+      (scaled_x1, scaled_y1), 
+      (scaled_x1, scaled_y2), 
+      (scaled_x2, scaled_y2), 
+      (scaled_x2, scaled_y1), 
+      (scaled_x1,scaled_y1)]
+    floorHBox = Line pts
 
 --the block is actually -25 on left -21 on right so 54 pixels
