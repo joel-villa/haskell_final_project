@@ -94,15 +94,19 @@ drawIntro w = draw x
     
 --draws player, with the offset
 drawPlayer :: Player -> Float ->  Picture -> Picture
-drawPlayer h offs pic = pictures [translate x y pic, playerPos, weaponRadius] 
+drawPlayer h offs pic = pictures [translate x y pic, playerPos, weaponHBox] 
   where
-    x0 = xPos h
     y = yPos h
-    x = x0 - offs
+    x = (xPos h) - offs
+    playerPos = translate x y (circle (10)) -- arbitrary 10 (for player position)
     w = weapon h -- The weapon
-    (w_x_offset,w_y_offset) = relativePos w  -- The weapon's position relative to sheep
-    playerPos = translate x y (circle (10)) -- arbitrary 5 (for player position)
-    weaponRadius = translate (x + w_x_offset) (y + w_y_offset) (circle (wDamageRadius w))
+    (relX,relY) = relativePos w  -- The weapon's position relative to sheep
+    w_hit_rad = wDamageRadius w
+    (wCenterX, wCenterY) = (x + relX, y + relY)
+    (wx1, wy1) = (wCenterX - w_hit_rad, wCenterY + w_hit_rad)
+    (wx2, wy2) = (wCenterX + w_hit_rad, wCenterY -w_hit_rad)
+    pts = [(wx1, wy1), (wx2, wy1), (wx2, wy2), (wx1, wy2), (wx1, wy1)]
+    weaponHBox = line pts
 -- drawPlayer world pic = Translate (20*((xPos (hero world))-(getOffset (xPos (hero world))))) ((yPos(hero world))) (pic)
 
 --(Line [((2*x1-50), ((2)*y1)), ((2*x2-22), (2*y2))]) :  -- these nums are NOT choosen arbitrarely
