@@ -37,7 +37,8 @@ starterSheep =
     inAir  = False,
     money  = 10, 
     sMoneyAndSValubles = [Potion {quantEffect=10,descriptor="Health Potion +10", effect=Healing}],
-    weapon = Weapon 5 "initial sword" 18 0 (15, -25)
+    weapon = Weapon 5 "initial sword" 18 0 (15, -25),
+    facingRight = True
   }
 
 angel ::BadGuy
