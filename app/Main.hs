@@ -16,27 +16,38 @@ main :: IO ()
 main =do
   sheep <- loadBMP "resources/Sheep.bmp"
   floorbmp <- loadBMP "resources/pinkGrass.bmp"
+  purgFloor <-loadBMP "resources/purgFloor.bmp"
+  hellfloor <- loadBMP "resources/hellfloor.bmp"
   clouds <- loadBMP "resources/patchOfClouds.bmp"
   angelGuy <-loadBMP "resources/angleDude.bmp"
   heart<-loadBMP "resources/heart.bmp"
   sheepSwing <- loadBMP "resources/SheepSwing.bmp"
   sheepLeft <- loadBMP "resources/SheepLeft.bmp"
   sheepLeftSwing <- loadBMP "resources/SheepLeftSwing.bmp"
+  hellback <-loadBMP "resources/hellBack.bmp"
+  evilguy <- loadBMP "resources/LilDude.bmp"
+  heavenback <-loadBMP "resources/heaven.bmp"
+  machoMan <-loadBMP "resources/MachoMan.bmp"
+  fluGuy <-loadBMP "resources/FlyGuy.bmp"
 
-  let bmpList = [floorbmp, sheep, clouds, angelGuy, heart, sheepSwing, 
-                 sheepLeft, sheepLeftSwing]
+  let bmpList = [purgFloor, sheep, clouds, evilguy, heart, sheepSwing, 
+                 sheepLeft, sheepLeftSwing, heavenback]
+
+  let heavenList=[floorbmp,sheep,clouds,angelGuy,heart,sheepSwing,sheepLeft,sheepLeftSwing,heavenback]  
+
+  let hellList= [hellfloor, sheep, fluGuy,machoMan, heart,sheepSwing,sheepLeft,sheepLeftSwing,(scale 2.75 3 hellback)]             
   play
     (InWindow "GameEvent" (1000, 900) (0,0))   --Display mode
     backgroundColor                            -- in Init.hs
     fps                                        -- in Init.hs
     initWorld                                  -- in Init.hs
-    (\world -> (worldToPicture world bmpList)) --A function to convert the world a picture.
+    (\world -> (worldToPicture world heavenList)) --A function to convert the world a picture.
     newHandleEvent                                -- in EventHandler.hs
     tick                                       -- in Tick.hs
 
 worldToPicture:: World -> [Picture]->Picture
 worldToPicture w pics = 
-  pictures((drawPlayer h offset' pPic) : (pictures (drawFloor bs offset' (pics!!0))) :drawIntro w: (drawHeart (pics!!4) w)++ (drawExtras w (pics!!2))++drawEnimies bgs offset' (pics!!3)) 
+  pictures(bgrnd: (drawPlayer h offset' pPic) : (pictures (drawFloor bs offset' (pics!!0))) :drawIntro w: (drawHeart (pics!!4) w)++ (drawExtras w (pics!!2))++drawEnimies bgs offset' (pics!!3)) 
   where 
     offset' = (offset w)      -- The offset of the world
     bs = terrain (curLevel w) -- The JBlocks of this level
@@ -44,6 +55,7 @@ worldToPicture w pics =
     bgs = enemies w           -- baddies
     drawExtras w pic =(Scale 2.5 2.5 (Translate (0) 100 pic)):[Scale 1.5 1 (Translate (-300) 300 pic)]     -- Sorry I will fix this later
     pPic = getPlayPic h pics  -- allows for multiple player pictures
+    bgrnd=(pics!!8)
 
 getPlayPic :: Player -> [Picture] -> Picture
 getPlayPic p pics = 
@@ -94,7 +106,7 @@ drawIntro w = draw x
     
 --draws player, with the offset
 drawPlayer :: Player -> Float ->  Picture -> Picture
-drawPlayer h offs pic = pictures [translate x y pic, playerPos, weaponHBox] 
+drawPlayer h offs pic = pictures [translate x y pic ,pHitbox]
   where
     y = yPos h
     x = (xPos h) - offs
@@ -106,7 +118,13 @@ drawPlayer h offs pic = pictures [translate x y pic, playerPos, weaponHBox]
     (wx1, wy1) = (wCenterX - w_hit_rad, wCenterY + w_hit_rad)
     (wx2, wy2) = (wCenterX + w_hit_rad, wCenterY -w_hit_rad)
     pts = [(wx1, wy1), (wx2, wy1), (wx2, wy2), (wx1, wy2), (wx1, wy1)]
+    pt = [
+      (unfloat offs (topLt (hitBox h))),
+      (unfloat offs (topRt (hitBox h))),
+      (unfloat offs (bottomLt (hitBox h))),
+      (unfloat offs (bottomRt (hitBox h)))]
     weaponHBox = line pts
+    pHitbox= line pt
 -- drawPlayer world pic = Translate (20*((xPos (hero world))-(getOffset (xPos (hero world))))) ((yPos(hero world))) (pic)
 
 --(Line [((2*x1-50), ((2)*y1)), ((2*x2-22), (2*y2))]) :  -- these nums are NOT choosen arbitrarely
@@ -117,7 +135,7 @@ drawPlayer h offs pic = pictures [translate x y pic, playerPos, weaponHBox]
                               --If you change this, it will break collison in its current form
 drawFloor :: [JBlock] -> Float -> Picture -> [Picture] 
 drawFloor [] offs pic = []
-drawFloor (b:bs) offs pic = floorPic : floorHBox :drawFloor bs offs pic                            
+drawFloor (b:bs) offs pic = floorPic:drawFloor bs offs pic                            
   where 
     (x0, yCenter) = topLeft b
     xCenter = x0 - offs
@@ -129,11 +147,16 @@ drawFloor (b:bs) offs pic = floorPic : floorHBox :drawFloor bs offs pic
     (scaled_x1, scaled_y1) = (x1*2, y1*2)
     (scaled_x2, scaled_y2) = (x2*2, y2*2)
     pts = [
-      (scaled_x1, scaled_y1), 
-      (scaled_x1, scaled_y2), 
-      (scaled_x2, scaled_y2), 
-      (scaled_x2, scaled_y1), 
-      (scaled_x1,scaled_y1)]
+      (unfloat offs (topLt (floorBox b))),
+      (unfloat offs (topRt (floorBox b))),
+      (unfloat offs (bottomLt (floorBox b))),
+      (unfloat offs (bottomRt (floorBox b)))]
     floorHBox = Line pts
 
+unfloat ::Float->(Float,Float)->(Float,Float)
+unfloat offs (x,y)=((x-offs),y)
+   
+
+
+--(2*x1-50-offs) (2*x2-22-offs)
 --the block is actually -25 on left -21 on right so 54 pixels
