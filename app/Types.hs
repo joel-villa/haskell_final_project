@@ -16,8 +16,10 @@ data Player=
     money              :: Int,
     sMoneyAndSValubles :: [Item],
     weapon             :: Item, 
-    facingRight        :: Bool
+    facingRight        :: Bool,
+    hitBox:: HitBox
   }
+
 
 -- Should be the same as player but w/out fallingTime?? and yVel 
 data BadGuy = 
@@ -67,8 +69,18 @@ data JBlock =
     topLeft     :: (Float, Float),
     height      :: Float,
     width       :: Float, 
-    path        :: JPath
+    path        :: JPath,
+    floorBox:: HitBox
   }
+--I gave it all 4 points incase we dont want to not only be a box
+data HitBox=
+  HitBox {
+    topLt:: (Float,Float),
+    topRt::(Float,Float),
+    bottomLt ::(Float,Float),
+    bottomRt :: (Float, Float)
+  }
+
 
 data Level = 
   Level {

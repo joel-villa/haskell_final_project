@@ -66,7 +66,20 @@ firstWorld x y xs ys= [ Block x y, Block (x+(xs)) y,Block (x+(2.0*xs)) y, Block 
 
 firstWorldToLevelBlock :: [Terrain] -> [JBlock]
 firstWorldToLevelBlock [] = []
-firstWorldToLevelBlock (Block x y : xs) =  reverse((JBlock (x, y) 10.5 40.5 None): firstWorldToLevelBlock xs) -- currently implemented
+firstWorldToLevelBlock (Block x y : xs) =  reverse((JBlock (x, y) 10.5 40.5 None (HitBox (x1,y1) (x2,y1) (x1,y2) (x2,y2))): firstWorldToLevelBlock xs) -- currently implemented
+    where 
+        x1=2*x -50  --offset
+        x2=2*(x+40.5) -22
+        y1=2*(y+11)
+        y2=2*(y-18)
+{-
+where 
+    (x1, y2) = topLeft block
+    x2 = x1 + width block
+    y1 = y2 - height block
+
+-}
+-- (2*x1-50-offs) (2*x2-22-offs) && inBetween y ((2)*y1) (2*y2 + 80)
 -- firstWorldToLevelBlock (Block x y : xs) =  reverse((JBlock (x, y) 30 53 None): firstWorldToLevelBlock xs)
 firstWorldToLevelBlock (Cloud x y z :xs) = firstWorldToLevelBlock xs
 
