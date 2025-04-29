@@ -33,7 +33,17 @@ updatePlayer p0 offs bs = newP
     (x,y)= topLt (hitBox p4)
     tpl= ((xPos p4), (yPos p4))
     newHit= newHitBox (xPos p4) (yPos p4) (facingRight p4)
-    newP = p4 {weapon = updateWeapon p4,hitBox=newHit }                        -- update Player's weapon velocity
+    newP = p4 {weapon = updateWeapon p4,hitBox=newHit, magic=projectileTest (magic p4) }                        -- update Player's weapon velocity
+
+projectileTest :: Projectiles ->Projectiles
+projectileTest Empty= Empty
+projectileTest p = 
+  if (durration p <0) then Empty
+  else p{projBox= generalUpdateHitBox updateX y oldBox, durration= (durration p)-1}
+  where 
+    updateX= (direction p)
+    y=0 --No update in y direction currently
+    oldBox= projBox p
 
 
 updateWeapon :: Player -> Item
@@ -82,7 +92,7 @@ onTop block p offs = (inBetween farLft (low-offs) (high-offs) || (inBetween farR
 vertCollision:: Player -> Float -> [JBlock]->Player 
 vertCollision p _ [] =p 
 vertCollision p offs (block:bs)=
-  if collidingL then p{xPos = x1, hitBox=newBox x1} -- x1 
+  if False then p{xPos = x1, hitBox=newBox x1} -- x1 
   else if False then p{xPos =x2,hitBox=newBox x2} --x2 
   else vertCollision p offs bs
     where 
@@ -91,7 +101,7 @@ vertCollision p offs (block:bs)=
       (pRx,pRy)= topRt(hitBox p)
       (pLx,pLy)= bottomLt (hitBox p)
       --low high
-      collidingL = inBetween pRx (x1-offs) (x2-offs) && inBetween pRy (y2) (y1)
+      collidingL = inBetween pRx (x1-offs) (x2-offs) && inBetween (yPos p) (y2) (y1)
       collidingR = inBetween pLx (x1-offs) (x2-offs)
       newBox x= newHitBox x (yPos p) (facingRight p) 
 --newHitBox:: Float-> Float-> Bool-> HitBox    
