@@ -98,12 +98,14 @@ data Level =
   } 
 data World = 
   World { 
-    hero     :: Player, 
-    curLevel :: Level, 
-    offset   :: Float,
-    intro    ::Int,
-    inTheBegining::[String],
-    enemies:: [BadGuy]
+    hero            :: Player, 
+    curLevel        :: Level, 
+    offset          :: Float,
+    intro           :: Int,
+    inTheBegining   :: [String],
+    enemies         :: [BadGuy],
+    levels          :: [Level],
+    levelIndex  :: Int
     } -- TODO change this to other World
 heavenIntro=["In the begining", "there was darkness", "And God said","Let there be a sheep","and then God said", "Go west young sheep"]
 data Terrain = 
