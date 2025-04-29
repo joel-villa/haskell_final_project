@@ -13,7 +13,16 @@ backgroundColor = (makeColor 0.75 0.75 1 0.5)
 
 
 initWorld :: World
-initWorld = World starterSheep(firstWorldToLevel(firstWorld (-200) (-160.0) 51 (30))) 0 0 heavenIntro [angel,angel{pathing=basicAngelPath2},angel{pathing=basicAngelPath3}]
+initWorld = World {
+  hero = starterSheep,
+  curLevel = (firstWorldToLevel(firstWorld (-200) (-160.0) 51 (30))),
+  offset = 0,
+  intro = 0,
+  inTheBegining = heavenIntro,
+  enemies = [angel,angel{pathing=basicAngelPath2} ,angel{pathing=basicAngelPath3}],
+  levels = [(firstWorldToLevel(firstWorld (-200) (-160.0) 51 (30)))],
+  levelIndex = 1
+}
 {-
 makeBlocks :: (Float, Float) -> Float -> Float -> Float -> [JBlock] -- make horizontal path of blocks
 makeBlocks (initX, initY) endX h w  
