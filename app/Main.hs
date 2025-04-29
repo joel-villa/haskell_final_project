@@ -30,25 +30,25 @@ main =do
   machoMan <-loadBMP "resources/MachoMan.bmp"
   fluGuy <-loadBMP "resources/FlyGuy.bmp"
 
-  let bmpList = [purgFloor, sheep, clouds, evilguy, heart, sheepSwing, 
-                 sheepLeft, sheepLeftSwing, heavenback]
-
   let heavenList=[floorbmp,sheep,clouds,angelGuy,heart,sheepSwing,sheepLeft,sheepLeftSwing,heavenback]  
 
-  let hellList= [hellfloor, sheep, fluGuy,machoMan, heart,sheepSwing,sheepLeft,sheepLeftSwing,(scale 2.75 3 hellback)]             
+  let hellList= [hellfloor, sheep, fluGuy,machoMan, heart,sheepSwing,sheepLeft,sheepLeftSwing,(scale 2.75 3 hellback)] 
+
+  let levelResources = [heavenList, hellList]           
   play
     (InWindow "GameEvent" (1000, 900) (0,0))   --Display mode
     backgroundColor                            -- in Init.hs
     fps                                        -- in Init.hs
     initWorld                                  -- in Init.hs
-    (\world -> (worldToPicture world heavenList)) --A function to convert the world a picture.
+    (\world -> (worldToPicture world levelResources)) --A function to convert the world a picture.
     newHandleEvent                                -- in EventHandler.hs
     tick                                       -- in Tick.hs
 
-worldToPicture:: World -> [Picture]->Picture
-worldToPicture w pics = 
+worldToPicture:: World -> [[Picture]]->Picture
+worldToPicture w picss = 
   pictures(bgrnd: (drawPlayer h offset' pPic) : (pictures (drawFloor bs offset' (pics!!0))) :drawIntro w: (drawHeart (pics!!4) w)++ (drawExtras w (pics!!2))++drawEnimies bgs offset' (pics!!3)) 
   where 
+    pics = picss !! (levelIndex w)
     offset' = (offset w)      -- The offset of the world
     bs = terrain (curLevel w) -- The JBlocks of this level
     h = hero w                -- current player info
