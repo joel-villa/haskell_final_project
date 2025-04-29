@@ -89,5 +89,47 @@ firstWorldToLevelCloud (Cloud x y v: xs ) = reverse(Cloud {cxpos = x , cypos = y
 firstWorldToLevelCloud (Block x y : xs) = firstWorldToLevelCloud xs
 
 firstWorldToLevel :: [Terrain] -> Level
-firstWorldToLevel terrain = Level {terrain = (firstWorldToLevelBlock terrain) , clouds = (firstWorldToLevelCloud terrain)}
+firstWorldToLevel terrain = Level {
+  terrain = (firstWorldToLevelBlock terrain),
+  clouds  = (firstWorldToLevelCloud terrain),
+  enemies = [angel,angel{pathing=basicAngelPath2} ,angel{pathing=basicAngelPath3}]
+  }
 
+angel ::BadGuy
+angel=
+  BadGuy{
+    health_bad=10,
+    money_bad=10,
+    pouch=[],
+    pathing= basicAngelPath,
+    hitRadius = 30
+}
+basicAngelPath= 
+  JPath{
+    initPos=(200,(-100)),
+    goalPos =(-100,(-100)),
+    x=100,
+    y=(-100),
+    xVelocity=(-0.5),
+    yVelocity=0
+  }
+
+basicAngelPath2= 
+  JPath{
+    initPos=(300,(0)),
+    goalPos =(600,(300)),
+    x=300,
+    y=(0),
+    xVelocity=(0.5),
+    yVelocity=(0.5)
+  }
+
+basicAngelPath3= 
+  JPath{
+    initPos=(900,(0)),
+    goalPos =(1200,(0)),
+    x=900,
+    y=(0),
+    xVelocity=(0.5),
+    yVelocity=(0)
+  }

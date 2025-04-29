@@ -94,7 +94,8 @@ data Level =
   Level {
     terrain  :: [JBlock],
     floorpos :: [(Float,Float)], 
-    clouds   :: [Terrain]
+    clouds   :: [Terrain],
+    enemies  :: [BadGuy]
   } 
 data World = 
   World { 
@@ -103,7 +104,6 @@ data World =
     offset          :: Float,
     intro           :: Int,
     inTheBegining   :: [String],
-    enemies         :: [BadGuy],
     levels          :: [Level],
     levelIndex  :: Int
     } -- TODO change this to other World

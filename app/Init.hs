@@ -19,9 +19,8 @@ initWorld = World {
   offset = 0,
   intro = 0,
   inTheBegining = heavenIntro,
-  enemies = [angel,angel{pathing=basicAngelPath2} ,angel{pathing=basicAngelPath3}],
   levels = [(firstWorldToLevel(firstWorld (-200) (-160.0) 51 (30)))],
-  levelIndex = 1
+  levelIndex = 0
 }
 {-
 makeBlocks :: (Float, Float) -> Float -> Float -> Float -> [JBlock] -- make horizontal path of blocks
@@ -68,46 +67,3 @@ generalUpdateHitBox x y oldH= HitBox ((x1+x),(y1+y)) ((x2+x),(y1+y)) ((x1+x),(y2
   where
     (x1,y1)= (topLt oldH)
     (x2,y2)= (bottomRt oldH)
-
-
-
-
-angel ::BadGuy
-angel=
-  BadGuy{
-    health_bad=10,
-    money_bad=10,
-    pouch=[],
-    pathing= basicAngelPath,
-    hitRadius = 30
-}
-basicAngelPath= 
-  JPath{
-    initPos=(200,(-100)),
-    goalPos =(-100,(-100)),
-    x=100,
-    y=(-100),
-    xVelocity=(-0.5),
-    yVelocity=0
-  }
-
-basicAngelPath2= 
-  JPath{
-    initPos=(300,(0)),
-    goalPos =(600,(300)),
-    x=300,
-    y=(0),
-    xVelocity=(0.5),
-    yVelocity=(0.5)
-  }
-
-basicAngelPath3= 
-  JPath{
-    initPos=(900,(0)),
-    goalPos =(1200,(0)),
-    x=900,
-    y=(0),
-    xVelocity=(0.5),
-    yVelocity=(0)
-  }
-
