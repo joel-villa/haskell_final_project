@@ -48,7 +48,7 @@ sheepBasedMagic p= p{magic=newMagic}
     x=(x1+x2)/2
     y=(y1+y2)/2
     (x1,y1)=(topLt (hitBox p))
-    (x2,y2)=(bottomRt (hitb p))
+    (x2,y2)=(bottomRt (hitBox p))
 
 --            leftX topY   width   height
 makeHitbox :: Float->Float->Float->Float->HitBox
