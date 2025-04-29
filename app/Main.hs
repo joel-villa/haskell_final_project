@@ -106,7 +106,7 @@ drawIntro w = draw x
     
 --draws player, with the offset
 drawPlayer :: Player -> Float ->  Picture -> Picture
-drawPlayer h offs pic = pictures [translate x y pic ,pHitbox]
+drawPlayer h offs pic = pictures (pHitbox: translate x y pic : (drawMagic (magic h) pic offs)) 
   where
     y = yPos h
     x = (xPos h) - offs
@@ -127,6 +127,20 @@ drawPlayer h offs pic = pictures [translate x y pic ,pHitbox]
     pHitbox= line pt
 -- drawPlayer world pic = Translate (20*((xPos (hero world))-(getOffset (xPos (hero world))))) ((yPos(hero world))) (pic)
 
+drawMagic :: Projectiles ->Picture ->Float-> [Picture]
+drawMagic Empty _ _ =[]
+drawMagic p pic offs = [Translate x y (scale 0.5 0.5 pic), projHitbox]
+  where
+    x=(x1+x2)/2 -offs
+    y=(y1+y2)/2 +20
+    (x1,y1)=(topLt (projBox p))
+    (x2,y2)=(bottomRt (projBox p))
+    pt = [
+      (unfloat offs (topLt (projBox p))),
+      (unfloat offs (topRt (projBox p))),
+      (unfloat offs (bottomLt (projBox p))),
+      (unfloat offs (bottomRt (projBox p)))]
+    projHitbox= line pt
 --(Line [((2*x1-50), ((2)*y1)), ((2*x2-22), (2*y2))]) :  -- these nums are NOT choosen arbitrarely
                               --(Line[((2*x0-50), ((2)*y1)), ((2*(x0+w)-22), (2*y2))]):
                               -- the 2* is for the scalar of the block

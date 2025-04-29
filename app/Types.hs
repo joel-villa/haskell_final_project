@@ -17,7 +17,8 @@ data Player=
     sMoneyAndSValubles :: [Item],
     weapon             :: Item, 
     facingRight        :: Bool,
-    hitBox:: HitBox
+    hitBox:: HitBox,
+    magic :: Projectiles
   }
 
 
@@ -80,6 +81,13 @@ data HitBox=
     bottomLt ::(Float,Float),
     bottomRt :: (Float, Float)
   }
+
+data Projectiles=
+  Projectiles {
+    projBox ::HitBox,
+    durration :: Float,
+    direction :: Float
+  } | Empty
 
 
 data Level = 
