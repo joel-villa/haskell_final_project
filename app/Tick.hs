@@ -7,7 +7,9 @@ tick _ w = newWorld
   where 
     bs = terrain (curLevel w)
     newPlayer = handleFall (updatePlayer (hero w) (offset w) bs)
-    newWorld = w {hero = newPlayer, offset=(getOffset w),intro= ((intro w) +1),enemies= (updateEnemies (enemies w))} 
+    newEnemies = updateEnemies (enemies (curLevel w))
+    newLevel = (curLevel w) {enemies = newEnemies}
+    newWorld = w {hero = newPlayer, offset=(getOffset w),intro= ((intro w) +1),curLevel= newLevel} 
 
 updateEnemies:: [BadGuy]->[BadGuy]
 updateEnemies [] =[]
