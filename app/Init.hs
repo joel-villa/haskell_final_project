@@ -44,8 +44,8 @@ starterSheep =
 
 --so you give it the actual x and this is what you do with it
 newHitBox:: Float-> Float-> Bool-> HitBox
-newHitBox x y False= HitBox (x-5,y+20) ((x+45),y+20) (x-5,(y-62)) ((x+45),(y-62))
-newHitBox x y True= HitBox (x-40,y+20) ((x+5),y+20) (x-40,(y-62)) ((x+5),(y-62))
+-- newHitBox x y False= HitBox (x-5,y+20) ((x+45),y+20) (x-5,(y-62)) ((x+45),(y-62))
+newHitBox x y _= HitBox (x-40,y+20) ((x+5),y+20) (x-40,(y-62)) ((x+5),(y-62))
 
 updateHitboxB:: Float->Float->Bool->HitBox
 --           bottomLeft

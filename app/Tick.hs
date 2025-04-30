@@ -126,17 +126,21 @@ onTop block p offs = (inBetween farLft (low) (high) || (inBetween farRt (low) (h
 vertCollision:: Player -> Float -> [JBlock]->Player 
 vertCollision p _ [] =p 
 vertCollision p offs (block:bs)=
-  if False then p{xPos = (x1+10), hitBox=newBox (x1+10),xVel =0} -- x1 
-  else if False then p{xPos =(x2-10),hitBox=newBox (x2-10),xVel =0} --x2 
+  if playerLeftBoxRight then p{xPos = (px+padding), hitBox=newBox (px+padding),xVel =0} -- x1 
+  else if playerRightBoxLeft then p{xPos =(px-padding),hitBox=newBox (px-padding),xVel =0} --x2 
   else vertCollision p offs bs
     where 
       (x1,y1)= topLt (floorBox block)
       (x2,y2)= bottomRt (floorBox block)
       (px1,py1)= topLt(hitBox p)
       (px2,py2)= bottomRt (hitBox p)
+      py = yPos p
+      px = xPos p
       --low high
-      collidingL = inBetween px1 x1 x2 && inBetween py1 y2 y1
-      collidingR = inBetween px2 x1 x2 && inBetween py1 y2 y1
+      padding = (px2 - px1) *(0.125) 
+      -- padding = 0
+      playerLeftBoxRight = inBetween px1 x1 x2 && inBetween py y2 y1
+      playerRightBoxLeft = inBetween px2 x1 x2 && inBetween py y2 y1
       newBox x= newHitBox x (yPos p) (facingRight p) 
 --newHitBox:: Float-> Float-> Bool-> HitBox    
 
@@ -184,7 +188,7 @@ handleFall p =
   else p
  
 inBetween :: Float -> Float -> Float -> Bool
-inBetween x low high = x > low && x < high
+inBetween x x1 x2 = (x > x1 && x < x2) || (x < x1 && x > x2)
 
 
 
