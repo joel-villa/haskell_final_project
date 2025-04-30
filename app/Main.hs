@@ -106,10 +106,11 @@ drawIntro w = draw x
     
 --draws player, with the offset
 drawPlayer :: Player -> Float ->  Picture -> Picture
-drawPlayer h offs pic = pictures ( translate x y pic : pHitbox:(drawMagic (magic h) pic offs))  --
+drawPlayer h offs pic = pictures ( translate adjustedX y pic : pHitbox:(drawMagic (magic h) pic offs))  --
   where
     y = yPos h
     x = (xPos h) - offs
+    adjustedX = if facingRight h then x else (x - 30) -- THIS CODE SHIFTS Sheep
     playerPos = translate x y (circle (10)) -- arbitrary 10 (for player position)
     w = weapon h -- The weapon
     (relX,relY) = relativePos w  -- The weapon's position relative to sheep
