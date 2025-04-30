@@ -6,7 +6,7 @@ tick :: Float -> World -> World
 tick _ w = newWorld
   where 
     bs = terrain (curLevel w)
-    newPlayer = handleFall (updatePlayer (hero w) (offset w) bs)
+    newPlayer = handleFall (updatePlayer (hero w) (enemies (curLevel w)) (offset w) bs)
     newEnemies = updateEnemies newPlayer (enemies (curLevel w))
     newLevel = (curLevel w) {enemies = newEnemies}
     newWorld = w {hero = newPlayer, offset=(getOffset w),intro= ((intro w) +1),curLevel= newLevel} 
@@ -20,54 +20,38 @@ updateEnemies p (bg:bgs) = if collision then (newBg{health_bad= (health_bad newB
     bg1 = bg{pathing=(updatePath (pathing bg))}
     oldHitbox= baddieBox bg1
     path =pathing bg 
-    newBg=bg1{baddieBox= generalUpdateHitBox ((xVelocity path)) ((yVelocity path)) oldHitbox}--, attack=(updateBasicAttack p bg (attack newBg))
-    collision=projCollision (magic p) bg
+    newBg=bg1{baddieBox= generalUpdateHitBox ((xVelocity path)) ((yVelocity path)) oldHitbox,attack=(updateBasicAttack p bg1 (attack bg1))}--, 
+    collision=projCollision (magic p) (baddieBox bg)
     
 updateBasicAttack:: Player->BadGuy->Projectiles->Projectiles
-updateBasicAttack p bg Empty = if abs (px-bx) <15 then Projectiles{projBox=newBox,durration=40,direction=newVel} else Empty
+--updateBasicAttack _ _ _ = Empty
+updateBasicAttack p bg Empty =if (abs(px-bx) <300) && (abs (py-by))<300 && (health_bad bg) >0 then Projectiles{projBox=newBox,durration=40,direction=newVel,yDirection =ydir} else Empty
   where 
     px = xPos p 
+    py = yPos p
     bx= x(pathing bg)
+    by = y(pathing bg)
     newBox= makeHitbox x0 y0 20 30
-    newVel = if (px-bx) >0 then 7 else (-7)
+    newVel = (px-bx)/40
+    ydir =(py-by)/40
     x0=(x1+x2)/2
-    y0=(y1 )
+    y0=(y1)
     (x1,y1)=(topLt (baddieBox bg))
     (x2,y2)=(bottomRt (baddieBox bg))
-updateBasicAttack p bg at= projectileTest at
-  
+    
+updateBasicAttack p bg at= if touchyWouchy then Empty else projectileTest at
+  where
+    touchyWouchy =projCollision at (hitBox p)
 
-
-projCollision:: Projectiles -> BadGuy->Bool
+projCollision:: Projectiles -> HitBox->Bool
 projCollision Empty bg = False
-projCollision p bg = collision
+projCollision p box = collision
   where
     (mx,my)=topLt (projBox p)
     (mx2,my2)=bottomRt (projBox p)
-    (x,y) =topLt (baddieBox bg)
-    (x1,y1) =bottomRt(baddieBox bg)
+    (x,y) =topLt (box)
+    (x1,y1) =bottomRt(box)
     collision = (inBetween mx x x1 && inBetween my2 y1 y) || (inBetween mx2 x x1 && inBetween my y1 y)
-
-
-
-updatePath :: JPath -> JPath  -- Just switch the starter and end and flip the velocity 
-updatePath path =if (xp,yp) == (goalPos path) then newPath else path{x=(x path)+(xVelocity path),y=(y path)+(yVelocity path)}
-  where 
-    (xp,yp)=((x path), (y path))
-    prevGoal = goalPos path
-    newPath= path{goalPos=(initPos path), initPos =prevGoal, xVelocity= (xVelocity path) *(-1), yVelocity= (yVelocity path) *(-1)}
-
-updatePlayer :: Player -> Float->[JBlock] -> Player
-updatePlayer p0 offs bs = newP
-  where
-    p1 = p0 {xPos = xPos p0 + xVel p0 , yPos =yPos p0 +yVel p0} -- new location based on velocities
-    p2 = horzCollisionHitBox p1 offs bs                               -- call to horzCollisionHitBox
-    p3 =vertCollision p2 offs bs                                      -- call to vertcollision
-    p4 = if inAir p3 then p3 {yVel = yVel p3 - 0.75} else p3    -- if in Air, fall
-    (x,y)= topLt (hitBox p4)
-    tpl= ((xPos p4), (yPos p4))
-    newHit= newHitBox (xPos p4) (yPos p4) (facingRight p4)
-    newP = p4 {weapon = updateWeapon p4,hitBox=newHit, magic=projectileTest (magic p4) }                        -- update Player's weapon velocity
 
 projectileTest :: Projectiles ->Projectiles
 projectileTest Empty= Empty
@@ -76,8 +60,32 @@ projectileTest p =
   else p{projBox= generalUpdateHitBox updateX y oldBox, durration= (durration p)-1}
   where 
     updateX= (direction p)
-    y=0 --No update in y direction currently
+    y= (yDirection p) --No update in y direction currently
     oldBox= projBox p
+
+updatePath :: JPath -> JPath  -- Just switch the starter and end and flip the velocity 
+updatePath path =if (xp,yp) == (goalPos path) then newPath else path{x=(x path)+(xVelocity path),y=(y path)+(yVelocity path)}
+  where 
+    (xp,yp)=((x path), (y path))
+    prevGoal = goalPos path
+    newPath= path{goalPos=(initPos path), initPos =prevGoal, xVelocity= (xVelocity path) *(-1), yVelocity= (yVelocity path) *(-1)}
+
+updatePlayer :: Player ->[BadGuy]-> Float->[JBlock] -> Player
+updatePlayer p0 bgs offs bs = newP
+  where
+    p1 = p0 {xPos = xPos p0 + xVel p0 , yPos =yPos p0 +yVel p0} -- new location based on velocities
+    p2 = horzCollisionHitBox p1 offs bs                               -- call to horzCollisionHitBox
+    p3 =vertCollision p2 offs bs                                      -- call to vertcollision
+    p4 = if inAir p3 then p3 {yVel = yVel p3 - 0.75} else p3    -- if in Air, fall
+    (x,y)= topLt (hitBox p4)
+    tpl= ((xPos p4), (yPos p4))
+    newHit= newHitBox (xPos p4) (yPos p4) (facingRight p4)
+    hth= if checkMultiCollision bgs p4 then ((health p4) -1) else health p4
+    newP = p4 {weapon = updateWeapon p4,hitBox=newHit, magic=projectileTest (magic p4),health =hth }--health =hth update Player's weapon velocity
+
+checkMultiCollision :: [BadGuy]->Player ->Bool 
+checkMultiCollision [] _ =False
+checkMultiCollision (bg:bgs) p =if projCollision (attack bg) (hitBox p) then True else checkMultiCollision bgs p
 
 
 updateWeapon :: Player -> Item
