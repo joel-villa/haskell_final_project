@@ -29,7 +29,8 @@ data BadGuy =
     money_bad  :: Int, 
     pouch      :: [Item], 
     pathing    :: JPath,
-    hitRadius  :: Float -- hitCircle's feel more natural w/ Brillo (since x,y is center of pic)
+    baddieBox :: HitBox,
+    attack :: Projectiles
   }
 
 
@@ -112,4 +113,10 @@ data Terrain =
                Block {bxpos :: Float, bypos :: Float} |
                Cloud {cxpos :: Float, cypos :: Float, cvel:: Float} | 
                Fence {fxpos :: Float, fypos :: Float}
+
+
+
+--            leftX topY   width   height
+makeHitbox :: Float->Float->Float->Float->HitBox
+makeHitbox x y w h =HitBox (x,y) (x+w,y) (x,y-h) (x+w,y-h)
 
