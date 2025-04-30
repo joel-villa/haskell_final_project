@@ -7,16 +7,48 @@ tick _ w = newWorld
   where 
     bs = terrain (curLevel w)
     newPlayer = handleFall (updatePlayer (hero w) (offset w) bs)
-    newEnemies = updateEnemies (enemies (curLevel w))
+    newEnemies = updateEnemies newPlayer (enemies (curLevel w))
     newLevel = (curLevel w) {enemies = newEnemies}
     newWorld = w {hero = newPlayer, offset=(getOffset w),intro= ((intro w) +1),curLevel= newLevel} 
+    --newWorld = w {hero = newPlayer, offset=(getOffset w),intro= ((intro w) +1),enemies= (updateEnemies newPlayer (enemies w))} 
 
-updateEnemies:: [BadGuy]->[BadGuy]
-updateEnemies [] =[]
-updateEnemies (bg:bgs) = newBg : updateEnemies bgs
+updateEnemies::Player-> [BadGuy]->[BadGuy]
+updateEnemies _ [] =[]
+--                                             change to weapon damage? proj damage?
+updateEnemies p (bg:bgs) = if collision then (newBg{health_bad= (health_bad newBg -10)}): updateEnemies p bgs else newBg : updateEnemies p bgs --newbg health =0
   where
-    newBg = bg{pathing=(updatePath (pathing bg)) }
+    bg1 = bg{pathing=(updatePath (pathing bg))}
+    oldHitbox= baddieBox bg1
+    path =pathing bg 
+    newBg=bg1{baddieBox= generalUpdateHitBox ((xVelocity path)) ((yVelocity path)) oldHitbox}--, attack=(updateBasicAttack p bg (attack newBg))
+    collision=projCollision (magic p) bg
     
+updateBasicAttack:: Player->BadGuy->Projectiles->Projectiles
+updateBasicAttack p bg Empty = if abs (px-bx) <15 then Projectiles{projBox=newBox,durration=40,direction=newVel} else Empty
+  where 
+    px = xPos p 
+    bx= x(pathing bg)
+    newBox= makeHitbox x0 y0 20 30
+    newVel = if (px-bx) >0 then 7 else (-7)
+    x0=(x1+x2)/2
+    y0=(y1 )
+    (x1,y1)=(topLt (baddieBox bg))
+    (x2,y2)=(bottomRt (baddieBox bg))
+updateBasicAttack p bg at= projectileTest at
+  
+
+
+projCollision:: Projectiles -> BadGuy->Bool
+projCollision Empty bg = False
+projCollision p bg = collision
+  where
+    (mx,my)=topLt (projBox p)
+    (mx2,my2)=bottomRt (projBox p)
+    (x,y) =topLt (baddieBox bg)
+    (x1,y1) =bottomRt(baddieBox bg)
+    collision = (inBetween mx x x1 && inBetween my2 y1 y) || (inBetween mx2 x x1 && inBetween my y1 y)
+
+
 
 updatePath :: JPath -> JPath  -- Just switch the starter and end and flip the velocity 
 updatePath path =if (xp,yp) == (goalPos path) then newPath else path{x=(x path)+(xVelocity path),y=(y path)+(yVelocity path)}
@@ -74,7 +106,7 @@ horzCollisionHitBox p offs (block:bs)=
       newBox= updateHitboxB px y (facingRight p)
 
 hittingHead :: JBlock-> Player-> Float ->Bool
-hittingHead block p offs =(inBetween farLft (low-offs) (high-offs) || (inBetween farRt (low-offs) (high-offs)))  && (inBetween y y1 y2) && ((yVel p ) >1)
+hittingHead block p offs =(inBetween farLft (low) (high) || (inBetween farRt (low) (high)))  && (inBetween y y1 y2) && ((yVel p ) >1)
   where
     (farLft, _)= bottomLt (hitBox p)
     (farRt, y) = topRt (hitBox p)
@@ -83,7 +115,7 @@ hittingHead block p offs =(inBetween farLft (low-offs) (high-offs) || (inBetween
 
 
 onTop :: JBlock -> Player ->Float-> Bool
-onTop block p offs = (inBetween farLft (low-offs) (high-offs) || (inBetween farRt (low-offs) (high-offs) ))&& (((yVel p) < 0.25) && (inBetween y y1 y2))
+onTop block p offs = (inBetween farLft (low) (high) || (inBetween farRt (low) (high) ))&& (((yVel p) < 0.25) && (inBetween y y1 y2))
   where
     (farLft, y)= bottomLt (hitBox p)
     (farRt, _) = bottomRt (hitBox p)
@@ -94,17 +126,17 @@ onTop block p offs = (inBetween farLft (low-offs) (high-offs) || (inBetween farR
 vertCollision:: Player -> Float -> [JBlock]->Player 
 vertCollision p _ [] =p 
 vertCollision p offs (block:bs)=
-  if False then p{xPos = x1, hitBox=newBox x1} -- x1 
-  else if False then p{xPos =x2,hitBox=newBox x2} --x2 
+  if False then p{xPos = (x1+10), hitBox=newBox (x1+10),xVel =0} -- x1 
+  else if False then p{xPos =(x2-10),hitBox=newBox (x2-10),xVel =0} --x2 
   else vertCollision p offs bs
     where 
       (x1,y1)= topLt (floorBox block)
       (x2,y2)= bottomRt (floorBox block)
-      (pRx,pRy)= topRt(hitBox p)
-      (pLx,pLy)= bottomLt (hitBox p)
+      (px1,py1)= topLt(hitBox p)
+      (px2,py2)= bottomRt (hitBox p)
       --low high
-      collidingL = inBetween pRx (x1-offs) (x2-offs) && inBetween (yPos p) (y2) (y1)
-      collidingR = inBetween pLx (x1-offs) (x2-offs)
+      collidingL = inBetween px1 x1 x2 && inBetween py1 y2 y1
+      collidingR = inBetween px2 x1 x2 && inBetween py1 y2 y1
       newBox x= newHitBox x (yPos p) (facingRight p) 
 --newHitBox:: Float-> Float-> Bool-> HitBox    
 

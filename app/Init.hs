@@ -15,30 +15,20 @@ backgroundColor = (makeColor 0.75 0.75 1 0.5)
 initWorld :: World
 initWorld = World {
   hero = starterSheep,
-  curLevel = (firstWorldToLevel(firstWorld (-200) (-160.0) 51 (30))),
+  curLevel = (firstWorldToLevel(firstWorld (-200) (-160.0) 105 (60))),
   offset = 0,
   intro = 0,
   inTheBegining = heavenIntro,
-  levels = [(firstWorldToLevel(firstWorld (-200) (-160.0) 51 (30)))],
+  levels = [(firstWorldToLevel(firstWorld (-200) (-160.0) 105 (60)))],
   levelIndex = 0
 }
-{-
-makeBlocks :: (Float, Float) -> Float -> Float -> Float -> [JBlock] -- make horizontal path of blocks
-makeBlocks (initX, initY) endX h w  
-  | initX > endX = []
-  | otherwise = JBlock (initX, initY) h w None : makeBlocks (initX + w, initY) endX h w
-makeTup :: Float-> Float->Float->[(Float,Float)]
-makeTup start end step
-  |start > end =[((start-(5.0*step)),-24),((-start+(3.0*step)),-24),((start-(18.0*step)),-24),((-start+(11.0*step)),-24)] 
-  |otherwise =[(start+step,(-30))] ++ makeTup (start+step) end step
--}
 
 -- Your classic begener sheep 
 starterSheep :: Player
 starterSheep =
   Player{
     xPos   = 0,
-    yPos   = (-256),
+    yPos   = (0),
     xVel   = 0,
     yVel   = 0,
     health = 3, 
@@ -47,7 +37,7 @@ starterSheep =
     sMoneyAndSValubles = [Potion {quantEffect=10,descriptor="Health Potion +10", effect=Healing}],
     weapon = Weapon 5 "initial sword" 18 0 (15, -25) False,
     facingRight = True,
-    hitBox= HitBox ((10),(-200)) ((20),(-200)) ((10), (-287)) (20, (-287)),
+    hitBox= HitBox ((10),(56)) ((20),(56)) ((10), (-31)) (20, (-31)),
     magic=Empty
   }
 

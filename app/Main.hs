@@ -29,10 +29,13 @@ main =do
   heavenback <-loadBMP "resources/heaven.bmp"
   machoMan <-loadBMP "resources/MachoMan.bmp"
   fluGuy <-loadBMP "resources/FlyGuy.bmp"
+  mossback <- loadBMP "resources/mossForest.bmp"
 
-  let heavenList=[floorbmp,sheep,clouds,angelGuy,heart,sheepSwing,sheepLeft,sheepLeftSwing,heavenback]  
+  let heavenList=[(scale 2 2 floorbmp),sheep,clouds,angelGuy,heart,sheepSwing,sheepLeft,sheepLeftSwing,heavenback]
 
-  let hellList= [hellfloor, sheep, fluGuy,machoMan, heart,sheepSwing,sheepLeft,sheepLeftSwing,(scale 2.75 3 hellback)] 
+  let purgList=[(scale 2 2 purgFloor),sheep,fluGuy,evilguy,heart,sheepSwing,sheepLeft,sheepLeftSwing,mossback]    
+
+  let hellList= [(scale 2 2 hellfloor), sheep, fluGuy,machoMan, heart,sheepSwing,sheepLeft,sheepLeftSwing,(scale 2.75 3 hellback)] 
 
   let levelResources = [heavenList, hellList]           
   play
@@ -74,18 +77,15 @@ getPlayPic p pics =
 --Draws multiple enimies but in the current form, with only one picture
 drawEnimies :: [BadGuy]->Float->Picture->[Picture]
 drawEnimies [] _ _ =[]
-drawEnimies (bg:bgs) offs pic = (Scale 2 2 (Translate (x0-offs) y0 pic)) : hitBox : drawEnimies bgs offs pic
+drawEnimies (bg:bgs) offs pic = if (health_bad bg >0) then ((Translate (x0-offs) y0 (Scale 2 2 pic))):(hitBox:drawEnimies bgs offs pic) else drawEnimies bgs offs pic --
   where 
     x0 = x (pathing bg)
     y0=y (pathing bg)
-    -- hitCircle's feel more natural w/ Brillo (since x,y is center of pic)
-    -- hitCircle1 = scale 2 2 (translate (x1 - offs) y1 (circle (hitRadius bg)))
-    xCenter = (x0 - offs)*2
-    yCenter = (y0*2)
-    hitR = hitRadius bg
-    (x1, y1) = (xCenter - hitR, yCenter + hitR)
-    (x2, y2) = (xCenter + hitR, yCenter - hitR)
-    pts = [(x1, y1), (x1, y2), (x2, y2), (x2, y1), (x1, y1)]
+    pts = [
+      (unfloat offs (topLt (baddieBox bg))),
+      (unfloat offs (topRt (baddieBox bg))),
+      (unfloat offs (bottomLt (baddieBox bg))),
+      (unfloat offs (bottomRt (baddieBox bg)))]
     hitBox = (line pts)
     -- hitCircle = (translate xCenter yCenter (circle (hitRadius bg))) 
 
@@ -102,11 +102,11 @@ drawIntro w = draw x
   where
     num =intro w
     x= if (num `div` 150) >5 then 5 else (num `div` 150)
-    draw x = Color red (Translate (-450- (offset w)) 0 (scale 0.65 1 (text ((inTheBegining w)!!x))))
+    draw x = (Translate (-450- (offset w)) 0 (scale 0.65 1 (text ((inTheBegining w)!!x))))
     
 --draws player, with the offset
 drawPlayer :: Player -> Float ->  Picture -> Picture
-drawPlayer h offs pic = pictures (pHitbox: translate x y pic : (drawMagic (magic h) pic offs)) 
+drawPlayer h offs pic = pictures ( translate x y pic : pHitbox:(drawMagic (magic h) pic offs))  --
   where
     y = yPos h
     x = (xPos h) - offs
@@ -129,10 +129,11 @@ drawPlayer h offs pic = pictures (pHitbox: translate x y pic : (drawMagic (magic
 
 drawMagic :: Projectiles ->Picture ->Float-> [Picture]
 drawMagic Empty _ _ =[]
-drawMagic p pic offs = [Translate x y (scale 0.5 0.5 pic), projHitbox]
+drawMagic p pic offs = [(Translate x y (Rotate r(scale 0.5 0.5 pic))), projHitbox]
   where
+    r= (durration  p)*15
     x=(x1+x2)/2 -offs
-    y=(y1+y2)/2 +20
+    y=(y1+y2)/2
     (x1,y1)=(topLt (projBox p))
     (x2,y2)=(bottomRt (projBox p))
     pt = [
@@ -149,7 +150,7 @@ drawMagic p pic offs = [Translate x y (scale 0.5 0.5 pic), projHitbox]
                               --If you change this, it will break collison in its current form
 drawFloor :: [JBlock] -> Float -> Picture -> [Picture] 
 drawFloor [] offs pic = []
-drawFloor (b:bs) offs pic = floorPic:drawFloor bs offs pic                            
+drawFloor (b:bs) offs pic = floorPic:floorHBox:drawFloor bs offs pic                            
   where 
     (x0, yCenter) = topLeft b
     xCenter = x0 - offs
@@ -157,7 +158,7 @@ drawFloor (b:bs) offs pic = floorPic:drawFloor bs offs pic
     hght = height b
     (x1, y1) = (xCenter - (wdth * 0.5) + 2, yCenter + (hght * 0.5) - 3) -- the top left corner 
     (x2, y2) = (x1 + wdth, y1 - hght) -- bottom right corner
-    floorPic = (scale 2 2(translate xCenter yCenter pic))
+    floorPic = ((translate xCenter yCenter pic))
     (scaled_x1, scaled_y1) = (x1*2, y1*2)
     (scaled_x2, scaled_y2) = (x2*2, y2*2)
     pts = [

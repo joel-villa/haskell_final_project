@@ -68,10 +68,10 @@ firstWorldToLevelBlock :: [Terrain] -> [JBlock]
 firstWorldToLevelBlock [] = []
 firstWorldToLevelBlock (Block x y : xs) =  reverse((JBlock (x, y) 10.5 40.5 None (HitBox (x1,y1) (x2,y1) (x1,y2) (x2,y2))): firstWorldToLevelBlock xs) -- currently implemented
     where 
-        x1=2*x -50  --offset
-        x2=2*(x+40.5) -22
-        y1=2*(y+11)
-        y2=2*(y-18)
+        x1=x -50  --offset
+        x2=x +54
+        y1=y+25
+        y2=y-35
 {-
 where 
     (x1, y2) = topLeft block
@@ -92,18 +92,30 @@ firstWorldToLevel :: [Terrain] -> Level
 firstWorldToLevel terrain = Level {
   terrain = (firstWorldToLevelBlock terrain),
   clouds  = (firstWorldToLevelCloud terrain),
-  enemies = [angel,angel{pathing=basicAngelPath2} ,angel{pathing=basicAngelPath3}]
+  enemies = [angel,angel2 ,angel3]
   }
+
+
+angel2=angel{pathing=basicAngelPath2, baddieBox = makeAngelHitbox (x basicAngelPath2) (y basicAngelPath2)}
+angel3=angel{pathing=basicAngelPath3, baddieBox = makeAngelHitbox (x basicAngelPath3) (y basicAngelPath3)}
+
 
 angel ::BadGuy
 angel=
   BadGuy{
     health_bad=10,
-    money_bad=10,
+    money_bad=1,
     pouch=[],
     pathing= basicAngelPath,
-    hitRadius = 30
+    baddieBox = makeAngelHitbox 100 (-100),
+    attack=Empty
 }
+-- Yes this is how we're doing this, sorry guys
+--                   x       y
+makeAngelHitbox :: Float ->Float ->HitBox
+makeAngelHitbox x y = makeHitbox (x-70) (y+40) 160 80
+
+
 basicAngelPath= 
   JPath{
     initPos=(200,(-100)),

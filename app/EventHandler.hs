@@ -42,14 +42,10 @@ useWeapon p = p {weapon = swungSword}
 sheepBasedMagic:: Player->Player
 sheepBasedMagic p= p{magic=newMagic}
   where
-    newMagic = Projectiles{projBox= (hitBox p),durration=40,direction=newVel}
-    newVel = if facingRight p then 10 else (-10)
-    newBox=makeHitbox x y 20 10
+    newMagic = Projectiles{projBox=newBox,durration=40,direction=newVel}
+    newVel = if facingRight p then 7 else (-7)
+    newBox=makeHitbox x y 20 30
     x=(x1+x2)/2
-    y=(y1+y2)/2
+    y=(y1 )
     (x1,y1)=(topLt (hitBox p))
     (x2,y2)=(bottomRt (hitBox p))
-
---            leftX topY   width   height
-makeHitbox :: Float->Float->Float->Float->HitBox
-makeHitbox x y w h =HitBox (x,y) (x+w, y) (x, y+h) (x+w,y+h)
