@@ -65,8 +65,8 @@ executable FinalProject
                       Tick,
                       Types,
                       Init,
-                      FirstWorld,
-                      SecondWorld
+                      FirstLevel,
+                      SecondLevel
                       
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:

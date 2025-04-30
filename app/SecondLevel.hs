@@ -1,10 +1,10 @@
-module SecondWorld where
+module SecondLevel where
 
-import FirstWorld
+import FirstLevel
 import Types
 
-secondWorld :: Float -> Float -> Float -> Float -> [Terrain]
-secondWorld x y xs ys = [ Block x y, Block (x+xs) y, Block (x+(2*xs)) y,
+secondLevel :: Float -> Float -> Float -> Float -> [Terrain]
+secondLevel x y xs ys = [ Block x y, Block (x+xs) y, Block (x+(2*xs)) y,
                          Block (x+(3*xs)) y,Block (x+(4*xs)) y,Block (x+(5*xs)) y,
                          Lava (x+(6*xs)) y False ,Lava (x+(7*xs)) y True, Lava (x+(8*xs)) y False,
                          Block (x+(9*xs)) y,Block (x+(10*xs)) y,Block (x+(11*xs)) y,

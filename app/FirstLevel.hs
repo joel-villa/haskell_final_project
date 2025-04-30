@@ -1,7 +1,7 @@
-module FirstWorld where
+module FirstLevel where
 import Types
-firstWorld :: Float -> Float -> Float -> Float -> [Terrain]
-firstWorld x y xs ys= [ Block x y, Block (x+(xs)) y,Block (x+(2.0*xs)) y, Block (x+(3.0*xs)) y, 
+firstLevel :: Float -> Float -> Float -> Float -> [Terrain]
+firstLevel x y xs ys= [ Block x y, Block (x+(xs)) y,Block (x+(2.0*xs)) y, Block (x+(3.0*xs)) y, 
                            Block (x+(4.0*xs)) y,Block (x+(5.0*xs)) (y +(ys + (2.0*ys))), Block (x+(6.0*xs)) (y +(ys + (2.0*ys))), 
                            Block (x+(5.0*xs)) y, Block (x+(6.0*xs)) y, Block (x+(7.0*xs)) y, Block (x+(8.0*xs)) y,
                            Block  (x+(8.0*xs)) (y +(ys)), Block (x+(8.0*xs)) (y +(2*ys)), Block (x+(9.0*xs)) (y +(2*ys)),

@@ -1,8 +1,8 @@
 module Init where
 import Brillo
 import Types
-import FirstWorld
-import SecondWorld
+import FirstLevel
+import SecondLevel
 
 -- fps: Number of simulation steps to take for each second of real time
 fps :: Int 
@@ -16,13 +16,14 @@ backgroundColor = (makeColor 0.75 0.75 1 0.5)
 initWorld :: World
 initWorld = World {
   hero = starterSheep,
-  curLevel = (firstWorldToLevel(firstWorld (-200) (-160.0) 105 (60))),
+  curLevel = (firstWorldToLevel(firstLevel (-200) (-270.0) 105 (60))),
   offset = 0,
   intro = 0,
   inTheBegining = heavenIntro,
-  levels = [(firstWorldToLevel(firstWorld (-200) (-160.0) 105 (60)))],
+  levels = [(firstWorldToLevel(firstLevel (-200) (-270.0) 105 (60))),firstWorldToLevel(secondLevel (-200) (-290.0) 105 (60))],
   levelIndex = 0
 }
+
 
 -- Your classic begener sheep 
 starterSheep :: Player
