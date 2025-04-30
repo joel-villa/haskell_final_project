@@ -68,10 +68,10 @@ firstWorldToLevelBlock :: [Terrain] -> [JBlock]
 firstWorldToLevelBlock [] = []
 firstWorldToLevelBlock (Block x y : xs) =  reverse((JBlock (x, y) 10.5 40.5 None (HitBox (x1,y1) (x2,y1) (x1,y2) (x2,y2))): firstWorldToLevelBlock xs) -- currently implemented
     where 
-        x1=2*x -50  --offset
-        x2=2*(x+40.5) -22
-        y1=2*(y+11)
-        y2=2*(y-18)
+        x1=x -50  --offset
+        x2=x +54
+        y1=y+25
+        y2=y-35
 {-
 where 
     (x1, y2) = topLeft block

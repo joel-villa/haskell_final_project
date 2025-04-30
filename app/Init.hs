@@ -23,6 +23,12 @@ initWorld = World {
   levelIndex = 0
 }
 {-
+initWorld =
+   World starterSheep(firstWorldToLevel(firstWorld (-200) (-160.0) 105 (60))) 0 0 heavenIntro [angel,angel2,angel3]
+
+angel2=angel{pathing=basicAngelPath2, baddieBox = makeAngelHitbox (x basicAngelPath2) (y basicAngelPath2)}
+angel3=angel{pathing=basicAngelPath3, baddieBox = makeAngelHitbox (x basicAngelPath3) (y basicAngelPath3)}
+
 makeBlocks :: (Float, Float) -> Float -> Float -> Float -> [JBlock] -- make horizontal path of blocks
 makeBlocks (initX, initY) endX h w  
   | initX > endX = []
@@ -38,7 +44,7 @@ starterSheep :: Player
 starterSheep =
   Player{
     xPos   = 0,
-    yPos   = (-256),
+    yPos   = (0),
     xVel   = 0,
     yVel   = 0,
     health = 3, 
@@ -47,7 +53,7 @@ starterSheep =
     sMoneyAndSValubles = [Potion {quantEffect=10,descriptor="Health Potion +10", effect=Healing}],
     weapon = Weapon 5 "initial sword" 18 0 (15, -25) False,
     facingRight = True,
-    hitBox= HitBox ((10),(-200)) ((20),(-200)) ((10), (-287)) (20, (-287)),
+    hitBox= HitBox ((10),(56)) ((20),(56)) ((10), (-31)) (20, (-31)),
     magic=Empty
   }
 
