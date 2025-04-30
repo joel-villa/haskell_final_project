@@ -2,6 +2,7 @@ module Init where
 import Brillo
 import Types
 import FirstWorld
+import SecondWorld
 
 -- fps: Number of simulation steps to take for each second of real time
 fps :: Int 
