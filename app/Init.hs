@@ -2,6 +2,7 @@ module Init where
 import Brillo
 import Types
 import FirstWorld
+import SecondLevel
 
 -- fps: Number of simulation steps to take for each second of real time
 fps :: Int 
@@ -19,7 +20,7 @@ initWorld = World {
   offset = 0,
   intro = 0,
   inTheBegining = heavenIntro,
-  levels = [(firstWorldToLevel(firstWorld (-200) (-290.0) 105 (60)))],
+  levels = [(firstWorldToLevel(firstWorld (-200) (-290.0) 105 (60))),(firstWorldToLevel(secondLevel (-200) (-290.0) 105 (60)))],
   levelIndex = 0
 }
 
