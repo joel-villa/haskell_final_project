@@ -111,8 +111,10 @@ data World =
 heavenIntro=["In the begining", "there was darkness", "And God said","Let there be a sheep","and then God said", "Go west young sheep"]
 data Terrain = 
                Block {bxpos :: Float, bypos :: Float} |
+               Brick {brxpos :: Float, brypos :: Float} |
                Cloud {cxpos :: Float, cypos :: Float, cvel:: Float} | 
-               Fence {fxpos :: Float, fypos :: Float}
+               Fence {fxpos :: Float, fypos :: Float} |
+               Lava  {lxpos :: Float, lypos :: Float, fireBall :: Bool}
 
 
 
