@@ -15,11 +15,11 @@ backgroundColor = (makeColor 0.75 0.75 1 0.5)
 initWorld :: World
 initWorld = World {
   hero = starterSheep,
-  curLevel = (firstWorldToLevel(firstWorld (-200) (-160.0) 105 (60))),
+  curLevel = (firstWorldToLevel(firstWorld (-200) (-290.0) 105 (60))),
   offset = 0,
   intro = 0,
   inTheBegining = heavenIntro,
-  levels = [(firstWorldToLevel(firstWorld (-200) (-160.0) 105 (60)))],
+  levels = [(firstWorldToLevel(firstWorld (-200) (-290.0) 105 (60)))],
   levelIndex = 0
 }
 
