@@ -87,7 +87,8 @@ data Projectiles=
   Projectiles {
     projBox ::HitBox,
     durration :: Float,
-    direction :: Float
+    direction :: Float,
+    yDirection::Float
   } | Empty
 
 

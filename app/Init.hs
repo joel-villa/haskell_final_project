@@ -32,7 +32,7 @@ starterSheep =
     yPos   = (0),
     xVel   = 0,
     yVel   = 0,
-    health = 3, 
+    health = 10, 
     inAir  = False,
     money  = 10, 
     sMoneyAndSValubles = [Potion {quantEffect=10,descriptor="Health Potion +10", effect=Healing}],

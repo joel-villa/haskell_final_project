@@ -31,9 +31,9 @@ main =do
   fluGuy <-loadBMP "resources/FlyGuy.bmp"
   mossback <- loadBMP "resources/mossForest.bmp"
 
-  let heavenList=[(scale 2 2 floorbmp),sheep,clouds,angelGuy,heart,sheepSwing,sheepLeft,sheepLeftSwing,heavenback]
+  let heavenList=[(scale 2 2 floorbmp),sheep,clouds,(Scale 2 2 angelGuy),heart,sheepSwing,sheepLeft,sheepLeftSwing,heavenback]
 
-  let purgList=[(scale 2 2 purgFloor),sheep,fluGuy,evilguy,heart,sheepSwing,sheepLeft,sheepLeftSwing,mossback]    
+  let purgList=[(scale 2 2 purgFloor),sheep,fluGuy,(Scale 2 2 evilguy),heart,sheepSwing,sheepLeft,sheepLeftSwing,mossback]    
 
   let hellList= [(scale 2 2 hellfloor), sheep, fluGuy,machoMan, heart,sheepSwing,sheepLeft,sheepLeftSwing,(scale 2.75 3 hellback)] 
 
@@ -48,15 +48,15 @@ main =do
     tick                                       -- in Tick.hs
 
 worldToPicture:: World -> [[Picture]]->Picture
-worldToPicture w picss = 
-  pictures(bgrnd: (drawPlayer h offset' pPic) : (pictures (drawFloor bs offset' (pics!!0))) :drawIntro w: (drawHeart (pics!!4) w)++ (drawExtras w (pics!!2))++drawEnimies bgs offset' (pics!!3)) 
+worldToPicture w picss = if hth<0 then bgrnd else
+  pictures(bgrnd: (drawPlayer h offset' pPic) : (pictures (drawFloor bs offset' (pics!!0))) :drawIntro w: (drawHeart (pics!!4) w)++drawEnimies bgs offset' (pics!!3)) 
   where 
     pics = picss !! (levelIndex w)
     offset' = (offset w)      -- The offset of the world
     bs = terrain (curLevel w) -- The JBlocks of this level
     h = hero w                -- current player info
+    hth=health h
     bgs = enemies (curLevel w)   -- baddies
-    drawExtras w pic =(Scale 2.5 2.5 (Translate (0) 100 pic)):[Scale 1.5 1 (Translate (-300) 300 pic)]     -- Sorry I will fix this later
     pPic = getPlayPic h pics  -- allows for multiple player pictures
     bgrnd=(pics!!8)
 
@@ -77,10 +77,13 @@ getPlayPic p pics =
 --Draws multiple enimies but in the current form, with only one picture
 drawEnimies :: [BadGuy]->Float->Picture->[Picture]
 drawEnimies [] _ _ =[]
-drawEnimies (bg:bgs) offs pic = if (health_bad bg >0) then ((Translate (x0-offs) y0 (Scale 2 2 pic))):(hitBox:drawEnimies bgs offs pic) else drawEnimies bgs offs pic --
+drawEnimies (bg:bgs) offs pic = 
+  if (health_bad bg >0) then (image:hitBox:attackPic++ (drawEnimies bgs offs pic)) else drawEnimies bgs offs pic --
   where 
     x0 = x (pathing bg)
     y0=y (pathing bg)
+    image =(Translate (x0-offs) y0 pic)
+    attackPic=(drawMagic (attack bg) pic offs)
     pts = [
       (unfloat offs (topLt (baddieBox bg))),
       (unfloat offs (topRt (baddieBox bg))),
@@ -93,8 +96,8 @@ drawEnimies (bg:bgs) offs pic = if (health_bad bg >0) then ((Translate (x0-offs)
 drawHeart :: Picture -> World ->[Picture]
 drawHeart pic w= go (health (hero w)) pic 
   where 
-    go 0.0 _ =[]
-    go n pic =  (Translate ((n*80)+170) 380 pic) :go (n-1) pic
+    go n _ =if n<0 then [] else (Translate ((n*80)+170) 380 pic) :go (n-1) pic
+   
 
 -- draws the text introduction
 drawIntro :: World ->Picture
@@ -115,16 +118,12 @@ drawPlayer h offs pic = pictures ( translate adjustedX y pic : pHitbox:(drawMagi
     w = weapon h -- The weapon
     (relX,relY) = relativePos w  -- The weapon's position relative to sheep
     w_hit_rad = wDamageRadius w
-    (wCenterX, wCenterY) = (x + relX, y + relY)
-    (wx1, wy1) = (wCenterX - w_hit_rad, wCenterY + w_hit_rad)
-    (wx2, wy2) = (wCenterX + w_hit_rad, wCenterY -w_hit_rad)
-    pts = [(wx1, wy1), (wx2, wy1), (wx2, wy2), (wx1, wy2), (wx1, wy1)]
     pt = [
       (unfloat offs (topLt (hitBox h))),
       (unfloat offs (topRt (hitBox h))),
       (unfloat offs (bottomLt (hitBox h))),
       (unfloat offs (bottomRt (hitBox h)))]
-    weaponHBox = line pts
+
     pHitbox= line pt
 -- drawPlayer world pic = Translate (20*((xPos (hero world))-(getOffset (xPos (hero world))))) ((yPos(hero world))) (pic)
 
