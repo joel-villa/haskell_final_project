@@ -52,12 +52,12 @@ data Item =
     effect      :: Effect 
   }     -- diff effect
   | Weapon {
-    wDamage       :: Int,            -- added to dmg rolls on hits
-    wDesc         :: String,         -- Exact descriptor, this would be for the users benefit
-    wDamageRadius :: Float,          -- How far of an effect?
-    wVelocity     :: Float,          -- 0 when not active, decremented in Tick while active
-    relativePos   :: (Float, Float), -- relative to sheep's position
-    active        :: Bool            -- is this weapon currently being used?
+    wDamage     :: Int,            -- added to dmg rolls on hits
+    wDesc       :: String,         -- Exact descriptor, this would be for the users benefit
+    wVelocity   :: Float,          -- 0 when not active, decremented in Tick while active
+    relativePos :: (Float, Float), -- relative to sheep's position
+    active      :: Bool,           -- is this weapon currently being used?
+    wHBox       :: HitBox
   }   
 -- Maybe a armor thing?
 
