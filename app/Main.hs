@@ -85,10 +85,10 @@ drawEnimies (bg:bgs) offs pic =
     image =(Translate (x0-offs) y0 pic)
     attackPic=(drawMagic (attack bg) pic offs)
     pts = [
-      (unfloat offs (topLt (baddieBox bg))),
-      (unfloat offs (topRt (baddieBox bg))),
-      (unfloat offs (bottomLt (baddieBox bg))),
-      (unfloat offs (bottomRt (baddieBox bg)))]
+      (adjustX offs (topLt (baddieBox bg))),
+      (adjustX offs (topRt (baddieBox bg))),
+      (adjustX offs (bottomLt (baddieBox bg))),
+      (adjustX offs (bottomRt (baddieBox bg)))]
     hitBox = (line pts)
     -- hitCircle = (translate xCenter yCenter (circle (hitRadius bg))) 
 
@@ -109,23 +109,26 @@ drawIntro w = draw x
     
 --draws player, with the offset
 drawPlayer :: Player -> Float ->  Picture -> Picture
-drawPlayer h offs pic = pictures ( translate adjustedX y pic : pHitbox:(drawMagic (magic h) pic offs))  --
+drawPlayer h offs pic = pictures ( translate adjustedX y pic : weaponHBox : pHitbox:(drawMagic (magic h) pic offs))  --
   where
     y = yPos h
     x = (xPos h) - offs
     adjustedX = if facingRight h then x else (x - 30) -- THIS CODE SHIFTS Sheep
     playerPos = translate x y (circle (10)) -- arbitrary 10 (for player position)
     w = weapon h -- The weapon
-    (relX,relY) = relativePos w  -- The weapon's position relative to sheep
-    w_hit_rad = wDamageRadius w
     pt = [
-      (unfloat offs (topLt (hitBox h))),
-      (unfloat offs (topRt (hitBox h))),
-      (unfloat offs (bottomLt (hitBox h))),
-      (unfloat offs (bottomRt (hitBox h)))]
-
+      (adjustX offs (topLt (hitBox h))),
+      (adjustX offs (topRt (hitBox h))),
+      (adjustX offs (bottomLt (hitBox h))),
+      (adjustX offs (bottomRt (hitBox h)))]
+    weaponPts = [
+      (adjustX offs (topLt (wHBox w))),
+      (adjustX offs (topRt (wHBox w))),
+      (adjustX offs (bottomLt (wHBox w))),
+      (adjustX offs (bottomRt (wHBox w)))
+      ]
     pHitbox= line pt
--- drawPlayer world pic = Translate (20*((xPos (hero world))-(getOffset (xPos (hero world))))) ((yPos(hero world))) (pic)
+    weaponHBox = Line weaponPts
 
 drawMagic :: Projectiles ->Picture ->Float-> [Picture]
 drawMagic Empty _ _ =[]
@@ -137,10 +140,10 @@ drawMagic p pic offs = [(Translate x y (Rotate r(scale 0.5 0.5 pic))), projHitbo
     (x1,y1)=(topLt (projBox p))
     (x2,y2)=(bottomRt (projBox p))
     pt = [
-      (unfloat offs (topLt (projBox p))),
-      (unfloat offs (topRt (projBox p))),
-      (unfloat offs (bottomLt (projBox p))),
-      (unfloat offs (bottomRt (projBox p)))]
+      (adjustX offs (topLt (projBox p))),
+      (adjustX offs (topRt (projBox p))),
+      (adjustX offs (bottomLt (projBox p))),
+      (adjustX offs (bottomRt (projBox p)))]
     projHitbox= line pt
 --(Line [((2*x1-50), ((2)*y1)), ((2*x2-22), (2*y2))]) :  -- these nums are NOT choosen arbitrarely
                               --(Line[((2*x0-50), ((2)*y1)), ((2*(x0+w)-22), (2*y2))]):
@@ -162,14 +165,14 @@ drawFloor (b:bs) offs pic = floorPic:floorHBox:drawFloor bs offs pic
     (scaled_x1, scaled_y1) = (x1*2, y1*2)
     (scaled_x2, scaled_y2) = (x2*2, y2*2)
     pts = [
-      (unfloat offs (topLt (floorBox b))),
-      (unfloat offs (topRt (floorBox b))),
-      (unfloat offs (bottomLt (floorBox b))),
-      (unfloat offs (bottomRt (floorBox b)))]
+      (adjustX offs (topLt (floorBox b))),
+      (adjustX offs (topRt (floorBox b))),
+      (adjustX offs (bottomLt (floorBox b))),
+      (adjustX offs (bottomRt (floorBox b)))]
     floorHBox = Line pts
 
-unfloat ::Float->(Float,Float)->(Float,Float)
-unfloat offs (x,y)=((x-offs),y)
+adjustX ::Float->(Float,Float)->(Float,Float)
+adjustX offs (x,y)=((x-offs),y)
    
 
 
