@@ -36,11 +36,42 @@ starterSheep =
     inAir  = False,
     money  = 10, 
     sMoneyAndSValubles = [Potion {quantEffect=10,descriptor="Health Potion +10", effect=Healing}],
-    weapon = Weapon 5 "initial sword" 18 0 (15, -25) False,
+    weapon = initSword,
     facingRight = True,
     hitBox= HitBox ((10),(56)) ((20),(56)) ((10), (-31)) (20, (-31)),
     magic=Empty
   }
+
+initSword :: Item
+initSword = Weapon 5 "initial sword" 0 (10, 0) False weaponHitBox
+  where
+    weaponHitBox = HitBox { -- uninitialized hitBox
+      topLt =    (0,   20),
+      topRt =    (50,  20),
+      bottomLt = (0,  -40),
+      bottomRt = (50, -40)
+    }
+updateSwordHBox :: Player -> HitBox
+updateSwordHBox p = sBox
+  where 
+    x = xPos p
+    y = yPos p
+    w = weapon p 
+    (relX,relY) = relativePos w  -- The weapon's position relative to sheep
+    (wx0, wy1) = (0,   20)
+    (wx1, wy0) = (50, -40)
+    sBox = HitBox {
+      topLt =    (wx0 + x + relX, wy1 + y + relY),
+      topRt =    (wx1 + x + relX, wy1 + y + relY),
+      bottomLt = (wx0 + x + relX, wy0 + y + relY),
+      bottomRt = (wx1 + x + relX, wy0 + y + relY)
+    }
+    -- weaponPts = [
+    --   (wx0 + x + xRel, wy1 + y + relY),
+    --   (wx1 + x + xRel, wy1 + y + relY),
+    --   (wx0 + x + xRel, wy0 + y + relY),
+    --   (wx1 + x + xRel, wy0 + y + relY)
+    --   ]
 
 --so you give it the actual x and this is what you do with it
 newHitBox:: Float-> Float-> Bool-> HitBox
