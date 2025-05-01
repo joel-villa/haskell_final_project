@@ -92,7 +92,8 @@ firstWorldToLevel :: [Terrain] -> Level
 firstWorldToLevel terrain = Level {
   terrain = (firstWorldToLevelBlock terrain),
   clouds  = (firstWorldToLevelCloud terrain),
-  enemies = [angel,angel2 ,angel3]
+  enemies = [angel,angel2 ,angel3] -- Commented out, cause don't want baddies for now
+  -- enemies = []
   }
 
 
