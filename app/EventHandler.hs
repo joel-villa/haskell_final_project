@@ -18,14 +18,37 @@ handleLeft :: Player -> Player
 handleLeft p = p {xVel = -7, facingRight = False, weapon = newWeapon}
   where
     --updating weapon hit-box
-    newWeapon = (weapon p) {relativePos = (-15, -25)}
+    rightwardFacing = facingRight p
+    wep = weapon p
+    (x, y) = relativePos wep
+    newWeapon = 
+      if rightwardFacing 
+        then wep {relativePos = (x - wDeltaX, y)} --TODO, make this not hard coded?
+      else wep
+
 
 -- handle right user input, returning the new player
 handleRight :: Player -> Player
 handleRight p = p {xVel = 7, facingRight = True, weapon = newWeapon}
   where
     --updating weapon hit-box
-    newWeapon = (weapon p) {relativePos = (15, -25)}
+    leftwardFacing = not (facingRight p)
+    wep = weapon p
+    (x, y) = relativePos wep
+    newWeapon = 
+      if leftwardFacing 
+        then wep {relativePos = (x + wDeltaX, y)} --TODO, make this not hard coded?
+      else wep
+
+wDeltaX :: Float -- TODO: change this to be the width of the player?
+wDeltaX = 105
+
+-- halfWidth :: HitBox -> Float 
+-- halfWidth hBox = (x1 + x2) * 0.5
+--   where
+--     (x1, y2) = topLt hBox
+--     (x2, y1) = bottomRt hBox
+
 -- handle jump user input, returning the new player
 handleJump :: Player ->Player
 handleJump plr 

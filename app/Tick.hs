@@ -45,12 +45,15 @@ updateBasicAttack p bg at= if touchyWouchy then Empty else projectileTest at
 
 projCollision:: Projectiles -> HitBox->Bool
 projCollision Empty bg = False
-projCollision p box = collision
+projCollision p box = hitBoxCollision (projBox p) box
+
+hitBoxCollision :: HitBox -> HitBox -> Bool
+hitBoxCollision box1 box2 = collision 
   where
-    (mx,my)=topLt (projBox p)
-    (mx2,my2)=bottomRt (projBox p)
-    (x,y) =topLt (box)
-    (x1,y1) =bottomRt(box)
+    (mx,my)=topLt box1
+    (mx2,my2)=bottomRt box1
+    (x,y) =topLt (box2)
+    (x1,y1) =bottomRt(box2)
     collision = (inBetween mx x x1 && inBetween my2 y1 y) || (inBetween mx2 x x1 && inBetween my y1 y)
 
 projectileTest :: Projectiles ->Projectiles
@@ -74,14 +77,20 @@ updatePlayer :: Player ->[BadGuy]-> Float->[JBlock] -> Player
 updatePlayer p0 bgs offs bs = newP
   where
     p1 = p0 {xPos = xPos p0 + xVel p0 , yPos =yPos p0 +yVel p0} -- new location based on velocities
-    p2 = horzCollisionHitBox p1 offs bs                               -- call to horzCollisionHitBox
-    p3 =vertCollision p2 offs bs                                      -- call to vertcollision
+    p2 = horzCollisionHitBox p1 offs bs                         -- call to horzCollisionHitBox
+    p3 =vertCollision p2 offs bs                                -- call to vertcollision
     p4 = if inAir p3 then p3 {yVel = yVel p3 - 0.75} else p3    -- if in Air, fall
     (x,y)= topLt (hitBox p4)
     tpl= ((xPos p4), (yPos p4))
     newHit= newHitBox (xPos p4) (yPos p4) (facingRight p4)
     hth= if checkMultiCollision bgs p4 then ((health p4) -1) else health p4
-    newP = p4 {weapon = updateWeapon p4,hitBox=newHit, magic=projectileTest (magic p4),health =hth }--health =hth update Player's weapon velocity
+
+    newP = p4 {
+      weapon = updateWeapon p4, -- update Player's weapon velocity & hit box
+      hitBox=newHit, 
+      magic=projectileTest (magic p4),
+      health =hth --health =hth 
+      }
 
 checkMultiCollision :: [BadGuy]->Player ->Bool 
 checkMultiCollision [] _ =False
@@ -89,12 +98,17 @@ checkMultiCollision (bg:bgs) p =if projCollision (attack bg) (hitBox p) then Tru
 
 
 updateWeapon :: Player -> Item
-updateWeapon p = oldWeapon {wVelocity = newWVelocity, active = newActive}
+updateWeapon p = oldWeapon {
+  wVelocity = newWVelocity,
+  active    = newActive,
+  wHBox     = newWeaponHBox
+  }
   where
     oldWeapon = (weapon p)                          -- the old weapon
     oldV = wVelocity oldWeapon                      -- the old weapon velocity
     newWVelocity = if oldV > 0 then oldV - 1 else 0 -- decrement weapon velocity
     newActive = if newWVelocity == 0 then False else True -- weapon is or is not being used 
+    newWeaponHBox = updateSwordHBox p
 
 
 --New and improved and not critic proof getOffset. Now goes off of the xvel instead of just positioning
