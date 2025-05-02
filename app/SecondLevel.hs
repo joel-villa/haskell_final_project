@@ -17,3 +17,13 @@ secondLevel x y xs ys = [ Block x y, Block (x+xs) y, Block (x+(2*xs)) y,
                          Block (x+(44*xs)) (y+(5*ys)),Block (x+(45*xs)) (y+(5*ys)),Block (x+(47*xs)) (y+(6*ys)),
                          Block (x+(48*xs)) (y+(6*ys)),Block (x+(49*xs)) (y+(3*ys)),Block (x+(50*xs)) (y+(3*ys)),
                          Block (x+(54*xs)) (y+(3*ys)),Block (x+(58*xs)) (y+(3*ys))]
+
+makeMovingPath :: (Float,Float) -> (Float,Float) -> Float -> Float -> JPath
+makeMovingPath (r,t) (a,b) xv yv = JPath {
+    initPos = (r,t),
+    goalPos = (a,b),
+    x = r ,
+    y = t,
+    xVelocity = xv,
+    yVelocity = yv
+}

@@ -74,6 +74,7 @@ data JBlock =
     path        :: JPath,
     floorBox:: HitBox
   }
+
 --I gave it all 4 points incase we dont want to not only be a box
 data HitBox=
   HitBox {
@@ -97,7 +98,9 @@ data Level =
     terrain  :: [JBlock],
     floorpos :: [(Float,Float)], 
     clouds   :: [Terrain],
-    enemies  :: [BadGuy]
+    lava     :: [Terrain],
+    enemies  :: [BadGuy],
+    flag     :: (Float, Float)
   } 
 data World = 
   World { 
@@ -107,15 +110,17 @@ data World =
     intro           :: Int,
     inTheBegining   :: [String],
     levels          :: [Level],
-    levelIndex  :: Int
+    levelIndex      :: Int
     } -- TODO change this to other World
 heavenIntro=["In the begining", "there was darkness", "And God said","Let there be a sheep","and then God said", "Go west young sheep"]
 data Terrain = 
-               Block {bxpos :: Float, bypos :: Float} |
-               Brick {brxpos :: Float, brypos :: Float} |
-               Cloud {cxpos :: Float, cypos :: Float, cvel:: Float} | 
-               Fence {fxpos :: Float, fypos :: Float} |
-               Lava  {lxpos :: Float, lypos :: Float, fireBall :: Bool}
+               Block       {bxpos :: Float, bypos :: Float}                  |
+               Brick       {brxpos :: Float, brypos :: Float}                |
+               Cloud       {cxpos :: Float, cypos :: Float, cvel:: Float}    | 
+               Fence       {fxpos :: Float, fypos :: Float}                  |
+               Lava        {lxpos :: Float, lypos :: Float, fireBall :: Bool}|
+               MovingBlock {mbxpos :: Float, mbypos :: Float, mbpath :: JPath} |
+               Flag        {fgxpos :: Float, fgypos :: Float}
 
 
 

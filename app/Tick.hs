@@ -9,7 +9,20 @@ tick _ w = newWorld
     newPlayer = handleFall (updatePlayer (hero w) (enemies (curLevel w)) (offset w) bs)
     newEnemies = updateEnemies newPlayer (enemies (curLevel w))
     newLevel = (curLevel w) {enemies = newEnemies}
-    newWorld = w {hero = newPlayer, offset=(getOffset w),intro= ((intro w) +1),curLevel= newLevel} 
+    newWorld = if (finishedLevel (hero w) (flag (curLevel w))) then
+                  w {
+                  hero = starterSheep, 
+                  offset=0,
+                  intro= ((intro w) +1),
+                  curLevel= (levels w) !! ((levelIndex w) + 1),
+                  levelIndex = (levelIndex w) + 1 } 
+                else
+                  w {
+                  hero = newPlayer, 
+                  offset=(getOffset w),
+                  intro= ((intro w) +1),
+                  curLevel= newLevel
+                  }
     --newWorld = w {hero = newPlayer, offset=(getOffset w),intro= ((intro w) +1),enemies= (updateEnemies newPlayer (enemies w))} 
 
 updateEnemies::Player-> [BadGuy]->[BadGuy]
@@ -109,6 +122,9 @@ updatePlayer p0 bgs offs bs = newP
 checkMultiCollision :: [BadGuy]->Player ->Bool 
 checkMultiCollision [] _ =False
 checkMultiCollision (bg:bgs) p =if projCollision (attack bg) (hitBox p) then True else checkMultiCollision bgs p
+
+finishedLevel :: Player -> (Float,Float) -> Bool
+finishedLevel p0 (x,y) = abs(x-(xPos p0)) < 10 && abs(y-(yPos p0)) < 10
 
 
 updateWeapon :: Player -> Item

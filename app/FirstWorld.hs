@@ -62,7 +62,7 @@ firstWorld x y xs ys= [ Block x y, Block (x+(xs)) y,Block (x+(2.0*xs)) y, Block 
                            Block (x+(160.0*xs)) (y),Block (x+(161.0*xs)) (y),Block (x+(161.0*xs)) (y),
                            Block (x+(162.0*xs)) (y),Block (x+(163.0*xs)) (y),Block (x+(164.0*xs)) (y),
                            Block (x+(165.0*xs)) (y),Block (x+(166.0*xs)) (y),Block (x+(167.0*xs)) (y),
-                           Block (x+(168.0*xs)) (y),Block (x+(169.0*xs)) (y),Block (x+(170.0*xs)) (y)]
+                           Block (x+(168.0*xs)) (y),Block (x+(169.0*xs)) (y),Block (x+(170.0*xs)) (y),Flag (x+(170*xs)) (y + ys)]
 
 firstWorldToLevelBlock :: [Terrain] -> [JBlock]
 firstWorldToLevelBlock [] = []
@@ -81,19 +81,31 @@ where
 -}
 -- (2*x1-50-offs) (2*x2-22-offs) && inBetween y ((2)*y1) (2*y2 + 80)
 -- firstWorldToLevelBlock (Block x y : xs) =  reverse((JBlock (x, y) 30 53 None): firstWorldToLevelBlock xs)
-firstWorldToLevelBlock (Cloud x y z :xs) = firstWorldToLevelBlock xs
+firstWorldToLevelBlock (x :xs) = firstWorldToLevelBlock xs
+
+flagToPoint :: [Terrain] -> (Float,Float)
+flagToPoint [] = (100000,1000000)
+flagToPoint (Flag x y : xs) = (x,y)
+flagToPoint (x : xs) = flagToPoint xs
 
 firstWorldToLevelCloud :: [Terrain] -> [Terrain]
 firstWorldToLevelCloud [] = []
 firstWorldToLevelCloud (Cloud x y v: xs ) = reverse(Cloud {cxpos = x , cypos = y, cvel = v} : firstWorldToLevelCloud xs)
-firstWorldToLevelCloud (Block x y : xs) = firstWorldToLevelCloud xs
+firstWorldToLevelCloud (x : xs) = firstWorldToLevelCloud xs
+
+firstWorldToLevelLava :: [Terrain] -> [Terrain]
+firstWorldToLevelLava [] = []
+firstWorldToLevelLava (Lava x y b : xs) = reverse (Lava {lxpos = x, lypos = y, fireBall = b} : firstWorldToLevelLava xs)
+firstWorldToLevelLava (x: xs) = firstWorldToLevelLava xs
 
 firstWorldToLevel :: [Terrain] -> Level
 firstWorldToLevel terrain = Level {
   terrain = (firstWorldToLevelBlock terrain),
   clouds  = (firstWorldToLevelCloud terrain),
-  enemies = [angel,angel2 ,angel3, god] -- Commented out, cause don't want baddies for now
-  -- enemies = []
+  lava    = (firstWorldToLevelLava terrain),
+  enemies = [angel,angel2 ,angel3, god], -- Commented out, cause don't want baddies for now
+  -- enemies = [],
+  flag    = (flagToPoint terrain)
   }
 
 
