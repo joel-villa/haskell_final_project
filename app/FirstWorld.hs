@@ -103,7 +103,7 @@ firstWorldToLevel terrain = Level {
   terrain = (firstWorldToLevelBlock terrain),
   clouds  = (firstWorldToLevelCloud terrain),
   lava    = (firstWorldToLevelLava terrain),
-  enemies = [angel,angel2 ,angel3, god] -- Commented out, cause don't want baddies for now
+  enemies = [angel,angel2 ,angel3, god], -- Commented out, cause don't want baddies for now
   -- enemies = [],
   flag    = (flagToPoint terrain)
   }
