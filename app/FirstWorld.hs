@@ -92,7 +92,7 @@ firstWorldToLevel :: [Terrain] -> Level
 firstWorldToLevel terrain = Level {
   terrain = (firstWorldToLevelBlock terrain),
   clouds  = (firstWorldToLevelCloud terrain),
-  enemies = [angel,angel2 ,angel3] -- Commented out, cause don't want baddies for now
+  enemies = [angel,angel2 ,angel3, god] -- Commented out, cause don't want baddies for now
   -- enemies = []
   }
 
@@ -100,6 +100,15 @@ firstWorldToLevel terrain = Level {
 angel2=angel{pathing=basicAngelPath2, baddieBox = makeAngelHitbox (x basicAngelPath2) (y basicAngelPath2)}
 angel3=angel{pathing=basicAngelPath3, baddieBox = makeAngelHitbox (x basicAngelPath3) (y basicAngelPath3)}
 
+god :: BadGuy
+god = BadGuy {
+  health_bad = 100,
+  money_bad = 100, -- ?
+  pouch = [],
+  pathing = godPath,
+  baddieBox = makeAngelHitbox 100 (-100),
+  attack = Empty
+}
 
 angel ::BadGuy
 angel=
@@ -145,4 +154,14 @@ basicAngelPath3=
     y=(0),
     xVelocity=(0.5),
     yVelocity=(0)
+  }
+
+godPath = 
+  JPath {
+    initPos = (15550, 150),
+    goalPos = (16000, 150),
+    x = 15550,
+    y = 150,
+    xVelocity = 1,
+    yVelocity = 0
   }

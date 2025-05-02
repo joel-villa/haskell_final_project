@@ -30,12 +30,13 @@ main =do
   machoMan <-loadBMP "resources/MachoMan.bmp"
   fluGuy <-loadBMP "resources/FlyGuy.bmp"
   mossback <- loadBMP "resources/mossForest.bmp"
+  god <- loadBMP "resources/God.bmp"
 
-  let heavenList=[(scale 2 2 floorbmp),sheep,clouds,(Scale 2 2 angelGuy),heart,sheepSwing,sheepLeft,sheepLeftSwing,heavenback]
+  let heavenList=[(scale 2 2 floorbmp),sheep,clouds,(Scale 2 2 angelGuy),heart,sheepSwing,sheepLeft,sheepLeftSwing,heavenback,(Scale 3 3 god)]
 
-  let purgList=[(scale 2 2 purgFloor),sheep,fluGuy,(Scale 2 2 evilguy),heart,sheepSwing,sheepLeft,sheepLeftSwing,mossback]    
+  let purgList=[(scale 2 2 purgFloor),sheep,fluGuy,(Scale 2 2 evilguy),heart,sheepSwing,sheepLeft,sheepLeftSwing,mossback, god]    
 
-  let hellList= [(scale 2 2 hellfloor), sheep, fluGuy,machoMan, heart,sheepSwing,sheepLeft,sheepLeftSwing,(scale 2.75 3 hellback)] 
+  let hellList= [(scale 2 2 hellfloor), sheep, fluGuy,machoMan, heart,sheepSwing,sheepLeft,sheepLeftSwing,(scale 2.75 3 hellback), god] 
 
   let levelResources = [heavenList, hellList]           
   play
@@ -49,7 +50,12 @@ main =do
 
 worldToPicture:: World -> [[Picture]]->Picture
 worldToPicture w picss = if hth<0 then bgrnd else
-  pictures(bgrnd: (drawPlayer h offset' pPic) : (pictures (drawFloor bs offset' (pics!!0))) :drawIntro w: (drawHeart (pics!!4) w)++drawEnimies bgs offset' (pics!!3)) 
+  pictures(bgrnd : 
+          (drawPlayer h offset' pPic) :
+          (pictures (drawFloor bs offset' (pics!!0))) :
+          drawIntro w : 
+          (drawHeart (pics!!4) w) ++
+          drawEnimies bgs offset' (baddiePics)) 
   where 
     pics = picss !! (levelIndex w)
     offset' = (offset w)      -- The offset of the world
@@ -59,6 +65,7 @@ worldToPicture w picss = if hth<0 then bgrnd else
     bgs = enemies (curLevel w)   -- baddies
     pPic = getPlayPic h pics  -- allows for multiple player pictures
     bgrnd=(pics!!8)
+    baddiePics = [pics !! 3, pics !! 9]
 
 getPlayPic :: Player -> [Picture] -> Picture
 getPlayPic p pics = 
@@ -75,11 +82,20 @@ getPlayPic p pics =
 
 
 --Draws multiple enimies but in the current form, with only one picture
-drawEnimies :: [BadGuy]->Float->Picture->[Picture]
+drawEnimies :: [BadGuy]->Float->[Picture]->[Picture]
 drawEnimies [] _ _ =[]
-drawEnimies (bg:bgs) offs pic = 
-  if (health_bad bg >0) then (image:hitBox:attackPic++ (drawEnimies bgs offs pic)) else drawEnimies bgs offs pic --
+drawEnimies [bg] offs pics = 
+  if (health_bad bg >0) 
+    then [(Translate (x0-offs) y0 pic)]
+  else []
   where 
+    pic = head (tail pics)
+    x0 = x (pathing bg)
+    y0 = y (pathing bg)
+drawEnimies (bg:bgs) offs pics = 
+  if (health_bad bg >0) then (image:hitBox:attackPic++ (drawEnimies bgs offs pics)) else drawEnimies bgs offs pics --
+  where 
+    pic = head pics
     x0 = x (pathing bg)
     y0=y (pathing bg)
     image =(Translate (x0-offs) y0 pic)
