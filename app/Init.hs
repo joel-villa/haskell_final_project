@@ -42,8 +42,9 @@ starterSheep =
     magic=Empty
   }
 
+-- The initial sword, TODO: is 50 okay for weapon damage?
 initSword :: Item
-initSword = Weapon 5 "initial sword" 0 (10, 0) False weaponHitBox
+initSword = Weapon 50 "initial sword" 0 (10, 0) False weaponHitBox
   where
     weaponHitBox = HitBox { -- uninitialized hitBox
       topLt =    (0,   20),
@@ -51,6 +52,9 @@ initSword = Weapon 5 "initial sword" 0 (10, 0) False weaponHitBox
       bottomLt = (0,  -40),
       bottomRt = (50, -40)
     }
+
+-- Update the sword's hit Box
+-- TODO: make HitBox.hs, move hitbox logic there
 updateSwordHBox :: Player -> HitBox
 updateSwordHBox p = sBox
   where 
