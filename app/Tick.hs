@@ -13,15 +13,29 @@ tick _ w = newWorld
     --newWorld = w {hero = newPlayer, offset=(getOffset w),intro= ((intro w) +1),enemies= (updateEnemies newPlayer (enemies w))} 
 
 updateEnemies::Player-> [BadGuy]->[BadGuy]
-updateEnemies _ [] =[]
---                                             change to weapon damage? proj damage?
-updateEnemies p (bg:bgs) = if collision then (newBg{health_bad= (health_bad newBg -10)}): updateEnemies p bgs else newBg : updateEnemies p bgs --newbg health =0
+updateEnemies _ [] =[] -- Recursive base case
+updateEnemies p (bg:bgs) = 
+  if swordCol 
+    -- Sword collision, reduce enemy's health, check other enemies
+    then (newBg{health_bad= (health_bad newBg - (wDamage wep))}) : updateEnemies p bgs
+  else if projCol 
+    -- Projectile collision, reduce enemy's health, recurse w/ other enemies
+    then (newBg{health_bad= (health_bad newBg -10)}) : updateEnemies p bgs -- TODO change to proj damage?
+  else newBg : updateEnemies p bgs 
   where
     bg1 = bg{pathing=(updatePath (pathing bg))}
     oldHitbox= baddieBox bg1
     path =pathing bg 
     newBg=bg1{baddieBox= generalUpdateHitBox ((xVelocity path)) ((yVelocity path)) oldHitbox,attack=(updateBasicAttack p bg1 (attack bg1))}--, 
-    collision=projCollision (magic p) (baddieBox bg)
+    projCol = projCollision (magic p) (baddieBox bg)  -- Did player's projectile hit enemy?
+    -- Sword collision:
+    wep = weapon p
+    swordCol = 
+      if active wep
+        -- if the weapon is active and the two hit-boxes intersect, do damage
+        then hitBoxCollision (wHBox wep) (baddieBox bg)
+      else False 
+    
     
 updateBasicAttack:: Player->BadGuy->Projectiles->Projectiles
 --updateBasicAttack _ _ _ = Empty
