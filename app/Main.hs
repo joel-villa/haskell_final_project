@@ -113,7 +113,7 @@ drawEnimies (bg:bgs) offs pics =
 drawHeart :: Picture -> World ->[Picture]
 drawHeart pic w= go (health (hero w)) pic 
   where 
-    go n _ =if n<0 then [] else (Translate ((n*80)+170) 380 pic) :go (n-1) pic
+    go n _ =if n<1 then [] else (Translate ((n*80)+170) 380 pic) :go (n-1) pic
    
 
 -- draws the text introduction
