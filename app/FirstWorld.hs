@@ -103,14 +103,26 @@ firstWorldToLevel terrain = Level {
   terrain = (firstWorldToLevelBlock terrain),
   clouds  = (firstWorldToLevelCloud terrain),
   lava    = (firstWorldToLevelLava terrain),
-  enemies = baddies, -- Commented out, cause don't want baddies for now
-  -- enemies = [],
+  --enemies = [angel,angel2 ,angel3]
+  enemies = baddies,
   flag    = (flagToPoint terrain)
   }
   where
     baddies = [
-      angel,angel2 ,angel3, god, 
-      (makeAngel (2150, 100) (2150, -150) 0 (-2))
+      god, 
+      -- The angels (in order): TODO make not hardcoded?
+      (makeAngel ( 1750,  100)  ( 1750, -150)   0   (-1)),
+      (makeAngel ( 1000,    0)  ( 1250,    0)   1     0 ),
+      (makeAngel ( 2750,  250)  ( 3250,  250) 0.5     0 ),
+      (makeAngel ( 3000,  250)  ( 3500,  250) 0.5     0 ),
+      (makeAngel ( 3250,  250)  ( 3750,  250) 0.5     0 ),
+      (makeAngel ( 6600,  200)  ( 6900,  350)   1   0.5 ),
+      (makeAngel ( 6800,  350)  ( 7100,  200)   1 (-0.5)),
+      (makeAngel ( 9600, -100) (10000,     0)   2  (0.5)),
+      (makeAngel ( 9800,  -50) (10200,    50)   2  (0.5)),
+      (makeAngel (10000,    0) (10400,   100)   2  (0.5)),
+      (makeAngel (10500, -250) (10500,   150)   0     4 ),
+      (makeAngel (13250,  225) (13750,   225) 0.5     0 )
       ]
 
 makeAngel :: (Float, Float) -> (Float, Float) -> Float -> Float -> BadGuy
@@ -185,7 +197,7 @@ basicAngelPath=
 basicAngelPath2= 
   JPath{
     initPos=(300,(0)),
-    goalPos =(600,(300)),
+    goalPos =(600,(150)),
     x=300,
     y=(0),
     xVelocity=(0.5),
