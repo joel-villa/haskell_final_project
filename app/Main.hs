@@ -34,18 +34,23 @@ main =do
   lightningBall <- loadBMP "resources/LightningBall.bmp"
   sheepMagic <- loadBMP "resources/SheepMag3.bmp"
   demonMagic <- loadBMP "resources/DemonMagic.bmp"
+  swingEffectLeft <- loadBMP "resources/SwingEffectLeft.bmp"
+  swingEffectRight <- loadBMP "resources/SwingEffectRight.bmp"
 
-  let heavenList=[(scale 2 2 floorbmp),sheep,clouds,(Scale 2 2 angelGuy),heart,
-                  sheepSwing,sheepLeft,sheepLeftSwing,heavenback,
-                  (Scale 3 3 god), (Scale 2 2 lightningBall), (Scale 2 2 sheepMagic)]
+  let heavenList = [(scale 2 2 floorbmp),sheep,clouds,(Scale 2 2 angelGuy),heart, 
+                    sheepSwing, sheepLeft,sheepLeftSwing,heavenback, 
+                    (Scale 3 3 god), (Scale 2 2 lightningBall), (Scale 2 2 sheepMagic),
+                    swingEffectLeft, swingEffectRight]
 
-  let purgList=[(scale 2 2 purgFloor),sheep,fluGuy,(Scale 2 2 evilguy),heart,
-                sheepSwing,sheepLeft,sheepLeftSwing,mossback, 
-                (Scale 2 2 evilguy), (Scale 2 2 evilguy), (Scale 2 2 sheepMagic)]    
+  let purgList= [(scale 2 2 purgFloor),sheep,fluGuy,(Scale 2 2 evilguy),heart,
+                  sheepSwing,sheepLeft,sheepLeftSwing,mossback, 
+                  (Scale 2 2 evilguy), (Scale 2 2 evilguy), (Scale 2 2 sheepMagic), 
+                  swingEffectLeft, swingEffectRight]    
 
-  let hellList= [(scale 2 2 hellfloor), sheep, fluGuy,(Scale 2 2 fluGuy), heart,
+  let hellList= [(scale 2 2 hellfloor), sheep, fluGuy,(Scale 2 2 fluGuy), heart, 
                   sheepSwing,sheepLeft,sheepLeftSwing,(scale 2.75 3 hellback), 
-                  machoMan, (Scale 2 2 demonMagic), (Scale 2 2 sheepMagic)] 
+                  machoMan, (Scale 2 2 demonMagic), (Scale 2 2 sheepMagic),
+                  swingEffectLeft, swingEffectRight] 
 
   let levelResources = [heavenList, hellList]           
   play
@@ -72,20 +77,20 @@ worldToPicture w picss = if hth<0 then bgrnd else
     h = hero w                -- current player info
     hth=health h
     bgs = enemies (curLevel w)   -- baddies
-    pPics = [(getPlayPic h pics), (pics !! 11)]  -- allows for multiple player pictures
+    pPics = (pics !! 11) : (getPlayPics h pics) -- allows for multiple player pictures
     bgrnd=(pics!!8)
     baddiePics = [pics !! 3, pics !! 9, pics !! 10]
 
-getPlayPic :: Player -> [Picture] -> Picture
-getPlayPic p pics = 
+getPlayPics :: Player -> [Picture] -> [Picture]
+getPlayPics p pics = 
   if active (weapon p) 
     then case facingEast of 
-      True -> pics !! 5  -- Swinging to right
-      False -> pics !! 7 -- swinging to left
+      True ->  (pics !! 5) : [pics !! 13] -- Swinging to right
+      False -> (pics !! 7) : [pics !! 12] -- swinging to left
   else 
     case facingEast of
-       True -> pics !! 1  -- facing right
-       False -> pics !! 6 -- facing left
+       True -> [pics !! 1] -- facing right
+       False -> [pics !! 6] -- facing left
   where 
     facingEast = facingRight p
 
@@ -126,15 +131,20 @@ drawIntro w = draw x
     
 --draws player, with the offset
 drawPlayer :: Player -> Float ->  [Picture] -> Picture
-drawPlayer h offs pics = pictures ( translate adjustedX y pic : weaponHBox : pHitbox:(drawMagic (magic h) magicPic offs))  --
+drawPlayer h offs pics = pictures ( translate adjustedX y pic : weaponHBox : pHitbox: swingPic : (drawMagic (magic h) magicPic offs))  --
   where
-    pic = head pics
-    magicPic = head (tail pics)
+    pic = head (tail pics)
+    magicPic = head pics
     y = yPos h
     x = (xPos h) - offs
     adjustedX = if facingRight h then x else (x - 30) -- THIS CODE SHIFTS Sheep
-    playerPos = translate x y (circle (10)) -- arbitrary 10 (for player position)
     w = weapon h -- The weapon
+    -- swingEffect = if active w then pics !! 2 else Blank --TODO: make this more beautiful
+    swingEffect = Blank
+    swingPic = 
+      if facingRight h 
+        then Translate (adjustedX + 30) (y + 10) swingEffect 
+      else   Translate (adjustedX - 30) (y + 10) swingEffect
     pt = [
       (adjustX offs (topLt (hitBox h))),
       (adjustX offs (topRt (hitBox h))),
