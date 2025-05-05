@@ -13,7 +13,7 @@ newHandleEvent(EventKey (SpecialKey KeySpace) Down _ _) w = w{hero = (useWeapon 
 newHandleEvent (EventKey (Char 'e') Down _ _) w =w{hero = (sheepBasedMagic (hero w))}
 newHandleEvent _ w = w
 vertSpeed :: Float
-vertSpeed = 15
+vertSpeed = 12
 -- handle left user input, returning the new player
 handleLeft :: Player -> Player
 handleLeft p = p {xVel = -vertSpeed, facingRight = False, weapon = newWeapon}
