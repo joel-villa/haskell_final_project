@@ -1,5 +1,6 @@
 module SecondLevel where
 import Types
+import FirstWorld
 
 secondLevel :: Float -> Float -> Float -> Float -> [Terrain]
 secondLevel x y xs ys = [ Block x y, Block (x+xs) y, Block (x+(2*xs)) y,
@@ -27,3 +28,52 @@ makeMovingPath (r,t) (a,b) xv yv = JPath {
     xVelocity = xv,
     yVelocity = yv
 }
+
+secondWorldToLevel :: [Terrain] -> Level
+secondWorldToLevel terrain = Level {
+  terrain = (firstWorldToLevelBlock terrain),
+  clouds  = (firstWorldToLevelCloud terrain),
+  lava    = (firstWorldToLevelLava terrain),
+  --enemies = [angel,angel2 ,angel3]
+  enemies = demons,
+  flag    = (flagToPoint terrain)
+  }
+
+demons :: [BadGuy]
+demons = [
+  (makeDemon ( 500, -250) ( 500,    0) 0 1),
+  (makeDemon (1300, -250) (1300,    0) 0 1),
+  (makeDemon (1300, -350) (1300, -100) 0 1),
+  (makeDemon (1300, -150) (1300,  100) 0 1),
+  (makeDemon (1300,  -50) (1300,  200) 0 1),
+  (makeDemon (1300, -450) (1300, -200) 0 1),
+  (makeDemon (2500,  -50) (3100,  -50) 1 0),
+  (makeDemon (2800,  -50) (3400,  -50) 1 0),
+  (makeDemon (3100,  -50) (3700,  -50) 1 0),
+  (makeDemon (3400,  -50) (4000,  -50) 1 0),
+  (makeDemon (3700,  -50) (4300,  -50) 1 0)
+  ]
+
+makeDemon :: (Float, Float) -> (Float, Float) -> Float -> Float -> BadGuy
+makeDemon (x0, y0) goalXY velX velY = BadGuy {
+    health_bad  = 50, -- ? 
+    money_bad   = 1,
+    pouch       = [],
+    pathing     = path,
+    baddieBox   = makeDemonHitBox x0 y0,
+    attack      = Empty,
+    isBoss      = False
+    }
+  where 
+    path = JPath {
+      initPos   = (x0, y0),
+      goalPos   = goalXY,
+      x         = x0,
+      y         = y0,
+      xVelocity = velX,
+      yVelocity = velY
+    }
+
+makeDemonHitBox :: Float ->Float ->HitBox
+--                                leftX     topY    width   height
+makeDemonHitBox x y = makeHitbox (x - 25) (y + 65)    60     70
