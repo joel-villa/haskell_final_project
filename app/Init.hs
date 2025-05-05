@@ -16,13 +16,19 @@ backgroundColor = (makeColor 0.75 0.75 1 0.5)
 initWorld :: World
 initWorld = World {
   hero = starterSheep,
-  curLevel = (firstWorldToLevel(firstWorld (-200) (-290.0) 105 (60))),
+  curLevel = (firstWorldToLevel(firstWorld initX initY xScalar yScalar)),
   offset = 0,
   intro = 0,
   inTheBegining = heavenIntro,
-  levels = [(firstWorldToLevel(firstWorld (-200) (-290.0) 105 (60))),(firstWorldToLevel(secondLevel (-200) (-290.0) 105 (60)))],
+  levels = [(firstWorldToLevel(firstWorld initX initY xScalar yScalar)),(secondWorldToLevel(secondLevel initX initY xScalar yScalar))],
   levelIndex = 0
 }
+  where
+    --TODO: idk what these number represent
+    initX = -200
+    initY = -290.0
+    xScalar = 105
+    yScalar = 60
 
 -- Your classic begener sheep 
 starterSheep :: Player
