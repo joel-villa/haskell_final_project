@@ -32,7 +32,8 @@ main =do
   mossback <- loadBMP "resources/mossForest.bmp"
   god <- loadBMP "resources/God.bmp"
   lightningBall <- loadBMP "resources/LightningBall.bmp"
-  sheepMagic <- loadBMP "resources/SheepMagic.bmp"
+  sheepMagic <- loadBMP "resources/SheepMag3.bmp"
+  demonMagic <- loadBMP "resources/DemonMagic.bmp"
 
   let heavenList=[(scale 2 2 floorbmp),sheep,clouds,(Scale 2 2 angelGuy),heart,
                   sheepSwing,sheepLeft,sheepLeftSwing,heavenback,
@@ -44,7 +45,7 @@ main =do
 
   let hellList= [(scale 2 2 hellfloor), sheep, fluGuy,machoMan, heart,
                   sheepSwing,sheepLeft,sheepLeftSwing,(scale 2.75 3 hellback), 
-                  machoMan, machoMan, (Scale 2 2 sheepMagic)] 
+                  machoMan, (Scale 2 2 demonMagic), (Scale 2 2 sheepMagic)] 
 
   let levelResources = [heavenList, hellList]           
   play
