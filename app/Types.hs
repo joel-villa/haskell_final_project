@@ -100,7 +100,7 @@ data Level =
     terrain  :: [JBlock],
     floorpos :: [(Float,Float)], 
     clouds   :: [Terrain],
-    lava     :: [Terrain],
+    lava     :: [JBlock],
     enemies  :: [BadGuy],
     flag     :: (Float, Float)
   } 

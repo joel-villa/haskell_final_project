@@ -76,6 +76,7 @@ worldToPicture w picss = if hth<0 then bgrnd else
     bs = terrain (curLevel w) -- The JBlocks of this level
     h = hero w                -- current player info
     hth=health h
+    ls = lava (curLevel w)
     bgs = enemies (curLevel w)   -- baddies
     pPics = (pics !! 11) : (getPlayPics h pics) -- allows for multiple player pictures
     bgrnd=(pics!!8)
@@ -199,6 +200,14 @@ drawFloor (b:bs) offs pic = floorPic:floorHBox:drawFloor bs offs pic
       (adjustX offs (bottomLt (floorBox b))),
       (adjustX offs (bottomRt (floorBox b)))]
     floorHBox = Line pts
+
+drawLava :: [JBlock] -> Float -> Picture -> [Picture]
+drawLava [] offs pic = []
+drawLava (l:ls) offs pic = lavaPic ++ drawLava ls offs pic
+  where
+    (x0, yCenter) = topLeft l
+    xCenter = x0 - offs 
+    lavaPic = ((Translate xCenter yCenter pic))
 
 adjustX ::Float->(Float,Float)->(Float,Float)
 adjustX offs (x,y)=((x-offs),y)

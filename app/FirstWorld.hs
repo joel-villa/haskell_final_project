@@ -93,9 +93,9 @@ firstWorldToLevelCloud [] = []
 firstWorldToLevelCloud (Cloud x y v: xs ) = reverse(Cloud {cxpos = x , cypos = y, cvel = v} : firstWorldToLevelCloud xs)
 firstWorldToLevelCloud (x : xs) = firstWorldToLevelCloud xs
 
-firstWorldToLevelLava :: [Terrain] -> [Terrain]
+firstWorldToLevelLava :: [Terrain] -> [JBlock]
 firstWorldToLevelLava [] = []
-firstWorldToLevelLava (Lava x y b : xs) = reverse (Lava {lxpos = x, lypos = y, fireBall = b} : firstWorldToLevelLava xs)
+firstWorldToLevelLava (Lava x y b : xs) = reverse ((JBlock (x, y) 10.5 40.5 None (HitBox (0,0) (0,0) (0,0) (0,0))) : firstWorldToLevelLava xs)
 firstWorldToLevelLava (x: xs) = firstWorldToLevelLava xs
 
 firstWorldToLevel :: [Terrain] -> Level
