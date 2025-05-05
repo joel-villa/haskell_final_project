@@ -43,7 +43,7 @@ main =do
                 sheepSwing,sheepLeft,sheepLeftSwing,mossback, 
                 (Scale 2 2 evilguy), (Scale 2 2 evilguy), (Scale 2 2 sheepMagic)]    
 
-  let hellList= [(scale 2 2 hellfloor), sheep, fluGuy,machoMan, heart,
+  let hellList= [(scale 2 2 hellfloor), sheep, fluGuy,(Scale 2 2 fluGuy), heart,
                   sheepSwing,sheepLeft,sheepLeftSwing,(scale 2.75 3 hellback), 
                   machoMan, (Scale 2 2 demonMagic), (Scale 2 2 sheepMagic)] 
 
