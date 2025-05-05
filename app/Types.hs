@@ -29,8 +29,9 @@ data BadGuy =
     money_bad  :: Int, 
     pouch      :: [Item], 
     pathing    :: JPath,
-    baddieBox :: HitBox,
-    attack :: Projectiles
+    baddieBox  :: HitBox,
+    attack     :: Projectiles,
+    isBoss     :: Bool
   }
 
 
