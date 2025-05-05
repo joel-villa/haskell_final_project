@@ -64,11 +64,9 @@ updateBasicAttack p bg Empty =if (abs(px-bx) <300) && (abs (py-by))<300 && (heal
     x0=(x1+x2)/2
     y0=(y1)
     (x1,y1)=(topLt (baddieBox bg))
-    (x2,y2)=(bottomRt (baddieBox bg))
-    
-updateBasicAttack p bg at= if touchyWouchy then Empty else projectileTest at
-  where
-    touchyWouchy =projCollision at (hitBox p)
+    (x2,y2)=(bottomRt (baddieBox bg))    
+updateBasicAttack p bg at= projectileTest at
+ 
 
 projCollision:: Projectiles -> HitBox->Bool
 projCollision Empty bg = False
@@ -103,20 +101,25 @@ updatePath path =if (xp,yp) == (goalPos path) then newPath else path{x=(x path)+
 updatePlayer :: Player ->[BadGuy]-> Float->[JBlock] -> Player
 updatePlayer p0 bgs offs bs = newP
   where
-    p1 = p0 {xPos = xPos p0 + xVel p0 , yPos =yPos p0 +yVel p0} -- new location based on velocities
+    p1 = p0 {xPos = xPos p0 + xVel p0 , yPos =yPos p0 +yVel p0,iDamage = (iDamage p0)-1} -- new location based on velocities
     p2 = horzCollisionHitBox p1 offs bs                         -- call to horzCollisionHitBox
     p3 =vertCollision p2 offs bs                                -- call to vertcollision
     p4 = if inAir p3 then p3 {yVel = yVel p3 - 0.75} else p3    -- if in Air, fall
     (x,y)= topLt (hitBox p4)
     tpl= ((xPos p4), (yPos p4))
     newHit= newHitBox (xPos p4) (yPos p4) (facingRight p4)
-    hth= if checkMultiCollision bgs p4 then ((health p4) -1) else health p4
+
+    wasHit=(checkMultiCollision bgs p4) && ((iDamage p0)<0)
+    hth= if wasHit  then ((health p4) -1) else health p4
+    newIdamage=if wasHit then 100 else iDamage p4
+    --niDamage=if hth ==health p4 then (-1) else 100
 
     newP = p4 {
       weapon = updateWeapon p4, -- update Player's weapon velocity & hit box
       hitBox=newHit, 
       magic=projectileTest (magic p4),
-      health =hth --health =hth 
+      health =hth, --health =hth 
+      iDamage = newIdamage
       }
 
 checkMultiCollision :: [BadGuy]->Player ->Bool 
