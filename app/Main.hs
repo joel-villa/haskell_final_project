@@ -31,12 +31,20 @@ main =do
   fluGuy <-loadBMP "resources/FlyGuy.bmp"
   mossback <- loadBMP "resources/mossForest.bmp"
   god <- loadBMP "resources/God.bmp"
+  lightningBall <- loadBMP "resources/LightningBall.bmp"
+  sheepMagic <- loadBMP "resources/SheepShot.bmp"
 
-  let heavenList=[(scale 2 2 floorbmp),sheep,clouds,(Scale 2 2 angelGuy),heart,sheepSwing,sheepLeft,sheepLeftSwing,heavenback,(Scale 3 3 god)]
+  let heavenList=[(scale 2 2 floorbmp),sheep,clouds,(Scale 2 2 angelGuy),heart,
+                  sheepSwing,sheepLeft,sheepLeftSwing,heavenback,
+                  (Scale 3 3 god), (Scale 2 2 lightningBall), (Scale 2 2 sheepMagic)]
 
-  let purgList=[(scale 2 2 purgFloor),sheep,fluGuy,(Scale 2 2 evilguy),heart,sheepSwing,sheepLeft,sheepLeftSwing,mossback, god]    
+  let purgList=[(scale 2 2 purgFloor),sheep,fluGuy,(Scale 2 2 evilguy),heart,
+                sheepSwing,sheepLeft,sheepLeftSwing,mossback, 
+                (Scale 2 2 evilguy), (Scale 2 2 evilguy), (Scale 2 2 sheepMagic)]    
 
-  let hellList= [(scale 2 2 hellfloor), sheep, fluGuy,machoMan, heart,sheepSwing,sheepLeft,sheepLeftSwing,(scale 2.75 3 hellback), god] 
+  let hellList= [(scale 2 2 hellfloor), sheep, fluGuy,machoMan, heart,
+                  sheepSwing,sheepLeft,sheepLeftSwing,(scale 2.75 3 hellback), 
+                  machoMan, machoMan, (Scale 2 2 sheepMagic)] 
 
   let levelResources = [heavenList, hellList]           
   play
@@ -51,7 +59,7 @@ main =do
 worldToPicture:: World -> [[Picture]]->Picture
 worldToPicture w picss = if hth<0 then bgrnd else
   pictures(bgrnd : 
-          (drawPlayer h offset' pPic) :
+          (drawPlayer h offset' pPics) :
           (pictures (drawFloor bs offset' (pics!!0))) :
           drawIntro w : 
           (drawHeart (pics!!4) w) ++
@@ -63,9 +71,9 @@ worldToPicture w picss = if hth<0 then bgrnd else
     h = hero w                -- current player info
     hth=health h
     bgs = enemies (curLevel w)   -- baddies
-    pPic = getPlayPic h pics  -- allows for multiple player pictures
+    pPics = [(getPlayPic h pics), (pics !! 11)]  -- allows for multiple player pictures
     bgrnd=(pics!!8)
-    baddiePics = [pics !! 3, pics !! 9]
+    baddiePics = [pics !! 3, pics !! 9, pics !! 10]
 
 getPlayPic :: Player -> [Picture] -> Picture
 getPlayPic p pics = 
@@ -89,7 +97,7 @@ drawEnimies [bg] offs pics =
     then [(Translate (x0-offs) y0 pic)]
   else []
   where 
-    pic = head (tail pics)
+    pic = head (tail pics) -- 2nd pic is GOD
     x0 = x (pathing bg)
     y0 = y (pathing bg)
 drawEnimies (bg:bgs) offs pics = 
@@ -99,7 +107,7 @@ drawEnimies (bg:bgs) offs pics =
     x0 = x (pathing bg)
     y0=y (pathing bg)
     image =(Translate (x0-offs) y0 pic)
-    attackPic=(drawMagic (attack bg) pic offs)
+    attackPic=(drawMagic (attack bg) (pics !! 2) offs) -- lightning ball
     pts = [
       (adjustX offs (topLt (baddieBox bg))),
       (adjustX offs (topRt (baddieBox bg))),
@@ -124,9 +132,11 @@ drawIntro w = draw x
     draw x = (Translate (-450- (offset w)) 0 (scale 0.65 1 (text ((inTheBegining w)!!x))))
     
 --draws player, with the offset
-drawPlayer :: Player -> Float ->  Picture -> Picture
-drawPlayer h offs pic = pictures ( translate adjustedX y pic : weaponHBox : pHitbox:(drawMagic (magic h) pic offs))  --
+drawPlayer :: Player -> Float ->  [Picture] -> Picture
+drawPlayer h offs pics = pictures ( translate adjustedX y pic : weaponHBox : pHitbox:(drawMagic (magic h) magicPic offs))  --
   where
+    pic = head pics
+    magicPic = head (tail pics)
     y = yPos h
     x = (xPos h) - offs
     adjustedX = if facingRight h then x else (x - 30) -- THIS CODE SHIFTS Sheep
