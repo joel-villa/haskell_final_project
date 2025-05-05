@@ -32,7 +32,7 @@ main =do
   mossback <- loadBMP "resources/mossForest.bmp"
   god <- loadBMP "resources/God.bmp"
   lightningBall <- loadBMP "resources/LightningBall.bmp"
-  sheepMagic <- loadBMP "resources/SheepShot.bmp"
+  sheepMagic <- loadBMP "resources/SheepMagic.bmp"
 
   let heavenList=[(scale 2 2 floorbmp),sheep,clouds,(Scale 2 2 angelGuy),heart,
                   sheepSwing,sheepLeft,sheepLeftSwing,heavenback,
