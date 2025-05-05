@@ -32,14 +32,15 @@ starterSheep =
     yPos   = (0),
     xVel   = 0,
     yVel   = 0,
-    health = 10, 
+    health = 4, 
     inAir  = False,
     money  = 10, 
     sMoneyAndSValubles = [Potion {quantEffect=10,descriptor="Health Potion +10", effect=Healing}],
     weapon = initSword,
     facingRight = True,
     hitBox= HitBox ((10),(56)) ((20),(56)) ((10), (-31)) (20, (-31)),
-    magic=Empty
+    magic=Empty,
+    iDamage = 100
   }
 
 -- The initial sword, TODO: is 50 okay for weapon damage?

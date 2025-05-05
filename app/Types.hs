@@ -18,7 +18,8 @@ data Player=
     weapon             :: Item, 
     facingRight        :: Bool,
     hitBox:: HitBox,
-    magic :: Projectiles
+    magic :: Projectiles,
+    iDamage :: Float
   }
 
 
