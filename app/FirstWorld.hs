@@ -158,14 +158,25 @@ angel3 = angel {
 
 god :: BadGuy
 god = BadGuy {
-  health_bad = 100,
+  health_bad = 2000,
   money_bad = 100, -- ?
   pouch = [],
   pathing = godPath,
-  baddieBox = makeAngelHitbox 200 (-200),
+  baddieBox = makeHitbox (x0 - 100) (y0 + 150) 200 300,
   attack = Empty,
   isBoss = True
 }
+  where
+    x0 = 15550
+    y0 = 250
+    godPath = JPath {
+      initPos = (x0, y0),
+      goalPos = (16000, y0),
+      x = x0,
+      y = y0,
+      xVelocity = 1,
+      yVelocity = 0
+    }
 
 angel ::BadGuy
 angel=
@@ -212,14 +223,4 @@ basicAngelPath3=
     y=(0),
     xVelocity=(0.5),
     yVelocity=(0)
-  }
-
-godPath = 
-  JPath {
-    initPos = (15550, 150),
-    goalPos = (16000, 150),
-    x = 15550,
-    y = 150,
-    xVelocity = 1,
-    yVelocity = 0
   }
