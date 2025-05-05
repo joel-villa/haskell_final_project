@@ -103,14 +103,46 @@ firstWorldToLevel terrain = Level {
   terrain = (firstWorldToLevelBlock terrain),
   clouds  = (firstWorldToLevelCloud terrain),
   lava    = (firstWorldToLevelLava terrain),
-  enemies = [angel,angel2 ,angel3, god], -- Commented out, cause don't want baddies for now
+  enemies = baddies, -- Commented out, cause don't want baddies for now
   -- enemies = [],
   flag    = (flagToPoint terrain)
   }
+  where
+    baddies = [
+      angel,angel2 ,angel3, god, 
+      (makeAngel (2150, 100) (2150, -150) 0 (-2))
+      ]
 
+makeAngel :: (Float, Float) -> (Float, Float) -> Float -> Float -> BadGuy
+makeAngel (x0, y0) goalXY velX velY = BadGuy {
+    health_bad  = 10,
+    money_bad   = 1,
+    pouch       = [],
+    pathing     = path,
+    baddieBox   = makeAngelHitbox x0 y0,
+    attack      = Empty,
+    isBoss      = False
+    }
+  where 
+    path = JPath {
+      initPos   = (x0, y0),
+      goalPos   = goalXY,
+      x         = x0,
+      y         = y0,
+      xVelocity = velX,
+      yVelocity = velY
+    }
 
-angel2=angel{pathing=basicAngelPath2, baddieBox = makeAngelHitbox (x basicAngelPath2) (y basicAngelPath2)}
-angel3=angel{pathing=basicAngelPath3, baddieBox = makeAngelHitbox (x basicAngelPath3) (y basicAngelPath3)}
+angel2 :: BadGuy
+angel2 = angel {
+  pathing = basicAngelPath2,
+  baddieBox = makeAngelHitbox (x basicAngelPath2) (y basicAngelPath2)
+  }
+angel3 :: BadGuy
+angel3 = angel {
+  pathing = basicAngelPath3,
+  baddieBox = makeAngelHitbox (x basicAngelPath3) (y basicAngelPath3)
+  }
 
 god :: BadGuy
 god = BadGuy {
@@ -118,8 +150,9 @@ god = BadGuy {
   money_bad = 100, -- ?
   pouch = [],
   pathing = godPath,
-  baddieBox = makeAngelHitbox 100 (-100),
-  attack = Empty
+  baddieBox = makeAngelHitbox 200 (-200),
+  attack = Empty,
+  isBoss = True
 }
 
 angel ::BadGuy
@@ -130,7 +163,8 @@ angel=
     pouch=[],
     pathing= basicAngelPath,
     baddieBox = makeAngelHitbox 100 (-100),
-    attack=Empty
+    attack=Empty,
+    isBoss = False
 }
 -- Yes this is how we're doing this, sorry guys
 --                   x       y

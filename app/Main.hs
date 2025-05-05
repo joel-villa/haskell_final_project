@@ -92,18 +92,10 @@ getPlayPic p pics =
 --Draws multiple enimies but in the current form, with only one picture
 drawEnimies :: [BadGuy]->Float->[Picture]->[Picture]
 drawEnimies [] _ _ =[]
-drawEnimies [bg] offs pics = 
-  if (health_bad bg >0) 
-    then [(Translate (x0-offs) y0 pic)]
-  else []
-  where 
-    pic = head (tail pics) -- 2nd pic is GOD
-    x0 = x (pathing bg)
-    y0 = y (pathing bg)
 drawEnimies (bg:bgs) offs pics = 
   if (health_bad bg >0) then (image:hitBox:attackPic++ (drawEnimies bgs offs pics)) else drawEnimies bgs offs pics --
   where 
-    pic = head pics
+    pic = if isBoss bg then head (tail pics) else head pics
     x0 = x (pathing bg)
     y0=y (pathing bg)
     image =(Translate (x0-offs) y0 pic)

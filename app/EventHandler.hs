@@ -12,10 +12,11 @@ newHandleEvent(EventKey (Char 'w') Down _ _) w = w{hero = (handleJump (hero w))}
 newHandleEvent(EventKey (SpecialKey KeySpace) Down _ _) w = w{hero = (useWeapon (hero w))}
 newHandleEvent (EventKey (Char 'e') Down _ _) w =w{hero = (sheepBasedMagic (hero w))}
 newHandleEvent _ w = w
-
+vertSpeed :: Float
+vertSpeed = 15
 -- handle left user input, returning the new player
 handleLeft :: Player -> Player
-handleLeft p = p {xVel = -7, facingRight = False, weapon = newWeapon}
+handleLeft p = p {xVel = -vertSpeed, facingRight = False, weapon = newWeapon}
   where
     --updating weapon hit-box
     rightwardFacing = facingRight p
@@ -29,7 +30,7 @@ handleLeft p = p {xVel = -7, facingRight = False, weapon = newWeapon}
 
 -- handle right user input, returning the new player
 handleRight :: Player -> Player
-handleRight p = p {xVel = 7, facingRight = True, weapon = newWeapon}
+handleRight p = p {xVel = vertSpeed, facingRight = True, weapon = newWeapon}
   where
     --updating weapon hit-box
     leftwardFacing = not (facingRight p)
