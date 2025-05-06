@@ -203,11 +203,11 @@ drawFloor (b:bs) offs pic = floorPic:floorHBox:drawFloor bs offs pic
 
 drawLava :: [JBlock] -> Float -> Picture -> [Picture]
 drawLava [] offs pic = []
-drawLava (l:ls) offs pic = lavaPic ++ drawLava ls offs pic
+drawLava (l:ls) offs pic = [lavaPic] ++ drawLava ls offs pic
   where
     (x0, yCenter) = topLeft l
-    xCenter = x0 - offs 
-    lavaPic = ((Translate xCenter yCenter pic))
+    xCenter = x0 - offs - 5 
+    lavaPic = (Translate xCenter (yCenter - 185) pic)
 
 adjustX ::Float->(Float,Float)->(Float,Float)
 adjustX offs (x,y)=((x-offs),y)
