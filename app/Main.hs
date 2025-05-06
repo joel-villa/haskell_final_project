@@ -36,21 +36,22 @@ main =do
   demonMagic <- loadBMP "resources/DemonMagic.bmp"
   swingEffectLeft <- loadBMP "resources/SwingEffectLeft.bmp"
   swingEffectRight <- loadBMP "resources/SwingEffectRight.bmp"
+  lavas <- loadBMP "resources/lavaBlock.bmp"
 
   let heavenList = [(scale 2 2 floorbmp),sheep,clouds,(Scale 2 2 angelGuy),heart, 
                     sheepSwing, sheepLeft,sheepLeftSwing,heavenback, 
                     (Scale 3 3 god), (Scale 2 2 lightningBall), (Scale 2 2 sheepMagic),
-                    swingEffectLeft, swingEffectRight]
+                    swingEffectLeft, swingEffectRight,lavas]
 
   let purgList= [(scale 2 2 purgFloor),sheep,fluGuy,(Scale 2 2 evilguy),heart,
                   sheepSwing,sheepLeft,sheepLeftSwing,mossback, 
                   (Scale 2 2 evilguy), (Scale 2 2 evilguy), (Scale 2 2 sheepMagic), 
-                  swingEffectLeft, swingEffectRight]    
+                  swingEffectLeft, swingEffectRight,lavas]    
 
   let hellList= [(scale 2 2 hellfloor), sheep, fluGuy,(Scale 2 2 fluGuy), heart, 
                   sheepSwing,sheepLeft,sheepLeftSwing,(scale 2.75 3 hellback), 
                   machoMan, (Scale 2 2 demonMagic), (Scale 2 2 sheepMagic),
-                  swingEffectLeft, swingEffectRight] 
+                  swingEffectLeft, swingEffectRight,(Scale 3 10 lavas)] 
 
   let levelResources = [heavenList, hellList]           
   play
@@ -67,6 +68,7 @@ worldToPicture w picss = if hth<0 then bgrnd else
   pictures(bgrnd : 
           (drawPlayer h offset' pPics) :
           (pictures (drawFloor bs offset' (pics!!0))) :
+          (pictures (drawLava ls offset' (pics !! 14))):
           drawIntro w : 
           (drawHeart (pics!!4) w) ++
           drawEnimies bgs offset' (baddiePics)) 
