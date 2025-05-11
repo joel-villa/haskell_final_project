@@ -36,6 +36,7 @@ main =do
   demonMagic <- loadBMP "resources/DemonMagic.bmp"
   swingEffectLeft <- loadBMP "resources/SwingEffectLeft.bmp"
   swingEffectRight <- loadBMP "resources/SwingEffectRight.bmp"
+  gameOver <- loadBMP "resources/gameOver.bmp"
 
   let heavenList = [(scale 2 2 floorbmp),sheep,clouds,(Scale 2 2 angelGuy),heart, 
                     sheepSwing, sheepLeft,sheepLeftSwing,heavenback, 
@@ -52,10 +53,10 @@ main =do
                   machoMan, (Scale 2 2 demonMagic), (Scale 2 2 sheepMagic),
                   swingEffectLeft, swingEffectRight] 
 
-  let levelResources = [heavenList, hellList]           
+  let levelResources = [heavenList, hellList,[Scale 2 2 gameOver]]           
   play
     (InWindow "GameEvent" (1000, 900) (0,0))   --Display mode
-    backgroundColor                            -- in Init.hs
+    black                                     -- in Init.hs
     fps                                        -- in Init.hs
     initWorld                                  -- in Init.hs
     (\world -> (worldToPicture world levelResources)) --A function to convert the world a picture.
@@ -63,7 +64,7 @@ main =do
     tick                                       -- in Tick.hs
 
 worldToPicture:: World -> [[Picture]]->Picture
-worldToPicture w picss = if hth<0 then bgrnd else
+worldToPicture w picss = if hth<0 then (picss!!2)!!0 else
   pictures(bgrnd : 
           (drawPlayer h offset' pPics) :
           (pictures (drawFloor bs offset' (pics!!0))) :
@@ -99,7 +100,7 @@ getPlayPics p pics =
 drawEnimies :: [BadGuy]->Float->[Picture]->[Picture]
 drawEnimies [] _ _ =[]
 drawEnimies (bg:bgs) offs pics = 
-  if (health_bad bg >0) then (image:hitBox:attackPic++ (drawEnimies bgs offs pics)) else drawEnimies bgs offs pics --
+  if (health_bad bg >0) then (image:attackPic++ (drawEnimies bgs offs pics)) else drawEnimies bgs offs pics -- :hitBox
   where 
     pic = if isBoss bg then head (tail pics) else head pics
     x0 = x (pathing bg)
@@ -131,7 +132,7 @@ drawIntro w = draw x
     
 --draws player, with the offset
 drawPlayer :: Player -> Float ->  [Picture] -> Picture
-drawPlayer h offs pics = pictures ( translate adjustedX y pic : weaponHBox : pHitbox: swingPic : (drawMagic (magic h) magicPic offs))  --
+drawPlayer h offs pics = pictures ( translate adjustedX y pic : swingPic : (drawMagic (magic h) magicPic offs))  --weaponHBox : pHitbox:
   where
     pic = head (tail pics)
     magicPic = head pics
@@ -161,7 +162,7 @@ drawPlayer h offs pics = pictures ( translate adjustedX y pic : weaponHBox : pHi
 
 drawMagic :: Projectiles ->Picture ->Float-> [Picture]
 drawMagic Empty _ _ =[]
-drawMagic p pic offs = [(Translate x y (Rotate r(scale 0.5 0.5 pic))), projHitbox]
+drawMagic p pic offs = [(Translate x y (Rotate r(scale 0.5 0.5 pic)))] --projHitbox
   where
     r= (durration  p)*15
     x=(x1+x2)/2 -offs
@@ -182,7 +183,7 @@ drawMagic p pic offs = [(Translate x y (Rotate r(scale 0.5 0.5 pic))), projHitbo
                               --If you change this, it will break collison in its current form
 drawFloor :: [JBlock] -> Float -> Picture -> [Picture] 
 drawFloor [] offs pic = []
-drawFloor (b:bs) offs pic = floorPic:floorHBox:drawFloor bs offs pic                            
+drawFloor (b:bs) offs pic = floorPic:drawFloor bs offs pic     --floorHBox                       
   where 
     (x0, yCenter) = topLeft b
     xCenter = x0 - offs
