@@ -238,7 +238,7 @@ inBlock block (x, y) offs = inBetween x (x1-offs) (x2-offs) && inBetween y y1 (y
 --This doesnt work anymore because of the hitboxes
 handleFall::Player->Player
 handleFall p =
-  if health p >0 &&  yPos p <(-500) 
+  if health p >(-1) &&  yPos p <(-500) 
   then p{health= (health p) -1, yPos =500, hitBox=(newHitBox (xPos p) 500 (facingRight p)),yVel=(0)} 
   else p
  
